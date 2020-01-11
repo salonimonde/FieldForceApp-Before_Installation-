@@ -78,6 +78,7 @@ import com.fieldforce.utility.CustomDialog;
 import com.fieldforce.utility.DecimalInputFilter;
 import com.fieldforce.utility.DialogCreator;
 import com.fieldforce.utility.MultipartUtility;
+import com.fieldforce.utility.SignatureView;
 import com.fieldforce.webservices.ApiConstants;
 import com.fieldforce.webservices.JsonResponse;
 import com.fieldforce.webservices.WebRequest;
@@ -138,7 +139,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private String PROFILE_IMAGE_DIRECTORY_NAME = ".profile-Images", ProfileImageName = "images";
     private Context mContext;
     private TextView txtSMSVerification, txtVerify, txtResendOTP;
-    private Button btnNext1, btnNext2, btnNext3, btnSubmit, btnVerifyOTP, btnSMSVerification;
+    private Button btnNext1, btnNext2, btnNext3, btnNext4, btnSubmit, btnVerifyOTP, btnSMSVerification;
     private EditText edtConsumerName, edtMobile, edtAadharNumber, edtEmailId, edtOther, edtFlatNumber, edtSocietyBuildingName,
             edtLocation, edtArea, edtAmountPayable, edtChequeNo, edtChequeBranch, edtChequeDate,
             edtDDNo, edtOtherBank, edtIFSCCheque, edtIFSCDD, edtOtherBankCheque, edtDDDate, edtDDBranch, edtState,
@@ -146,7 +147,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             edtDistrict;
     private RelativeLayout relativeViewGeneralInfo, relativeViewAddressInfo, relativeViewUploadDoc, relativeViewPayment,
             relativeIdProof, relativeAddressProof, relativeImgId1, relativeImgId2, relativeImgAdd1, relativeImgAdd2,
-            relBankName, relNocProof, relBankNameCheque;
+            relBankName, relNocProof, relBankNameCheque, relativeSignature;
     private NestedScrollView nestedIdProof, nestedAddressProof;
     private RecyclerView recyclerIDDoc, recyclerViewAddDoc;
     private LinearLayoutManager layoutManager;
@@ -182,14 +183,17 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
     private int Count = 0;
     private ImageView imgTakeID1, imgTakeID2, imgCancelID1, imgCancelID2, imgTakeADD1,
-            imgTakeADD2, imgCancelADD1, imgCancelADD2, imgTakeNoc, imgCancelNoc, imgCheque, imgDD, imgCancelCheque, imgCancelDD;
-    private File File1 = null, File2 = null, File3 = null, File4 = null, File5 = null, fileCheque = null, fileDD = null;
-    private String imgId1, imgId2 = "", imgId3 = "", imgId4 = "", imgId5 = "", imgIdCheque = "", imgIdDD = "";
+            imgTakeADD2, imgCancelADD1, imgCancelADD2, imgTakeNoc, imgCancelNoc, imgCheque, imgDD,
+            imgCancelCheque, imgCancelDD;
+    private File File1 = null, File2 = null, File3 = null, File4 = null, File5 = null,
+            fileCheque = null, fileDD = null, fileConsumerSign = null;
+    private String imgId1, imgId2 = "", imgId3 = "", imgId4 = "", imgId5 = "",
+            imgIdCheque = "", imgIdDD = "";
 
     private String enquiryId = "";
 
     private boolean idProof = false, addressProof = true, nocProof = true;
-    private Button btnPreviousOne, btnPreviousTwo, btnPreviousThree;
+    private Button btnPreviousOne, btnPreviousTwo, btnPreviousThree, btnPreviousFour, btnClearConsumer;
     private int imageCount = 0, imageCountAdd = 0;
     private ArrayList<String> imgRemoveList = new ArrayList<>();
 
@@ -221,7 +225,12 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
     private AlertDialog alert, alert1;
 
-    private Bitmap idBitmap1 = null, idBitmap2 = null, addBitmap1 = null, addBitmap2 = null, nocBitmap = null;
+    private Bitmap idBitmap1 = null, idBitmap2 = null, addBitmap1 = null, addBitmap2 = null, nocBitmap = null,
+            bitmapChequeDD = null, bitmapSign = null;
+
+    private LinearLayout viewConsumerSignature;
+    private SignatureView signatureViewConsumer;
+
 
 
     @Override
@@ -282,15 +291,18 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         relBankName = findViewById(R.id.rel_bank_name);
         relNocProof = findViewById(R.id.relative_noc_proof);
         relBankNameCheque = findViewById(R.id.rel_bank_name_cheque);
+        relativeSignature = findViewById(R.id.relative_layout_step_five);
 
 
         btnPreviousOne = findViewById(R.id.btn_previous_1);
         btnPreviousTwo = findViewById(R.id.btn_previous_2);
         btnPreviousThree = findViewById(R.id.btn_previous_3);
+        btnPreviousFour = findViewById(R.id.btn_previous_4);
 
         btnNext1 = findViewById(R.id.btn_next1);
         btnNext2 = findViewById(R.id.btn_next2);
         btnNext3 = findViewById(R.id.btn_next3);
+        btnNext4 = findViewById(R.id.btn_next_4);
         btnSubmit = findViewById(R.id.btn_submit);
 //        btnVerifyOTP = findViewById(R.id.btn_verify_otp);
 //        btnSMSVerification = findViewById(R.id.btn_sms_verification);
@@ -328,6 +340,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         btnPreviousOne.setOnClickListener(this);
         btnPreviousTwo.setOnClickListener(this);
         btnPreviousThree.setOnClickListener(this);
+        btnPreviousFour.setOnClickListener(this);
 
         imgCancelADD1.setOnClickListener(this);
         imgCancelADD2.setOnClickListener(this);
@@ -340,7 +353,12 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         btnNext1.setOnClickListener(this);
         btnNext2.setOnClickListener(this);
         btnNext3.setOnClickListener(this);
+        btnNext4.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
+
+        btnClearConsumer = findViewById(R.id.btn_clear_consumer);
+        btnClearConsumer.setOnClickListener(this);
+
 //        btnVerifyOTP.setOnClickListener(this);
 //        btnSMSVerification.setOnClickListener(this);
         txtSMSVerification.setOnClickListener(this);
@@ -407,6 +425,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         linearDDDetails = findViewById(R.id.linear_dd_details);
         linearNocDetails = findViewById(R.id.linear_noc_details);
         linearOTP = findViewById(R.id.linear_otp);
+
+
+        viewConsumerSignature = findViewById(R.id.view_signature_consumer);
+        signatureViewConsumer = new SignatureView(mContext);
+        viewConsumerSignature.addView(signatureViewConsumer);
 
 
         radioGroup = findViewById(R.id.radio_group_connectivity);
@@ -808,6 +831,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 relativeViewPayment.setVisibility(View.VISIBLE);
                 getPaymentScheme();
             }
+        } else if (view == btnNext4) {
+            checkPaymentValidations();
+        } else if (view == btnClearConsumer) {
+            signatureViewConsumer.clearSignature();
         } else if (view.equals(btnSubmit)) {
 
             LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
@@ -818,7 +845,34 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
             if (isGPSEnabled && hasGps) {
                 captureLocation();
-                checkPaymentValidations();
+
+                if (signatureViewConsumer.getSignature() != null) {
+                    Bitmap bitmap = null, galleryBitmap = null;
+
+
+                    Uri tempUriConsumer = getImageUri(mContext, signatureViewConsumer.getSignature());
+                    fileConsumerSign = new File(getRealPathFromURI(tempUriConsumer));
+
+                    try {
+                        galleryBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), tempUriConsumer);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    bitmap = Bitmap.createScaledBitmap(
+                            galleryBitmap, AppConstants.IMAGE_WIDTH, AppConstants.IMAGE_HEIGHT, false);
+                    bitmapSign = bitmap;
+
+                    if (isRejected) {
+                        new UploadData().execute();
+                    } else {
+//                        showDialogForUploadOption(mContext);
+                        doSubmitOps();
+                    }
+
+                } else {
+                    Toast.makeText(mContext, getString(R.string.please_add_consumer_signature), Toast.LENGTH_SHORT).show();
+                }
+//                checkPaymentValidations();
             } else {
                 showLocationEnableDialog();
             }
@@ -849,7 +903,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             linearNocDetails.setVisibility(View.VISIBLE);
             showPictureDialog();
 
-        }/* else if (view.equals(imgCheque)) {
+        } else if (view.equals(imgCheque)) {
             Count = 6;
             fileCheque = null;
             callCamera();
@@ -857,7 +911,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             Count = 7;
             fileDD = null;
             callCamera();
-        } */ else if (view == relativeIdProof) {
+        } else if (view == relativeIdProof) {
             if (idProof) {
                 nestedIdProof.setVisibility(View.VISIBLE);
                 imgIdProofArrow.setRotation(180);
@@ -921,6 +975,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             relativeViewAddressInfo.setVisibility(View.GONE);
             relativeViewUploadDoc.setVisibility(View.VISIBLE);
             relativeViewPayment.setVisibility(View.GONE);
+        }else if (view == btnPreviousFour) {
+            relativeViewGeneralInfo.setVisibility(View.GONE);
+            relativeViewAddressInfo.setVisibility(View.GONE);
+            relativeViewUploadDoc.setVisibility(View.GONE);
+            relativeViewPayment.setVisibility(View.VISIBLE);
         } else if (view == imgCancelID1) {
             File1 = null;
             if (imageCount > 0) {
@@ -962,7 +1021,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             imgTakeNoc.setImageResource(R.drawable.ic_action_camera1);
             if (!imgRemoveList.contains(imgId5))
                 imgRemoveList.add(imgId5);
-        } /*else if (view == imgCancelCheque) {
+        } else if (view == imgCancelCheque) {
             fileCheque = null;
             imgRemoveList.add(imgIdCheque);
             imgCheque.setImageResource(R.drawable.ic_action_camera1);
@@ -974,7 +1033,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             imgDD.setImageResource(R.drawable.ic_action_camera1);
             if (!imgRemoveList.contains(imgIdDD))
                 imgRemoveList.add(imgIdDD);
-        }*/
+        }
     }
 
     private void callCamera() {
@@ -1385,8 +1444,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     private void setBankSpinner() {
-        Collection<String> valueSet;
-        bankArray = new ArrayList<>();
+      /*  Collection<String> valueSet;
+
         Collection<String> keySet;
         ArrayList<String> keySetArray = new ArrayList<>();
         if (hashMapBankName != null && hashMapBankName.size() > 0) {
@@ -1395,7 +1454,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 bankArray = new ArrayList<>(valueSet);
             }
         } else bankArray.add(getString(R.string.select_bank));
-
+*/
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, bankArray) {
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -1450,7 +1509,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     private void setBankSpinnerCheque() {
-        Collection<String> valueSet;
+       /* Collection<String> valueSet;
         bankArrayCheque = new ArrayList<>();
         if (hashMapBankChequeArray != null && hashMapBankChequeArray.size() > 0) {
             for (int i = 0; i < hashMapBankChequeArray.size(); i++) {
@@ -1459,7 +1518,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             }
         } else bankArrayCheque.add(getString(R.string.select_bank));
 
-
+*/
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, bankArrayCheque) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
@@ -1819,116 +1878,114 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 if (spinnerPaymentMethod.getSelectedItem().equals(getString(R.string.select_payment_type))) {
                     Toast.makeText(mContext, getString(R.string.select_payment_method), Toast.LENGTH_SHORT).show();
                 } else if (spinnerPaymentMethod.getSelectedItem().equals(getString(R.string.dd))) {
-                    // i have changed fileDD from fileChange
-                    /*if (fileDD != null) {*/
-                    if (!edtDDNo.getText().toString().trim().isEmpty()) {
-                        if (edtDDNo.getText().toString().trim().length() == 6) {
-                            if (!edtIFSCDD.getText().toString().trim().isEmpty()) {
-                                if (edtIFSCDD.getText().toString().trim().matches("^[A-Z]{4}[0][A-Z0-9]{6}$")) {
+                    if (fileDD != null) {
+                        if (edtDDNo.getText().toString().trim().length() == 6
+                                || edtDDNo.getText().toString().length() == 0) {
+                            if (edtIFSCDD.getText().toString().trim().matches("^[A-Z]{4}[0][A-Z0-9]{6}$")
+                                    || edtIFSCDD.getText().toString().length() == 0) {
 
-                                    if (selectedBank.equals(getString(R.string.select_bank))) {
-                                        Toast.makeText(mContext, R.string.please_select_bank, Toast.LENGTH_SHORT).show();
-                                    } else if (selectedBank.equals(getString(R.string.others))) {
-                                        if (!edtDDBranch.getText().toString().trim().isEmpty()) {
-                                            if (!edtDDDate.getText().toString().trim().isEmpty()) {
-                                                edtOtherBank.setVisibility(View.VISIBLE);
-                                                if (!edtOtherBank.getText().toString().trim().isEmpty()) {
-                                                    selectedBankName = edtOtherBank.getText().toString().trim();
-                                                    edtChequeNo.setText("");
-                                                    edtChequeBranch.setText("");
-                                                    edtChequeDate.setText("");
-                                                    if (isRejected) {
-                                                        new UploadData().execute();
-                                                    } else {
-                                                        showDialogForUploadOption(mContext);
-                                                    }
-                                                } else {
-                                                    Toast.makeText(mContext, R.string.please_specify_other_bank_name, Toast.LENGTH_SHORT).show();
-                                                }
-                                            } else {
-                                                Toast.makeText(mContext, getString(R.string.enter_cheque_date), Toast.LENGTH_SHORT).show();
-                                            }
-
-                                        } else {
-                                            Toast.makeText(mContext, getString(R.string.enter_cheque_branch), Toast.LENGTH_SHORT).show();
-                                        }
+                                if (selectedBank.equals(getString(R.string.select_bank))) {
+                                    selectedBankName = "";
+                                    edtChequeNo.setText("");
+                                    edtChequeBranch.setText("");
+                                    edtChequeDate.setText("");
+                                    selectedBankCheckName = "";
+                                    edtIFSCCheque.setText("");
+                                    /*if (isRejected) {
+                                        new UploadData().execute();
                                     } else {
-                                        if (!edtDDBranch.getText().toString().trim().isEmpty()) {
-                                            if (!edtDDDate.getText().toString().trim().isEmpty()) {
-                                                selectedBankName = selectedBank;
-                                                edtChequeNo.setText("");
-                                                edtChequeBranch.setText("");
-                                                edtChequeDate.setText("");
-                                                selectedBankCheckName = "";
-                                                edtIFSCCheque.setText("");
-                                                if (isRejected) {
-                                                    new UploadData().execute();
-                                                } else {
-                                                    showDialogForUploadOption(mContext);
-                                                }
-                                            } else {
-                                                Toast.makeText(mContext, getString(R.string.enter_cheque_date), Toast.LENGTH_SHORT).show();
-                                            }
+                                        showDialogForUploadOption(mContext);
+                                    }*/
+                                    relativeSignature.setVisibility(View.VISIBLE);
+                                    relativeViewPayment.setVisibility(View.GONE);
+                                } else if (selectedBank.equals(getString(R.string.others))) {
+                                    edtOtherBank.setVisibility(View.VISIBLE);
+                                    if (!edtOtherBank.getText().toString().trim().isEmpty()) {
+                                        selectedBankName = edtOtherBank.getText().toString().trim();
+                                        edtChequeNo.setText("");
+                                        edtChequeBranch.setText("");
+                                        edtChequeDate.setText("");
+                                        /*if (isRejected) {
+                                            new UploadData().execute();
                                         } else {
-                                            Toast.makeText(mContext, getString(R.string.enter_cheque_branch), Toast.LENGTH_SHORT).show();
-                                        }
+                                            showDialogForUploadOption(mContext);
+                                        }*/
+                                        relativeSignature.setVisibility(View.VISIBLE);
+                                        relativeViewPayment.setVisibility(View.GONE);
+                                    } else {
+                                        Toast.makeText(mContext, R.string.please_specify_other_bank_name, Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    Toast.makeText(mContext, R.string.enter_valid_ifsc_code, Toast.LENGTH_SHORT).show();
+                                    selectedBankName = selectedBank;
+                                    edtChequeNo.setText("");
+                                    edtChequeBranch.setText("");
+                                    edtChequeDate.setText("");
+                                    selectedBankCheckName = "";
+                                    edtIFSCCheque.setText("");
+                                    relativeSignature.setVisibility(View.VISIBLE);
+                                    relativeViewPayment.setVisibility(View.GONE);
+                                    /*if (isRejected) {
+                                        new UploadData().execute();
+                                    } else {
+                                        showDialogForUploadOption(mContext);
+                                    }*/
                                 }
-
                             } else {
-                                Toast.makeText(mContext, getString(R.string.enter_ifsc_code), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, R.string.enter_valid_ifsc_code, Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(mContext, R.string.enter_valid_dd_no, Toast.LENGTH_SHORT).show();
                         }
 
-
                     } else {
-                        Toast.makeText(mContext, R.string.please_enter_dd_number, Toast.LENGTH_SHORT).show();
-                    }
-                    /*} else {
                         Toast.makeText(mContext, R.string.capture_dd_image, Toast.LENGTH_SHORT).show();
-                    }*/
+                    }
                 } else {
-                    /*if (fileCheque != null) {*/
-                    if (!edtChequeNo.getText().toString().trim().isEmpty()) {
-                        if (edtChequeNo.getText().toString().trim().length() == 6) {
+                    if (fileCheque != null) {
+                        if (edtChequeNo.getText().toString().trim().length() == 6
+                                || edtChequeNo.getText().toString().trim().length() == 0) {
                             if (selectedBankCheque.equals(getString(R.string.select_bank))) {
-                                Toast.makeText(mContext, R.string.please_select_bank, Toast.LENGTH_SHORT).show();
+                                if (edtIFSCCheque.getText().toString().trim().matches("^[A-Z]{4}[0][A-Z0-9]{6}$")
+                                        || edtIFSCCheque.getText().toString().trim().length() == 0) {
+                                    selectedChequeDate = edtChequeDate.getText().toString().trim();
+                                    selectedBankCheckName = "";
+                                    edtDDNo.setText("");
+                                    selectedBankName = "";
+                                    edtDDDate.setText("");
+                                    edtDDBranch.setText("");
+                                    edtIFSCDD.setText("");
+                                    relativeSignature.setVisibility(View.VISIBLE);
+                                    relativeViewPayment.setVisibility(View.GONE);
+                                    /*if (isRejected) {
+                                        new UploadData().execute();
+                                    } else {
+                                        showDialogForUploadOption(mContext);
+                                    }*/
+                                } else {
+                                    Toast.makeText(mContext, R.string.ifsc_code, Toast.LENGTH_SHORT).show();
+                                }
                             } else if (selectedBankCheque.equals(getString(R.string.others))) {
                                 edtOtherBankCheque.setVisibility(View.VISIBLE);
                                 if (!edtOtherBankCheque.getText().toString().trim().isEmpty()) {
-                                    if (!edtIFSCCheque.getText().toString().trim().isEmpty()) {
-                                        if (edtIFSCCheque.getText().toString().trim().matches("^[A-Z]{4}[0][A-Z0-9]{6}$")) {
-                                            if (!edtChequeBranch.getText().toString().trim().isEmpty()) {
-                                                if (!edtChequeDate.getText().toString().trim().isEmpty()) {
-                                                    selectedChequeDate = edtChequeDate.getText().toString().trim();
-                                                    selectedBankCheckName = edtOtherBankCheque.getText().toString().trim();
-                                                    edtDDNo.setText("");
-                                                    selectedBankName = "";
-                                                    edtDDDate.setText("");
-                                                    edtDDBranch.setText("");
-                                                    edtIFSCDD.setText("");
-                                                    if (isRejected) {
-                                                        new UploadData().execute();
-                                                    } else {
-                                                        showDialogForUploadOption(mContext);
-                                                    }
-                                                } else {
-                                                    Toast.makeText(mContext, R.string.enter_cheque_date, Toast.LENGTH_SHORT).show();
-                                                }
-                                            } else {
-                                                Toast.makeText(mContext, R.string.enter_cheque_branch, Toast.LENGTH_SHORT).show();
-                                            }
+                                    if (edtIFSCCheque.getText().toString().trim().matches("^[A-Z]{4}[0][A-Z0-9]{6}$")
+                                            || edtIFSCCheque.getText().toString().trim().length() == 0) {
+                                        selectedChequeDate = edtChequeDate.getText().toString().trim();
+                                        selectedBankCheckName = edtOtherBankCheque.getText().toString().trim();
+                                        edtDDNo.setText("");
+                                        selectedBankName = "";
+                                        edtDDDate.setText("");
+                                        edtDDBranch.setText("");
+                                        edtIFSCDD.setText("");
+                                        relativeSignature.setVisibility(View.VISIBLE);
+                                        relativeViewPayment.setVisibility(View.GONE);
+                                        /*if (isRejected) {
+                                            new UploadData().execute();
                                         } else {
-                                            Toast.makeText(mContext, R.string.ifsc_code, Toast.LENGTH_SHORT).show();
-                                        }
+                                            showDialogForUploadOption(mContext);
+                                        }*/
 
                                     } else {
-                                        Toast.makeText(mContext, getString(R.string.enter_ifsc_code), Toast.LENGTH_SHORT).show();
-
+                                        Toast.makeText(mContext, R.string.ifsc_code, Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
                                     Toast.makeText(mContext, getString(R.string.please_specify_other_bank_name), Toast.LENGTH_SHORT).show();
@@ -1936,47 +1993,33 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                                 }
 
                             } else {
-                                if (!edtIFSCCheque.getText().toString().trim().isEmpty()) {
-                                    if (edtIFSCCheque.getText().toString().trim().matches("^[A-Z]{4}[0][A-Z0-9]{6}$")) {
-                                        if (!edtChequeBranch.getText().toString().trim().isEmpty()) {
-                                            if (!edtChequeDate.getText().toString().trim().isEmpty()) {
-                                                selectedChequeDate = edtChequeDate.getText().toString().trim();
-                                                selectedBankCheckName = selectedBankCheque;
-                                                edtDDNo.setText("");
-                                                selectedBankName = "";
-                                                edtDDDate.setText("");
-                                                edtDDBranch.setText("");
-                                                edtIFSCDD.setText("");
-                                                if (isRejected) {
-                                                    new UploadData().execute();
-                                                } else {
-                                                    showDialogForUploadOption(mContext);
-                                                }
-                                            } else {
-                                                Toast.makeText(mContext, R.string.enter_cheque_date, Toast.LENGTH_SHORT).show();
-                                            }
-                                        } else {
-                                            Toast.makeText(mContext, R.string.enter_cheque_branch, Toast.LENGTH_SHORT).show();
-                                        }
+                                if (edtIFSCCheque.getText().toString().trim().matches("^[A-Z]{4}[0][A-Z0-9]{6}$")
+                                        || edtIFSCCheque.getText().toString().trim().length() == 0) {
+                                    selectedChequeDate = edtChequeDate.getText().toString().trim();
+                                    selectedBankCheckName = selectedBankCheque;
+                                    edtDDNo.setText("");
+                                    selectedBankName = "";
+                                    edtDDDate.setText("");
+                                    edtDDBranch.setText("");
+                                    edtIFSCDD.setText("");
+                                    relativeSignature.setVisibility(View.VISIBLE);
+                                    relativeViewPayment.setVisibility(View.GONE);
+                                    /*if (isRejected) {
+                                        new UploadData().execute();
                                     } else {
-                                        Toast.makeText(mContext, R.string.enter_valid_ifsc_code, Toast.LENGTH_SHORT).show();
-                                    }
-
+                                        showDialogForUploadOption(mContext);
+                                    }*/
                                 } else {
-                                    Toast.makeText(mContext, R.string.enter_ifsc_code, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, R.string.enter_valid_ifsc_code, Toast.LENGTH_SHORT).show();
                                 }
 
                             }
                         } else {
                             Toast.makeText(mContext, R.string.enter_valid_cheque_no, Toast.LENGTH_SHORT).show();
                         }
-
                     } else {
-                        Toast.makeText(mContext, R.string.enter_cheque_number, Toast.LENGTH_SHORT).show();
-                    }
-                    /*} else {
                         Toast.makeText(mContext, R.string.capture_cheque_image, Toast.LENGTH_SHORT).show();
-                    }*/
+                    }
                 }
             } else {
                 selectedBankCheckName = "";
@@ -1991,11 +2034,13 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 edtDDDate.setText("");
                 edtDDBranch.setText("");
                 edtIFSCDD.setText("");
-                if (isRejected) {
+                relativeSignature.setVisibility(View.VISIBLE);
+                relativeViewPayment.setVisibility(View.GONE);
+                /*if (isRejected) {
                     new UploadData().execute();
                 } else {
                     showDialogForUploadOption(mContext);
-                }
+                }*/
 
             }
         } else
@@ -2148,21 +2193,34 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                         hashMapBankName.clear();
                         hashMapBankName.put("0", getString(R.string.select_bank));
                         hashMapBankName.put("1", getString(R.string.others));
+
+                        bankArray = new ArrayList<>();
+                        bankArray.add(0, getString(R.string.select_bank));
+                        bankArray.add(1, getString(R.string.others));
                         for (Consumer con : jsonResponse.banklist) {
-                            hashMapBankName.put(con.getBankName(), con.getBankName());
+                            bankArray.add(con.getBankName());
+                            Log.d("11111111111111", "" + bankArray);
+
                         }
+
 
                         hashMapBankChequeArray.clear();
                         hashMapBankChequeArray.put("0", getString(R.string.select_bank));
                         hashMapBankChequeArray.put("1", getString(R.string.others));
-                        for (Consumer con : jsonResponse.banklist) {
-                            hashMapBankChequeArray.put(con.getBankName(), con.getBankName());
-                        }
 
-                        if (hashMapBankChequeArray.size() > 2) {
+                        bankArrayCheque = new ArrayList<>();
+                        bankArrayCheque.add(0, getString(R.string.select_bank));
+                        bankArrayCheque.add(1, getString(R.string.others));
+                        for (Consumer con : jsonResponse.banklist) {
+                            bankArrayCheque.add(con.getBankName());
+                        }
+                        Log.d("222222222222", "" + bankArrayCheque);
+
+
+                        if (bankArrayCheque.size() > 2) {
                             setBankSpinnerCheque();
                         }
-                        if (hashMapBankName.size() > 2) {
+                        if (bankArray.size() > 2) {
                             setBankSpinner();
 
                         }
@@ -2348,7 +2406,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     File5 = new File(getRealPathFromURI(tempUri));
 //                    Picasso.get().load(File5).into(imgTakeNoc);
 
-                } /*else if (Count == 6) {
+                } else if (Count == 6) {
                     Count = 0;
                     if (fileCheque != null) {
                         if (imgRemoveList.size() > 0) {
@@ -2360,6 +2418,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                         }
                     }
                     imgCheque.setImageBitmap(bitmap);
+                    bitmapChequeDD = bitmap;
                     Uri tempUri = getImageUri(mContext, bitmap);
                     fileCheque = new File(getRealPathFromURI(tempUri));
                 } else if (Count == 7) {
@@ -2374,9 +2433,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                         }
                     }
                     imgDD.setImageBitmap(bitmap);
+                    bitmapChequeDD = bitmap;
                     Uri tempUri = getImageUri(mContext, bitmap);
                     fileDD = new File(getRealPathFromURI(tempUri));
-                }*/
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -2810,6 +2870,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.FileAddProof0 = addBitmap1 != null ? CommonUtility.getBitmapEncodedString(addBitmap1) : "";
         registrationModel.FileAddProof1 = addBitmap2 != null ? CommonUtility.getBitmapEncodedString(addBitmap2) : "";
         registrationModel.FileNocProof = nocBitmap != null ? CommonUtility.getBitmapEncodedString(nocBitmap) : "";
+        registrationModel.FileSign = bitmapSign != null ? CommonUtility.getBitmapEncodedString(bitmapSign) : "";
+        registrationModel.FileChequeDD = bitmapChequeDD != null ? CommonUtility.getBitmapEncodedString(bitmapChequeDD) : "";
+
+
+
 
 
         registrationModel.isRejected = String.valueOf(isRejected);
@@ -2940,12 +3005,12 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     multipartUtility.addFilePart("File_noc_proof", File5);
                 }
 
-                /*if (spinnerPaymentMethod.getSelectedItem().toString().trim().equals(getString(R.string.cheque))) {
+                if (spinnerPaymentMethod.getSelectedItem().toString().trim().equals(getString(R.string.cheque))) {
                     multipartUtility.addFilePart("File_cheque_dd", fileCheque);
                 }
                 if (spinnerPaymentMethod.getSelectedItem().toString().trim().equals(getString(R.string.dd))) {
                     multipartUtility.addFilePart("File_cheque_dd", fileDD);
-                }*/
+                }
 
 
                 multipartUtility.addFormField("image_count", String.valueOf(imageCount));
@@ -3028,10 +3093,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                             File4.delete();
                         if (File5 != null)
                             File5.delete();
-                        /*if (fileCheque != null)
+                        if (fileCheque != null)
                             fileCheque.delete();
                         if (fileDD != null)
-                            fileDD.delete();*/
+                            fileDD.delete();
 
                     } else {
                         Toast.makeText(mContext, response.getString("message"), Toast.LENGTH_SHORT).show();

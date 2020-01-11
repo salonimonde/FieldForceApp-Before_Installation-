@@ -79,5 +79,7 @@ public class RegistrationTable {
         public static final String IS_REJECTED = "is_document_rejected";
         public static final String DATE_OF_PAYMENT = "date_of_payment";
         public static final String CARD_STATUS = "status";
+        public static final String FIELD_CHEQUE_DD = "File_cheque_dd";
+        public static final String FILE_SIGN = "File_sign";
     }
 }

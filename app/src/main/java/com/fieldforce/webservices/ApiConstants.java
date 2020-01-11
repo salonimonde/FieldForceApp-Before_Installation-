@@ -3,14 +3,14 @@ package com.fieldforce.webservices;
 @SuppressWarnings("ALL")
 public class ApiConstants {
 
-   /* public static final String DOMAIN_URL = "http://192.168.1.42:8008"; // Arpita Local
+    /*public static final String DOMAIN_URL = "http://192.168.1.42:8008"; // Arpita Local
     public static final String DOMAIN_URL_CIS = "http://192.168.1.42:8008";*/
 
-    /*public static final String DOMAIN_URL = "http://192.168.1.51:8000"; //
-    public static final String DOMAIN_URL_CIS = "http://192.168.1.51:8000";*/
+    public static final String DOMAIN_URL = "http://192.168.1.51:7000"; //
+    public static final String DOMAIN_URL_CIS = "http://192.168.1.51:7000";
 
-    public static final String DOMAIN_URL = "http://192.168.43.214:8000"; //
-    public static final String DOMAIN_URL_CIS = "http://192.168.43.214:8000";
+    /*public static final String DOMAIN_URL = "http://192.168.43.214:8000"; //
+    public static final String DOMAIN_URL_CIS = "http://192.168.43.214:8000";*/
 
 
     /*public static final String DOMAIN_URL = "http://54.187.162.209"; //  PROD

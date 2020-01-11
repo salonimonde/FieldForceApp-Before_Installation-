@@ -5692,6 +5692,9 @@ public class DatabaseManager {
             values.put(RegistrationTable.Cols.DISTRICT, registrationModel.district != null ? registrationModel.district : "");
             values.put(RegistrationTable.Cols.SOCIETY_NAME, registrationModel.societyName != null ? registrationModel.societyName : "");
             values.put(RegistrationTable.Cols.CARD_STATUS, cardStatus);
+            values.put(RegistrationTable.Cols.FIELD_CHEQUE_DD, registrationModel.FileChequeDD != null ? registrationModel.FileChequeDD : "");
+            values.put(RegistrationTable.Cols.FILE_SIGN, registrationModel.FileSign != null ? registrationModel.FileSign : "");
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -5809,6 +5812,11 @@ public class DatabaseManager {
         registrationModel.landmark = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.LANDMARK)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.LANDMARK)) : "";
         registrationModel.district = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.DISTRICT)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.DISTRICT)) : "";
         registrationModel.societyName = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.SOCIETY_NAME)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.SOCIETY_NAME)) : "";
+
+
+        registrationModel.FileChequeDD = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FIELD_CHEQUE_DD)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FIELD_CHEQUE_DD)) : "";
+        registrationModel.FileSign = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_SIGN)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_SIGN)) : "";
+
         return registrationModel;
     }
 

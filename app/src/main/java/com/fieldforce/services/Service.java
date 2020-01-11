@@ -238,7 +238,7 @@ public class Service extends android.app.Service {
             try {
 
                 MultipartUtility multipartUtility = new MultipartUtility(ApiConstants.UPLOAD_NSC_FORM, "UTF-8");
-                if (!registrationToUpload.get(0).enquiryId.isEmpty()) {
+                if (registrationToUpload.get(0).enquiryId != null) {
                     multipartUtility.addFormField("enquiry_id", registrationToUpload.get(0).enquiryId);
                 }
                 multipartUtility.addFormField("consumer_category", registrationToUpload.get(0).consumerCategory);
@@ -338,12 +338,12 @@ public class Service extends android.app.Service {
                     multipartUtility.addFilePart("File_noc_proof", getImage(registrationToUpload.get(0).FileNocProof));
                 }
 
-                /*if (spinnerPaymentMethod.getSelectedItem().toString().trim().equals(getString(R.string.cheque))) {
-                    multipartUtility.addFilePart("File_cheque_dd", fileCheque);
+                if (!registrationToUpload.get(0).FileChequeDD.isEmpty()) {
+                    multipartUtility.addFilePart("File_cheque_dd", getImage(registrationToUpload.get(0).FileChequeDD));
                 }
-                if (spinnerPaymentMethod.getSelectedItem().toString().trim().equals(getString(R.string.dd))) {
-                    multipartUtility.addFilePart("File_cheque_dd", fileDD);
-                }*/
+                if (!registrationToUpload.get(0).FileSign.isEmpty()) {
+                    multipartUtility.addFilePart("File_sign", getImage(registrationToUpload.get(0).FileSign));
+                }
 
 
                 multipartUtility.addFormField("image_count", registrationToUpload.get(0).imageCount);

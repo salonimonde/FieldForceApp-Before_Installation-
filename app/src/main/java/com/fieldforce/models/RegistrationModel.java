@@ -211,8 +211,12 @@ public class RegistrationModel implements Serializable {
 
 
 
+    @SerializedName("File_cheque_dd")
+    public String FileChequeDD;
 
 
+    @SerializedName("File_sign")
+    public String FileSign;
 
 
 

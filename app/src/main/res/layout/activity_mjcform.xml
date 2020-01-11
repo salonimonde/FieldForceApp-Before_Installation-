@@ -17,7 +17,7 @@
             android:id="@+id/relative_layout_step_one"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/linear_general_info"
@@ -942,7 +942,7 @@
             android:id="@+id/relative_layout_step_four"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/linear_signature"

@@ -409,6 +409,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 RegistrationTable.Cols.FILE_ADD_PROOF_0 + " BLOB, " +
                 RegistrationTable.Cols.FILE_ADD_PROOF_1 + " BLOB, " +
                 RegistrationTable.Cols.FILE_NOC_PROOF + " BLOB, " +
+                RegistrationTable.Cols.FIELD_CHEQUE_DD + " BLOB, " +
+                RegistrationTable.Cols.FILE_SIGN + " BLOB, " +
                 RegistrationTable.Cols.IMAGE_COUNT + " VARCHAR, " +
                 RegistrationTable.Cols.IMAGE_COUNT_ADD + " VARCHAR, " +
                 RegistrationTable.Cols.VENDOR_ID + " VARCHAR, " +

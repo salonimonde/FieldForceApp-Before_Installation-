@@ -316,10 +316,11 @@
     <string name="bgl">BGL</string>
 
     <string name="general_information">General Infromation</string>
-    <string name="step_1_4">STEP 1:4</string>
-    <string name="step_2_4">STEP 2:4</string>
-    <string name="step_3_4">STEP 3:4</string>
-    <string name="step_4_4">STEP 4:4</string>
+    <string name="step_1_4">STEP 1:5</string>
+    <string name="step_2_4">STEP 2:5</string>
+    <string name="step_3_4">STEP 3:5</string>
+    <string name="step_4_4">STEP 4:5</string>
+    <string name="step_5_4">STEP 5:5</string>
     <string name="applicant_company_name">Applicant/Company Name *</string>
     <string name="mobile_number_mandatory">Mobile Number *</string>
     <string name="aadhar_number_mandatory">Aadhar Number</string>
@@ -582,6 +583,7 @@
     <string name="page2">Page 2</string>
     <string name="page3">Page 3</string>
     <string name="page4">Page 4</string>
+    <string name="page5">Page 5</string>
     <string name="checklist">Check List</string>
     <string name="sr_no">Sr. No</string>
     <string name="sr_no1">1</string>
@@ -738,5 +740,7 @@
 
 
     <string name="do_you_want_to_assign_this_to_installation">Do You Want to Assign this to Installation ?</string>
+
+    <string name="consent_form">Consent Form</string>
 
 </resources>
