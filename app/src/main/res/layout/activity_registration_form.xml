@@ -1007,7 +1007,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_h1"
-                    app:cardCornerRadius="@dimen/margin_h2">
+                    app:cardCornerRadius="@dimen/margin_h2"
+                    android:padding="@dimen/margin_h3"
+                    android:elevation="@dimen/margin_h1">
 
                     <RelativeLayout
                         android:id="@+id/relative_id_proof"
@@ -1178,7 +1180,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_h1"
-                    app:cardCornerRadius="@dimen/margin_h2">
+                    app:cardCornerRadius="@dimen/margin_h2"
+                    android:padding="@dimen/margin_h3"
+                    android:elevation="@dimen/margin_h1">
 
                 <RelativeLayout
                     android:id="@+id/relative_address_proof"
@@ -1335,7 +1339,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_h1"
-                    app:cardCornerRadius="@dimen/margin_h2">
+                    app:cardCornerRadius="@dimen/margin_h2"
+                    android:padding="@dimen/margin_h3"
+                    android:elevation="@dimen/margin_h1">
 
                 <RelativeLayout
                     android:id="@+id/relative_noc_proof"
@@ -2115,7 +2121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin_h2"
-                android:text="@string/we_are_happy"
+                android:text="@string/consumer_consent"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/text_size_h4"
                 android:layout_below="@+id/view_six"/>

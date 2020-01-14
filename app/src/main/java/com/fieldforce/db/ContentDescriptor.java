@@ -4,7 +4,9 @@ import android.content.UriMatcher;
 import android.net.Uri;
 
 import com.fieldforce.db.tables.AllJobCardTable;
+import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
+import com.fieldforce.db.tables.BankTable;
 import com.fieldforce.db.tables.BreakDownJobCardTable;
 import com.fieldforce.db.tables.CommissionJobCardTable;
 import com.fieldforce.db.tables.ComplaintJobCardTable;
@@ -57,6 +59,8 @@ public class ContentDescriptor
         matcher.addURI(AUTHORITY, AllJobCardTable.PATH, AllJobCardTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, RegistrationTable.PATH, RegistrationTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, RejectedJobCardTable.PATH, RejectedJobCardTable.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, AreaTable.PATH, AreaTable.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, BankTable.PATH, BankTable.PATH_TOKEN);
 
         return matcher;
     }

@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import com.fieldforce.R;
 import com.fieldforce.db.tables.AllJobCardTable;
+import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
+import com.fieldforce.db.tables.BankTable;
 import com.fieldforce.db.tables.BreakDownJobCardTable;
 import com.fieldforce.db.tables.CommissionJobCardTable;
 import com.fieldforce.db.tables.ComplaintJobCardTable;
@@ -122,6 +124,180 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return values;
+    }
+
+
+    // Database functions related to Area created be Saloni 14-01-2019
+
+    public static void saveArea(Context loginActivity, ArrayList<Consumer> consumer) {
+        for (Consumer consumerModel : consumer){
+            DatabaseManager.saveAreaInfo(loginActivity, consumerModel);
+
+        }
+    }
+
+    private static void saveAreaInfo(Context context, Consumer consumer) {
+        if (consumer != null) {
+            ContentValues values = getContentValuesAreaInfoTable(context, consumer);
+            String condition = AreaTable.Cols.AREA_ID + "='" + consumer.areaID + "'";
+            saveAreaValues(context, AreaTable.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValuesAreaInfoTable(Context context, Consumer consumer) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(AreaTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(AreaTable.Cols.AREA_ID, consumer.areaID != null ? consumer.areaID : "");
+            values.put(AreaTable.Cols.AREA_NAME, consumer.area != null ? consumer.area : "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void saveAreaValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+
+    public static ArrayList<Consumer> getAreas(Context context, String userId) {
+        String condition = AreaTable.Cols.USER_LOGIN_ID + "='" + userId + "'";
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(AreaTable.CONTENT_URI, null,
+                condition, null, AreaTable.Cols.AREA_ID + " ASC ");
+        ArrayList<Consumer> areas = getAreaFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return areas;
+    }
+
+    private static ArrayList<Consumer> getAreaFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getAreasFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getAreasFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.areaID = cursor.getString(cursor.getColumnIndex(AreaTable.Cols.AREA_ID)) != null ? cursor.getString(cursor.getColumnIndex(AreaTable.Cols.AREA_ID)) : "";
+        consumerModel.area = cursor.getString(cursor.getColumnIndex(AreaTable.Cols.AREA_NAME)) != null ? cursor.getString(cursor.getColumnIndex(AreaTable.Cols.AREA_NAME)) : "";
+        return consumerModel;
+    }
+
+    // Area Related Functions end here
+
+
+    // Bank Related Functions start here
+
+    public static void saveBankNames(Context loginActivity, ArrayList<Consumer> banks) {
+        for (Consumer bankName : banks){
+            DatabaseManager.saveBankInfo(loginActivity, bankName);
+        }
+    }
+
+    private static void saveBankInfo(Context context, Consumer bankName) {
+        if (bankName != null) {
+            ContentValues values = getContentValuesBankInfoTable(context, bankName);
+            String condition = BankTable.Cols.BANK_NAME + "='" + bankName + "'";
+            saveBankValues(context, BankTable.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValuesBankInfoTable(Context context, Consumer bankName) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(BankTable.Cols.BANK_NAME, bankName.bank_name != null ? bankName.bank_name : "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void saveBankValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+    public static ArrayList<Consumer> getBanks(Context context) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(BankTable.CONTENT_URI, null,
+                null, null, BankTable.Cols.ID + " ASC ");
+        ArrayList<Consumer> banks = getBankFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return banks;
+    }
+
+    private static ArrayList<Consumer> getBankFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getBanksFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getBanksFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.bank_name = cursor.getString(cursor.getColumnIndex(BankTable.Cols.BANK_NAME)) != null ? cursor.getString(cursor.getColumnIndex(BankTable.Cols.BANK_NAME)) : "";
+        return consumerModel;
     }
 
     //Notification Table related methods

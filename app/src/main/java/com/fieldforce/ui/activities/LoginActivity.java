@@ -28,6 +28,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.fieldforce.R;
 import com.fieldforce.db.DatabaseManager;
 import com.fieldforce.interfaces.ApiServiceCaller;
+import com.fieldforce.models.Consumer;
 import com.fieldforce.models.UserProfileModel;
 import com.fieldforce.utility.App;
 import com.fieldforce.utility.AppConstants;
@@ -39,6 +40,8 @@ import com.fieldforce.webservices.JsonResponse;
 import com.fieldforce.webservices.WebRequest;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends ParentActivity implements View.OnClickListener, ApiServiceCaller {
 
@@ -89,8 +92,8 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        String imeiNumber = telephonyManager.getDeviceId();
-//        String imeiNumber = "355463061207453";
+//        String imeiNumber = telephonyManager.getDeviceId();
+        String imeiNumber = "353398090944795";
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             showLoadingDialog();
             try {
@@ -174,6 +177,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                                 AppPreferences.getInstance(mContext).putString(AppConstants.SCREEN_NO, "0");
 
 
+                                getArea();
                                 Intent intent = new Intent(mContext, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -191,6 +195,45 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                 }
             }
             break;
+            case ApiConstants.GET_AREA_SP: {
+                if (jsonResponse != null) {
+                    if (jsonResponse.area_list != null) {
+                        ArrayList<Consumer> consumer = new ArrayList<>();
+                        consumer.addAll(jsonResponse.area_list);
+
+                        DatabaseManager.saveArea(mContext, consumer);
+                        getBankNames();
+                        dismissLoadingDialog();
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+                            dismissLoadingDialog();
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+            break;
+            case ApiConstants.GET_BANK_NAME_URL: {
+                if (jsonResponse.result != null) {
+                    if (jsonResponse.banklist != null) {
+
+
+                        ArrayList<Consumer> bank = new ArrayList<>();
+                        bank.addAll(jsonResponse.banklist);
+
+                        Log.d("tttttttttttt",""+bank);
+                        DatabaseManager.saveBankNames(mContext, bank);
+
+
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+                            dismissLoadingDialog();
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+            break;
         }
     }
 
@@ -202,6 +245,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                 Toast.makeText(mContext, AppConstants.API_FAIL_MESSAGE, Toast.LENGTH_SHORT).show();
             }
             break;
+
         }
     }
 
@@ -223,5 +267,37 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
         customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         customDialog.show();
         customDialog.setCancelable(false);
+    }
+
+
+    private void getArea() {
+        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
+                        ApiConstants.GET_AREA_SP, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_AREA_SP);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+    }
+
+    public void getBankNames() {
+
+        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+//            showLoadingDialog();
+            try {
+
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
+                        ApiConstants.GET_BANK_NAME_URL, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_BANK_NAME_URL);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
     }
 }

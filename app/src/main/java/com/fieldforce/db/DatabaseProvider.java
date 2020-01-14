@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 import com.fieldforce.db.tables.AllJobCardTable;
+import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
+import com.fieldforce.db.tables.BankTable;
 import com.fieldforce.db.tables.BreakDownJobCardTable;
 import com.fieldforce.db.tables.ComplaintJobCardTable;
 import com.fieldforce.db.tables.ConsumerEnquiryTable;
@@ -134,6 +136,16 @@ public class DatabaseProvider extends ContentProvider {
                         selection, selectionArgs, sortOrder);
                 break;
             }
+            case AreaTable.PATH_TOKEN: {
+                result = doQuery(db, uri, AreaTable.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
+            case BankTable.PATH_TOKEN: {
+                result = doQuery(db, uri, BankTable.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
         }
 
         return result;
@@ -232,6 +244,16 @@ public class DatabaseProvider extends ContentProvider {
                         RejectedJobCardTable.CONTENT_URI, uri, values);
                 break;
             }
+            case AreaTable.PATH_TOKEN: {
+                result = doInsert(db, AreaTable.TABLE_NAME,
+                        BankTable.CONTENT_URI, uri, values);
+                break;
+            }
+            case BankTable.PATH_TOKEN: {
+                result = doInsert(db, BankTable.TABLE_NAME,
+                        BankTable.CONTENT_URI, uri, values);
+                break;
+            }
         }
 
         if (result == null) {
@@ -310,6 +332,14 @@ public class DatabaseProvider extends ContentProvider {
             }
             case RejectedJobCardTable.PATH_TOKEN: {
                 table = RejectedJobCardTable.TABLE_NAME;
+                break;
+            }
+            case AreaTable.PATH_TOKEN: {
+                table = AreaTable.TABLE_NAME;
+                break;
+            }
+            case BankTable.PATH_TOKEN: {
+                table = BankTable.TABLE_NAME;
                 break;
             }
         }
@@ -418,6 +448,16 @@ public class DatabaseProvider extends ContentProvider {
                         selectionArgs);
                 break;
             }
+            case AreaTable.PATH_TOKEN: {
+                result = doDelete(db, uri, AreaTable.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
+            case BankTable.PATH_TOKEN: {
+                result = doDelete(db, uri, BankTable.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
         }
         return result;
     }
@@ -508,6 +548,16 @@ public class DatabaseProvider extends ContentProvider {
             }
             case RejectedJobCardTable.PATH_TOKEN: {
                 result = doUpdate(db, uri, RejectedJobCardTable.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+            case AreaTable.PATH_TOKEN: {
+                result = doUpdate(db, uri, AreaTable.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+            case BankTable.PATH_TOKEN: {
+                result = doUpdate(db, uri, BankTable.TABLE_NAME, selection,
                         selectionArgs, values);
                 break;
             }

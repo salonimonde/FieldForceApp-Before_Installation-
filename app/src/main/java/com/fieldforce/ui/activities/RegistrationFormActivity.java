@@ -4,9 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -121,6 +124,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import android.telephony.SmsManager;
+import android.text.Selection;
+import android.view.KeyEvent;
+
+import java.util.Random;
+
 import id.zelory.compressor.Compressor;
 
 import static com.fieldforce.utility.AppConstants.GALLERY;
@@ -232,6 +241,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private SignatureView signatureViewConsumer;
 
 
+    private ArrayList<Consumer> consumerArea, bankNames;
+
+
+    private String mStrOTP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -449,6 +462,132 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 }
             }
         });
+
+        //jayshree changes
+
+        edtFlatNumber.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String prefix = getString(R.string.house_number);
+                if (!editable.toString().startsWith(prefix)) {
+                    String cleanString;
+                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
+                    if (editable.toString().startsWith(deletedPrefix)) {
+                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
+                    } else {
+                        cleanString = editable.toString().replaceAll(prefix, "");
+                    }
+                    edtFlatNumber.setText(prefix + cleanString);
+                    edtFlatNumber.setSelection(edtFlatNumber.getText().length());
+                }
+
+            }
+        });
+
+        edtFloor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String prefix = getString(R.string.floor_no_new);
+                if (!editable.toString().startsWith(prefix)) {
+                    String cleanString;
+                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
+                    if (editable.toString().startsWith(deletedPrefix)) {
+                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
+                    } else {
+                        cleanString = editable.toString().replaceAll(prefix, "");
+                    }
+                    edtFloor.setText(prefix + cleanString);
+                    edtFloor.setSelection(edtFloor.getText().length());
+                }
+
+
+            }
+        });
+
+        edtPlotNo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String prefix = getString(R.string.plot_no_new);
+                if (!editable.toString().startsWith(prefix)) {
+                    String cleanString;
+                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
+                    if (editable.toString().startsWith(deletedPrefix)) {
+                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
+                    } else {
+                        cleanString = editable.toString().replaceAll(prefix, "");
+                    }
+                    edtPlotNo.setText(prefix + cleanString);
+                    edtPlotNo.setSelection(edtPlotNo.getText().length());
+                }
+
+            }
+        });
+
+        edtWing.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String prefix = getString(R.string.wing_new);
+                if (!editable.toString().startsWith(prefix)) {
+                    String cleanString;
+                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
+                    if (editable.toString().startsWith(deletedPrefix)) {
+                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
+                    } else {
+                        cleanString = editable.toString().replaceAll(prefix, "");
+                    }
+                    edtWing.setText(prefix + cleanString);
+                    edtWing.setSelection(edtWing.getText().length());
+                }
+            }
+        });
+
+        //****************************************
 
 
        /* spinnerOccupation = findViewById(R.id.spinner_occupation);
@@ -781,6 +920,43 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
     public void getBankNames() {
 
+        bankNames = DatabaseManager.getBanks(mContext);
+        Log.d("333333333333333", "" + bankNames);
+
+        hashMapBankName.clear();
+        hashMapBankName.put("0", getString(R.string.select_bank));
+        hashMapBankName.put("1", getString(R.string.others));
+
+        bankArray = new ArrayList<>();
+        bankArray.add(0, getString(R.string.select_bank));
+        bankArray.add(1, getString(R.string.others));
+        for (Consumer con : bankNames) {
+            bankArray.add(con.getBankName());
+
+        }
+
+
+        hashMapBankChequeArray.clear();
+        hashMapBankChequeArray.put("0", getString(R.string.select_bank));
+        hashMapBankChequeArray.put("1", getString(R.string.others));
+
+        bankArrayCheque = new ArrayList<>();
+        bankArrayCheque.add(0, getString(R.string.select_bank));
+        bankArrayCheque.add(1, getString(R.string.others));
+        for (Consumer con : bankNames) {
+            bankArrayCheque.add(con.getBankName());
+        }
+
+
+        if (bankArrayCheque.size() > 2) {
+            setBankSpinnerCheque();
+        }
+        if (bankArray.size() > 2) {
+            setBankSpinner();
+
+        }
+
+/*
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
 //            showLoadingDialog();
             try {
@@ -792,7 +968,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 e.printStackTrace();
             }
         } else
-            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();*/
     }
 
     @Override
@@ -812,17 +988,24 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         } else if (view == btnNext2) {
             validateAddressInfo();
         } else if (view == txtSMSVerification || view == txtResendOTP) {
+            getOTP();
             clickCount = clickCount + 1;
             enableInputField(true);
-            if (edtEnterOTP.getText().toString().trim().length() != 0) {
-                enableInputField(false);
+            /*if (edtEnterOTP.getText().toString().equals(mStrOTP)) {
+
+                Toast.makeText(RegistrationFormActivity.this, "Verified Mobile Number",
+                        Toast.LENGTH_LONG).show();
+
+                *//*enableInputField(false);
                 CustomDialog customDialog = new CustomDialog((Activity) mContext, getString(R.string.already_verified),
                         getString(R.string.otp_already_verifed), false);
                 customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 customDialog.show();
-                customDialog.setCancelable(false);
+                customDialog.setCancelable(false);*//*
 //                Toast.makeText(getApplicationContext(), getString(R.string.otp_already_verifed), Toast.LENGTH_LONG).show();
             }
+            else
+                Toast.makeText(this, "Invalid OTP", Toast.LENGTH_SHORT).show();*/
         } else if (view == btnNext3) {
             imageCount = 0;
             imageCountAdd = 0;
@@ -918,6 +1101,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
                 nestedAddressProof.setVisibility(View.GONE);
                 imgAddressProofArrow.setRotation(0);
+
+                relNocProof.setVisibility(View.GONE);
+                imgNocProofArrow.setRotation(0);
+
                 idProof = false;
             } else {
                 nestedIdProof.setVisibility(View.GONE);
@@ -931,6 +1118,9 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
                 nestedIdProof.setVisibility(View.GONE);
                 imgIdProofArrow.setRotation(0);
+
+                relNocProof.setVisibility(View.GONE);
+                imgNocProofArrow.setRotation(0);
 
                 addressProof = false;
             } else {
@@ -947,6 +1137,9 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     nestedAddressProof.setVisibility(View.GONE);
                     nestedIdProof.setVisibility(View.GONE);
 
+                    imgIdProofArrow.setRotation(0);
+                    imgAddressProofArrow.setRotation(0);
+
                     nocProof = false;
                 } else {
                     relNocProof.setVisibility(View.GONE);
@@ -958,7 +1151,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 imgNocProofArrow.setRotation(0);
                 nocProof = true;
             }
-
 
         } else if (view == btnPreviousOne) {
             relativeViewGeneralInfo.setVisibility(View.VISIBLE);
@@ -975,7 +1167,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             relativeViewAddressInfo.setVisibility(View.GONE);
             relativeViewUploadDoc.setVisibility(View.VISIBLE);
             relativeViewPayment.setVisibility(View.GONE);
-        }else if (view == btnPreviousFour) {
+        } else if (view == btnPreviousFour) {
             relativeViewGeneralInfo.setVisibility(View.GONE);
             relativeViewAddressInfo.setVisibility(View.GONE);
             relativeViewUploadDoc.setVisibility(View.GONE);
@@ -1123,6 +1315,20 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     private void getArea() {
+
+
+        consumerArea = DatabaseManager.getAreas(mContext,
+                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+
+        haspMapArea.clear();
+        haspMapArea.put("0", getString(R.string.select_area));
+        for (Consumer con : consumerArea)
+            haspMapArea.put(con.getAreaID(), con.getArea());
+
+        Log.d("1111111111", "" + haspMapArea);
+        setAreaSpinner();
+        /*
+
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             try {
                 JSONObject jsonObject = new JSONObject();
@@ -1134,7 +1340,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 e.printStackTrace();
             }
         } else
-            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();*/
     }
 
     private void getDocumentList() {
@@ -1361,6 +1567,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 if (haspMapArea != null && haspMapArea.size() > 0) {
                     areaList = getKeysFromValue(haspMapArea, spinnerArea.getSelectedItem().toString());
                     selectedArea = areaList.get(0);
+                    Log.d("222222222222", "" + selectedArea);
                     if (selectedArea.equals("0")) {
                         hashMapPinCode.clear();
                         setPinCodeSpinner();
@@ -1753,7 +1960,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }*/
 
     private void validateAddressInfo() {
-        if (edtFlatNumber.getText().toString().trim().length() > 0)
+        if (edtFlatNumber.getText().toString().trim().length() > 0 && edtFlatNumber.getText().toString().length()>10)
             if (edtSocietyBuildingName.getText().toString().trim().length() > 0)
                 if (edtRoadNo.getText().toString().trim().length() > 0)
                     if (edtLandmark.getText().toString().trim().length() > 0)
@@ -2199,7 +2406,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                         bankArray.add(1, getString(R.string.others));
                         for (Consumer con : jsonResponse.banklist) {
                             bankArray.add(con.getBankName());
-                            Log.d("11111111111111", "" + bankArray);
 
                         }
 
@@ -2214,7 +2420,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                         for (Consumer con : jsonResponse.banklist) {
                             bankArrayCheque.add(con.getBankName());
                         }
-                        Log.d("222222222222", "" + bankArrayCheque);
 
 
                         if (bankArrayCheque.size() > 2) {
@@ -2724,7 +2929,22 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     public void onSubmitClicked(View view) {
-        String code = ((EditText) findViewById(R.id.edt_enter_otp)).getText().toString();
+        if (edtEnterOTP.getText().toString().equals(mStrOTP)) {
+
+            Toast.makeText(RegistrationFormActivity.this, "Verified Mobile Number",
+                    Toast.LENGTH_LONG).show();
+
+                /*enableInputField(false);
+                CustomDialog customDialog = new CustomDialog((Activity) mContext, getString(R.string.already_verified),
+                        getString(R.string.otp_already_verifed), false);
+                customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                customDialog.show();
+                customDialog.setCancelable(false);*/
+//                Toast.makeText(getApplicationContext(), getString(R.string.otp_already_verifed), Toast.LENGTH_LONG).show();
+        }
+        else
+            Toast.makeText(this, "Invalid OTP", Toast.LENGTH_SHORT).show();
+        /*String code = ((EditText) findViewById(R.id.edt_enter_otp)).getText().toString();
         if (code.equals("")) {
             Toast.makeText(getApplicationContext(), getString(R.string.error_enter_OTP), Toast.LENGTH_LONG).show();
         } else if (!code.isEmpty()) {
@@ -2735,7 +2955,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 showLoadingDialog(getString(R.string.verification_in_progress));
                 enableInputField(false);
             }
-        }
+        }*/
     }
 
     private void tryAndPrefillPhoneNumber() {
@@ -2872,9 +3092,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.FileNocProof = nocBitmap != null ? CommonUtility.getBitmapEncodedString(nocBitmap) : "";
         registrationModel.FileSign = bitmapSign != null ? CommonUtility.getBitmapEncodedString(bitmapSign) : "";
         registrationModel.FileChequeDD = bitmapChequeDD != null ? CommonUtility.getBitmapEncodedString(bitmapChequeDD) : "";
-
-
-
 
 
         registrationModel.isRejected = String.valueOf(isRejected);
@@ -3272,4 +3489,134 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
 
     }
+
+
+
+
+
+
+    //OTP Changes by Jayshree on 13-01-2020
+    private void getOTP()
+    {
+        Random otp = new Random();
+
+        StringBuilder builder = new StringBuilder();
+        for (int count = 0; count <= 3; count++) {
+            builder.append(otp.nextInt(3));
+        }
+        mStrOTP = builder.toString();
+        multimsg( mStrOTP, ""+edtMobile.getText().toString());
+
+    }
+    private void multimsg(String message,String phoneNumber)
+    {
+        Log.e("tag1111","otp = "+mStrOTP);
+        //mProgressBar.setVisibility(View.VISIBLE);
+        String SENT = "SMS_SENT";
+        String DELIVERED = "SMS_DELIVERED";
+
+        Log.e("TAG","SMS:"+message+"NUMBER:"+phoneNumber);
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(
+                SENT), 0);
+
+        PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0,
+                new Intent(DELIVERED), 0);
+
+        //---when the SMS has been sent---
+        registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode())
+                {
+                    case Activity.RESULT_OK:
+                        Toast.makeText(RegistrationFormActivity.this, "SMS sent",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+
+                        Toast.makeText(RegistrationFormActivity.this, "Generic failure",
+                                Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(RegistrationFormActivity.this, "No service",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Toast.makeText(RegistrationFormActivity.this, "Null PDU",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Toast.makeText(RegistrationFormActivity.this, "Radio off",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        },new IntentFilter(SENT));
+
+        //---when the SMS has been delivered---
+        registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode())
+                {
+                    case Activity.RESULT_OK:
+                        Toast.makeText(RegistrationFormActivity.this, "SMS delivered",
+                                Toast.LENGTH_SHORT).show();
+                        //txtSMSVerification.setEnabled(false);
+
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Toast.makeText(RegistrationFormActivity.this, "SMS not delivered",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        }, new IntentFilter(DELIVERED));
+
+        SmsManager sms = SmsManager.getDefault();
+        ///sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
+        SmsManager smsMgr = SmsManager.getDefault();
+        SmsManager sm = SmsManager.getDefault();
+        ArrayList<String> parts =sm.divideMessage(message);
+        int numParts = parts.size();
+        ArrayList<PendingIntent> sentIntents = new ArrayList<PendingIntent>();
+        ArrayList<PendingIntent> deliveryIntents = new ArrayList<PendingIntent>();
+        for (int i = 0; i < numParts; i++) {
+            sentIntents.add(PendingIntent.getBroadcast(RegistrationFormActivity.this, 0,
+                    new Intent(SENT), 0));
+            deliveryIntents.add(PendingIntent.getBroadcast(RegistrationFormActivity.this, 0,
+                    new Intent(DELIVERED), 0));
+        }
+        if (ContextCompat.checkSelfPermission(RegistrationFormActivity.this,
+                Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            int permissionCheck = ContextCompat.checkSelfPermission(RegistrationFormActivity.this, Manifest.permission.READ_PHONE_STATE);
+
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((Activity) RegistrationFormActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 0);
+            } else {
+                //TODO
+            }
+            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) RegistrationFormActivity.this,
+                    Manifest.permission.SEND_SMS)) {
+            } else {
+                ActivityCompat.requestPermissions((Activity) RegistrationFormActivity.this,
+                        new String[]{Manifest.permission.SEND_SMS},
+                        1);
+            }
+        }else{
+            //already has permission granted
+            if(phoneNumber.length()!=0) {
+
+                sms.sendMultipartTextMessage(phoneNumber, null, parts, sentIntents, deliveryIntents);
+            }
+            //smsManager.sendTextMessage(phonenumber, null,smsbody, null, null);
+            Toast.makeText(RegistrationFormActivity.this, "SMS SENT.",
+                    Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    // OTP Change by Jayshree Completed
 }

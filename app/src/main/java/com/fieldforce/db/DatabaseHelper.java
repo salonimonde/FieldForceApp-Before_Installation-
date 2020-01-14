@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.fieldforce.db.tables.AllJobCardTable;
+import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
+import com.fieldforce.db.tables.BankTable;
 import com.fieldforce.db.tables.BreakDownJobCardTable;
 import com.fieldforce.db.tables.CommissionJobCardTable;
 import com.fieldforce.db.tables.ComplaintJobCardTable;
@@ -57,6 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createRegistrationTable(db);
         createRejectedJobCardTable(db);
         createAllJobCardTable(db);
+        createAreaTable(db);
+        createBankTable(db);
 
     }
 
@@ -447,6 +451,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 RejectedJobCardTable.Cols.REGISTRATION_NO + " VARCHAR";
         createTable(db, RejectedJobCardTable.TABLE_NAME, RejectedJobCardTableFields);
     }
+
+    private void createAreaTable(SQLiteDatabase db){
+        String AreaTableFields = AreaTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                AreaTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
+                AreaTable.Cols.AREA_ID + " VARCHAR, " +
+                AreaTable.Cols.AREA_NAME + " VARCHAR";
+        createTable(db, AreaTable.TABLE_NAME, AreaTableFields);
+    }
+
+    private void createBankTable(SQLiteDatabase db){
+        String BankTableFields = BankTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                BankTable.Cols.BANK_NAME + " VARCHAR";
+        createTable(db, BankTable.TABLE_NAME, BankTableFields);
+    }
+
     public void dropTable(SQLiteDatabase db, String name) {
         String query = MessageFormat.format(DatabaseHelper.KEY_DROP_TABLE, name);
         db.execSQL(query);
