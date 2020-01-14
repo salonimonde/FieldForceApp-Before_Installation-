@@ -70,8 +70,9 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (v == btnLogin) {
+            Log.d("xxxxxxxxxxxxxx", " " + Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-//            Log.d("xxxxxxxxxxxxxx", " " + Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -221,7 +222,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                         ArrayList<Consumer> bank = new ArrayList<>();
                         bank.addAll(jsonResponse.banklist);
 
-                        Log.d("tttttttttttt",""+bank);
+                        Log.d("tttttttttttt", "" + bank);
                         DatabaseManager.saveBankNames(mContext, bank);
 
 

@@ -1960,7 +1960,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }*/
 
     private void validateAddressInfo() {
-        if (edtFlatNumber.getText().toString().trim().length() > 0 && edtFlatNumber.getText().toString().length()>10)
+        if (edtFlatNumber.getText().toString().trim().length() > 0 && edtFlatNumber.getText().toString().length() > 10)
             if (edtSocietyBuildingName.getText().toString().trim().length() > 0)
                 if (edtRoadNo.getText().toString().trim().length() > 0)
                     if (edtLandmark.getText().toString().trim().length() > 0)
@@ -2941,8 +2941,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 customDialog.show();
                 customDialog.setCancelable(false);*/
 //                Toast.makeText(getApplicationContext(), getString(R.string.otp_already_verifed), Toast.LENGTH_LONG).show();
-        }
-        else
+        } else
             Toast.makeText(this, "Invalid OTP", Toast.LENGTH_SHORT).show();
         /*String code = ((EditText) findViewById(R.id.edt_enter_otp)).getText().toString();
         if (code.equals("")) {
@@ -3491,13 +3490,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
 
-
-
-
-
     //OTP Changes by Jayshree on 13-01-2020
-    private void getOTP()
-    {
+    private void getOTP() {
         Random otp = new Random();
 
         StringBuilder builder = new StringBuilder();
@@ -3505,17 +3499,19 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             builder.append(otp.nextInt(3));
         }
         mStrOTP = builder.toString();
-        multimsg( mStrOTP, ""+edtMobile.getText().toString());
+
+        multimsg(mStrOTP, "" + edtMobile.getText().toString());
+
 
     }
-    private void multimsg(String message,String phoneNumber)
-    {
-        Log.e("tag1111","otp = "+mStrOTP);
+
+    private void multimsg(String message, String phoneNumber) {
+        Log.e("tag1111", "otp = " + mStrOTP);
         //mProgressBar.setVisibility(View.VISIBLE);
         String SENT = "SMS_SENT";
         String DELIVERED = "SMS_DELIVERED";
 
-        Log.e("TAG","SMS:"+message+"NUMBER:"+phoneNumber);
+        Log.e("TAG", "SMS:" + message + "NUMBER:" + phoneNumber);
         PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(
                 SENT), 0);
 
@@ -3523,11 +3519,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 new Intent(DELIVERED), 0);
 
         //---when the SMS has been sent---
-        registerReceiver(new BroadcastReceiver(){
+        registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context arg0, Intent arg1) {
-                switch (getResultCode())
-                {
+                switch (getResultCode()) {
                     case Activity.RESULT_OK:
                         Toast.makeText(RegistrationFormActivity.this, "SMS sent",
                                 Toast.LENGTH_SHORT).show();
@@ -3552,14 +3547,13 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                         break;
                 }
             }
-        },new IntentFilter(SENT));
+        }, new IntentFilter(SENT));
 
         //---when the SMS has been delivered---
-        registerReceiver(new BroadcastReceiver(){
+        registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context arg0, Intent arg1) {
-                switch (getResultCode())
-                {
+                switch (getResultCode()) {
                     case Activity.RESULT_OK:
                         Toast.makeText(RegistrationFormActivity.this, "SMS delivered",
                                 Toast.LENGTH_SHORT).show();
@@ -3578,7 +3572,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         ///sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
         SmsManager smsMgr = SmsManager.getDefault();
         SmsManager sm = SmsManager.getDefault();
-        ArrayList<String> parts =sm.divideMessage(message);
+        ArrayList<String> parts = sm.divideMessage(message);
         int numParts = parts.size();
         ArrayList<PendingIntent> sentIntents = new ArrayList<PendingIntent>();
         ArrayList<PendingIntent> deliveryIntents = new ArrayList<PendingIntent>();
@@ -3597,6 +3591,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 ActivityCompat.requestPermissions((Activity) RegistrationFormActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 0);
             } else {
                 //TODO
+
             }
             if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) RegistrationFormActivity.this,
                     Manifest.permission.SEND_SMS)) {
@@ -3605,9 +3600,9 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                         new String[]{Manifest.permission.SEND_SMS},
                         1);
             }
-        }else{
+        } else {
             //already has permission granted
-            if(phoneNumber.length()!=0) {
+            if (phoneNumber.length() != 0) {
 
                 sms.sendMultipartTextMessage(phoneNumber, null, parts, sentIntents, deliveryIntents);
             }
