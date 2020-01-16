@@ -93,8 +93,8 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-//        String imeiNumber = telephonyManager.getDeviceId();
-        String imeiNumber = "353398090944795";
+        String imeiNumber = telephonyManager.getDeviceId();
+//        String imeiNumber = "353398090944795";
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             showLoadingDialog();
             try {

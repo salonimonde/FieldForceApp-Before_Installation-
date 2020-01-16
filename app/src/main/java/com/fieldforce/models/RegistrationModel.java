@@ -115,19 +115,19 @@ public class RegistrationModel implements Serializable {
     public String isNscNew;
 
     @SerializedName("File0")
-    public String File0;
+    public ImageModel File0;
 
     @SerializedName("File1")
-    public String File1;
+    public ImageModel File1;
 
     @SerializedName("File_add_proof0")
-    public String FileAddProof0;
+    public ImageModel FileAddProof0;
 
     @SerializedName("File_add_proof1")
-    public String FileAddProof1;
+    public ImageModel FileAddProof1;
 
     @SerializedName("File_noc_proof")
-    public String FileNocProof;
+    public ImageModel FileNocProof;
 
     @SerializedName("image_count")
     public String imageCount;
@@ -212,11 +212,11 @@ public class RegistrationModel implements Serializable {
 
 
     @SerializedName("File_cheque_dd")
-    public String FileChequeDD;
+    public ImageModel FileChequeDD;
 
 
     @SerializedName("File_sign")
-    public String FileSign;
+    public ImageModel FileSign;
 
 
 

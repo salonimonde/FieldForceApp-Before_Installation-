@@ -747,14 +747,16 @@
     <string name="consumer_consent"> I do hereby agree &amp; confirm that (i) The scheme and offer will be at the sole discretion of
         Bhagyanagar Gas Limited, and can be discontinued at any time without giving any prior notice.
         (ii) Getting PNG connection is subject to permissions from local authorities &amp; technical feasibility
-        (iii) No two schemes can be clubbed together &amp; I agree to the said terms &amp; the terms which shall prevail from tim to time.
+        (iii) No two schemes can be clubbed together &amp; I agree to the said terms &amp; the terms which shall prevail from time to time.
     </string>
 
 
 
-    <string name="wing_new">Wing - </string>
-    <string name="plot_no_new">Plot No - </string>
-    <string name="floor_no_new">Floor - </string>
-    <string name="house_number">House No - </string>
+    <string name="wing_new">Wing  : </string>
+    <string name="plot_no_new">Plot No : </string>
+    <string name="floor_no_new">Floor :</string>
+    <string name="house_number">House No : </string>
+    <string name="declaration">Declaration</string>
+    <string name="declaration_form">Declaration Form</string>
 
 </resources>

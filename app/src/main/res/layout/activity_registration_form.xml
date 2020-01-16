@@ -2091,7 +2091,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1.5"
-                    android:text="@string/consent_form"
+                    android:text="@string/declaration_form"
                     android:textColor="@color/colorTextYellow"
                     android:textSize="@dimen/text_size_h6" />
 

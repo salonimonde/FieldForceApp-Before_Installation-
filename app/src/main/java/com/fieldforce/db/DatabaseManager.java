@@ -29,6 +29,7 @@ import com.fieldforce.db.tables.RegistrationTable;
 import com.fieldforce.db.tables.RejectedJobCardTable;
 import com.fieldforce.db.tables.ServiceJobCardTable;
 import com.fieldforce.models.Consumer;
+import com.fieldforce.models.ImageModel;
 import com.fieldforce.models.NotificationCard;
 import com.fieldforce.models.RegistrationModel;
 import com.fieldforce.models.TodayModel;
@@ -5816,6 +5817,8 @@ public class DatabaseManager {
             values.put(RegistrationTable.Cols.ENQUIRY_ID, registrationModel.enquiryId != null ? registrationModel.enquiryId : "");
             values.put(RegistrationTable.Cols.CONSUMER_CATEGORY, registrationModel.consumerCategory != null ? registrationModel.consumerCategory : "");
             values.put(RegistrationTable.Cols.CONSUMER_SUB_CATEGORY, registrationModel.consumerSubCategory != null ? registrationModel.consumerSubCategory : "");
+
+
             values.put(RegistrationTable.Cols.STATE, registrationModel.state != null ? registrationModel.state : "");
             values.put(RegistrationTable.Cols.NAME, registrationModel.name != null ? registrationModel.name : "");
             values.put(RegistrationTable.Cols.ADHAAR, registrationModel.addhaar != null ? registrationModel.addhaar : "");
@@ -5854,11 +5857,11 @@ public class DatabaseManager {
             values.put(RegistrationTable.Cols.FIELD_FORCE_ID, registrationModel.fieldForceId != null ? registrationModel.fieldForceId : "");
             values.put(RegistrationTable.Cols.DOCUMENTS, registrationModel.documents != null ? registrationModel.documents : "");
             values.put(RegistrationTable.Cols.DOCUMENTS_ADD, registrationModel.documentsAdd != null ? registrationModel.documentsAdd : "");
-            values.put(RegistrationTable.Cols.FILE_0, registrationModel.File0 != null ? registrationModel.File0 : "");
-            values.put(RegistrationTable.Cols.FILE_1, registrationModel.File1 != null ? registrationModel.File1 : "");
-            values.put(RegistrationTable.Cols.FILE_ADD_PROOF_0, registrationModel.FileAddProof0 != null ? registrationModel.FileAddProof0 : "");
-            values.put(RegistrationTable.Cols.FILE_ADD_PROOF_1, registrationModel.FileAddProof1 != null ? registrationModel.FileAddProof1 : "");
-            values.put(RegistrationTable.Cols.FILE_NOC_PROOF, registrationModel.FileNocProof != null ? registrationModel.FileNocProof : "");
+            values.put(RegistrationTable.Cols.FILE_0, registrationModel.File0 != null ? registrationModel.File0.image : "");
+            values.put(RegistrationTable.Cols.FILE_1, registrationModel.File1 != null ? registrationModel.File1.image : "");
+            values.put(RegistrationTable.Cols.FILE_ADD_PROOF_0, registrationModel.FileAddProof0 != null ? registrationModel.FileAddProof0.image : "");
+            values.put(RegistrationTable.Cols.FILE_ADD_PROOF_1, registrationModel.FileAddProof1 != null ? registrationModel.FileAddProof1.image : "");
+            values.put(RegistrationTable.Cols.FILE_NOC_PROOF, registrationModel.FileNocProof != null ? registrationModel.FileNocProof.image : "");
             values.put(RegistrationTable.Cols.AREA_NAME, registrationModel.areaName != null ? registrationModel.areaName : "");
             values.put(RegistrationTable.Cols.FLOOR_NO, registrationModel.floorNo != null ? registrationModel.floorNo : "");
             values.put(RegistrationTable.Cols.PLOT_NO, registrationModel.plotNo != null ? registrationModel.plotNo : "");
@@ -5868,8 +5871,8 @@ public class DatabaseManager {
             values.put(RegistrationTable.Cols.DISTRICT, registrationModel.district != null ? registrationModel.district : "");
             values.put(RegistrationTable.Cols.SOCIETY_NAME, registrationModel.societyName != null ? registrationModel.societyName : "");
             values.put(RegistrationTable.Cols.CARD_STATUS, cardStatus);
-            values.put(RegistrationTable.Cols.FIELD_CHEQUE_DD, registrationModel.FileChequeDD != null ? registrationModel.FileChequeDD : "");
-            values.put(RegistrationTable.Cols.FILE_SIGN, registrationModel.FileSign != null ? registrationModel.FileSign : "");
+            values.put(RegistrationTable.Cols.FIELD_CHEQUE_DD, registrationModel.FileChequeDD != null ? registrationModel.FileChequeDD.image : "");
+            values.put(RegistrationTable.Cols.FILE_SIGN, registrationModel.FileSign != null ? registrationModel.FileSign.image : "");
 
 
         } catch (Exception e) {
@@ -5931,6 +5934,10 @@ public class DatabaseManager {
     }
 
     private static RegistrationModel getRegistrationFromCursor(Context context, Cursor cursor) {
+
+        DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+        Date date = new Date();
+        String dateValue = dateFormat.format(date);
         RegistrationModel registrationModel = new RegistrationModel();
         registrationModel.id = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) : "";
         registrationModel.enquiryId = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ENQUIRY_ID)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ENQUIRY_ID)) : "";
@@ -5968,11 +5975,6 @@ public class DatabaseManager {
         registrationModel.longitude = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.LONGITUDE)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.LONGITUDE)) : "";
         registrationModel.connectivity = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.CONNECTIVITY)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.CONNECTIVITY)) : "";
         registrationModel.isNscNew = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.IS_NSC_NEW)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.IS_NSC_NEW)) : "";
-        registrationModel.File0 = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_0)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_0)) : "";
-        registrationModel.File1 = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_1)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_1)) : "";
-        registrationModel.FileAddProof0 = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_0)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_0)) : "";
-        registrationModel.FileAddProof1 = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_1)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_1)) : "";
-        registrationModel.FileNocProof = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_NOC_PROOF)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_NOC_PROOF)) : "";
         registrationModel.imageCount = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.IMAGE_COUNT)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.IMAGE_COUNT)) : "";
         registrationModel.imageCountAdd = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.IMAGE_COUNT_ADD)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.IMAGE_COUNT_ADD)) : "";
         registrationModel.vendorId = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.VENDOR_ID)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.VENDOR_ID)) : "";
@@ -5990,8 +5992,58 @@ public class DatabaseManager {
         registrationModel.societyName = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.SOCIETY_NAME)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.SOCIETY_NAME)) : "";
 
 
-        registrationModel.FileChequeDD = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FIELD_CHEQUE_DD)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FIELD_CHEQUE_DD)) : "";
-        registrationModel.FileSign = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_SIGN)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_SIGN)) : "";
+
+
+
+        ImageModel id01 = new ImageModel();
+        id01.name = "nsc_id01_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+                + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
+        id01.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_0)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_0)) : "";
+        id01.content_type = "image/jpeg";
+        registrationModel.File0 = id01;
+
+        ImageModel id02 = new ImageModel();
+        id02.name = "nsc_id02_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+                + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
+        id02.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_1)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_1)) : "";
+        id02.content_type = "image/jpeg";
+        registrationModel.File1 = id02;
+
+        ImageModel add01 = new ImageModel();
+        add01.name = "nsc_add01_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+                + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
+        add01.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_0)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_0)) : "";
+        add01.content_type = "image/jpeg";
+        registrationModel.FileAddProof0 = add01;
+
+        ImageModel add02 = new ImageModel();
+        add01.name = "nsc_add02_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+                + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
+        add02.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_1)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_1)) : "";
+        add02.content_type = "image/jpeg";
+        registrationModel.FileAddProof1 = add02;
+
+        ImageModel chequedd = new ImageModel();
+        chequedd.name = "nsc_chequedd_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+                + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
+        chequedd.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FIELD_CHEQUE_DD)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FIELD_CHEQUE_DD)) : "";
+        chequedd.content_type = "image/jpeg";
+        registrationModel.FileChequeDD = chequedd;
+
+        ImageModel sign = new ImageModel();
+        sign.name = "nsc_sign_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+                + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
+        sign.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_SIGN)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_SIGN)) : "";
+        sign.content_type = "image/jpeg";
+        registrationModel.FileSign = sign;
+
+
+        ImageModel noc = new ImageModel();
+        sign.name = "nsc_noc_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+                + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
+        sign.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_NOC_PROOF)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_NOC_PROOF)) : "";
+        sign.content_type = "image/jpeg";
+        registrationModel.FileNocProof = sign;
 
         return registrationModel;
     }

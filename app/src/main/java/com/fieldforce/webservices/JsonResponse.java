@@ -15,6 +15,7 @@ public class JsonResponse {
     public String message;
     public String result;
     public String status;
+    public String nsc_id;
     public static String FAILURE = "failure";
 
 

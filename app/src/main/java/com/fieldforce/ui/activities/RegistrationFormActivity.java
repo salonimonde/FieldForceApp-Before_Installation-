@@ -16,7 +16,6 @@ import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
@@ -34,7 +33,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
@@ -67,9 +65,9 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.fieldforce.R;
 import com.fieldforce.db.DatabaseManager;
-import com.fieldforce.db.tables.RegistrationTable;
 import com.fieldforce.interfaces.ApiServiceCaller;
 import com.fieldforce.models.Consumer;
+import com.fieldforce.models.ImageModel;
 import com.fieldforce.models.RegistrationModel;
 import com.fieldforce.models.TodayModel;
 import com.fieldforce.ui.adapters.DocumentIdAdapter;
@@ -78,7 +76,6 @@ import com.fieldforce.utility.AppConstants;
 import com.fieldforce.utility.AppPreferences;
 import com.fieldforce.utility.CommonUtility;
 import com.fieldforce.utility.CustomDialog;
-import com.fieldforce.utility.DecimalInputFilter;
 import com.fieldforce.utility.DialogCreator;
 import com.fieldforce.utility.MultipartUtility;
 import com.fieldforce.utility.SignatureView;
@@ -98,11 +95,9 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.gson.JsonObject;
 import com.msg91.sendotp.library.SendOtpVerification;
 import com.msg91.sendotp.library.Verification;
 import com.msg91.sendotp.library.VerificationListener;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -125,8 +120,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import android.telephony.SmsManager;
-import android.text.Selection;
-import android.view.KeyEvent;
 
 import java.util.Random;
 
@@ -987,8 +980,12 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
         } else if (view == btnNext2) {
             validateAddressInfo();
-        } else if (view == txtSMSVerification || view == txtResendOTP) {
-            getOTP();
+        } else if (view == txtSMSVerification) {
+            if (edtMobile.getText().length() < 10) {
+                Toast.makeText(this, "Please enter Valid Mobile Number", Toast.LENGTH_SHORT).show();
+            } else {
+                getOTP();
+            }
             clickCount = clickCount + 1;
             enableInputField(true);
             /*if (edtEnterOTP.getText().toString().equals(mStrOTP)) {
@@ -1006,6 +1003,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             }
             else
                 Toast.makeText(this, "Invalid OTP", Toast.LENGTH_SHORT).show();*/
+        } else if (view == txtResendOTP) {
+            if (!edtEnterOTP.getText().toString().equals(mStrOTP)) {
+                txtResendOTP.setClickable(true);
+                getOTP();
+            }
         } else if (view == btnNext3) {
             imageCount = 0;
             imageCountAdd = 0;
@@ -2670,7 +2672,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title" + System.currentTimeMillis(), null);
         return Uri.parse(path);
     }
 
@@ -2930,9 +2932,12 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
     public void onSubmitClicked(View view) {
         if (edtEnterOTP.getText().toString().equals(mStrOTP)) {
-
             Toast.makeText(RegistrationFormActivity.this, "Verified Mobile Number",
                     Toast.LENGTH_LONG).show();
+            edtEnterOTP.setFocusable(false);
+            edtEnterOTP.setFocusableInTouchMode(false);
+            txtResendOTP.setClickable(false);
+            txtSMSVerification.setClickable(false);
 
                 /*enableInputField(false);
                 CustomDialog customDialog = new CustomDialog((Activity) mContext, getString(R.string.already_verified),
@@ -3004,14 +3009,28 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.enquiryId = !enquiryId.isEmpty() ? enquiryId : "";
         registrationModel.consumerCategory = selectedCategory;
         registrationModel.consumerSubCategory = selectSubCategory;
+        Log.d("mmmmmmmmmmmmm", "" + registrationModel.consumerSubCategory);
         registrationModel.state = stateId;
         registrationModel.name = edtConsumerName.getText().toString();
         registrationModel.addhaar = edtAadharNumber.getText().toString();
         registrationModel.emailId = edtEmailId.getText().toString();
         registrationModel.flatNo = edtFlatNumber.getText().toString();
-        registrationModel.floorNo = edtFloor.getText().toString();
-        registrationModel.plotNo = edtPlotNo.getText().toString();
-        registrationModel.wing = edtWing.getText().toString();
+
+
+        if(edtFloor.getText().toString().length()>7){
+            registrationModel.floorNo = edtFloor.getText().toString();
+        }
+        if(edtPlotNo.getText().toString().length()>9){
+            registrationModel.plotNo = edtPlotNo.getText().toString();
+        }
+        //registrationModel.floorNo = edtFloor.getText().toString();
+        //registrationModel.plotNo = edtPlotNo.getText().toString();
+        if(edtWing.getText().toString().length()>6){
+            registrationModel.wing = edtWing.getText().toString();
+        }
+//        registrationModel.floorNo = edtFloor.getText().toString();
+//        registrationModel.plotNo = edtPlotNo.getText().toString();
+//        registrationModel.wing = edtWing.getText().toString();
         registrationModel.roadNo = edtRoadNo.getText().toString();
         registrationModel.landmark = edtLandmark.getText().toString();
         registrationModel.district = edtDistrict.getText().toString();
@@ -3071,9 +3090,13 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             checklist11.add(i, checkValueList.get(i));
         }
 
+        ArrayList<String> documentOne = new ArrayList<>();
         for (int i = 0; i < checklist11.size(); i++) {
-            registrationModel.documents = checklist11.get(i) + "|";
+            documentOne.add(checklist11.get(i) + "|");
         }
+
+        registrationModel.documents = documentOne.toString();
+        ArrayList<String> documentTwo = new ArrayList<>();
 
         ArrayList<String> checklist12 = new ArrayList<>();
         for (int i = 0; i < DocumentIdAdapter.checkParamsListAddress.size(); i++) {
@@ -3081,16 +3104,36 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         }
 
         for (int i = 0; i < checklist12.size(); i++) {
-            registrationModel.documentsAdd = checklist12.get(i) + "|";
+            documentTwo.add(checklist12.get(i) + "|");
         }
 
-        registrationModel.File0 = idBitmap1 != null ? CommonUtility.getBitmapEncodedString(idBitmap1) : "";
-        registrationModel.File1 = idBitmap2 != null ? CommonUtility.getBitmapEncodedString(idBitmap2) : "";
-        registrationModel.FileAddProof0 = addBitmap1 != null ? CommonUtility.getBitmapEncodedString(addBitmap1) : "";
-        registrationModel.FileAddProof1 = addBitmap2 != null ? CommonUtility.getBitmapEncodedString(addBitmap2) : "";
-        registrationModel.FileNocProof = nocBitmap != null ? CommonUtility.getBitmapEncodedString(nocBitmap) : "";
-        registrationModel.FileSign = bitmapSign != null ? CommonUtility.getBitmapEncodedString(bitmapSign) : "";
-        registrationModel.FileChequeDD = bitmapChequeDD != null ? CommonUtility.getBitmapEncodedString(bitmapChequeDD) : "";
+        registrationModel.documentsAdd = documentTwo.toString();
+
+
+        ImageModel imageFile0 = new ImageModel();
+        ImageModel imageFile1 = new ImageModel();
+        ImageModel imageAddFile0 = new ImageModel();
+        ImageModel imageAddFile1 = new ImageModel();
+        ImageModel imageNocFile0 = new ImageModel();
+        ImageModel imageSignFile0 = new ImageModel();
+        ImageModel imageChequeDDFile0 = new ImageModel();
+
+
+        imageFile0.image = CommonUtility.getBitmapEncodedString(idBitmap1);
+        imageFile1.image = CommonUtility.getBitmapEncodedString(idBitmap2);
+        imageAddFile0.image = CommonUtility.getBitmapEncodedString(addBitmap1);
+        imageAddFile1.image = CommonUtility.getBitmapEncodedString(addBitmap2);
+        imageNocFile0.image = CommonUtility.getBitmapEncodedString(nocBitmap);
+        imageSignFile0.image = CommonUtility.getBitmapEncodedString(bitmapSign);
+        imageChequeDDFile0.image = CommonUtility.getBitmapEncodedString(bitmapChequeDD);
+
+        registrationModel.File0 = imageFile0;
+        registrationModel.File1 = imageFile1;
+        registrationModel.FileAddProof0 = imageAddFile0;
+        registrationModel.FileAddProof1 = imageAddFile1;
+        registrationModel.FileNocProof = imageNocFile0;
+        registrationModel.FileSign = imageSignFile0;
+        registrationModel.FileChequeDD = imageChequeDDFile0;
 
 
         registrationModel.isRejected = String.valueOf(isRejected);
@@ -3192,8 +3235,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     checklist11.add(i, checkValueList.get(i));
                 }
 
+
                 for (int i = 0; i < checklist11.size(); i++) {
                     multipartUtility.addFormField("documents", checklist11.get(i));
+
                 }
 
                 ArrayList<String> checklist12 = new ArrayList<>();
@@ -3204,6 +3249,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
                 for (int i = 0; i < checklist12.size(); i++) {
                     multipartUtility.addFormField("documents_add", checklist12.get(i));
+
                 }
                 if (File1 != null) {
                     multipartUtility.addFilePart("File0", File1);
@@ -3500,7 +3546,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         }
         mStrOTP = builder.toString();
 
-        multimsg(mStrOTP, "" + edtMobile.getText().toString());
+        multimsg( "OTP for BGL New Registration is " + mStrOTP, ""+edtMobile.getText().toString());
 
 
     }

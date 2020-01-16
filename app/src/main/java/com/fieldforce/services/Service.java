@@ -1,8 +1,10 @@
 package com.fieldforce.services;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,17 +20,27 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.fieldforce.R;
 import com.fieldforce.db.DatabaseManager;
+import com.fieldforce.interfaces.ApiServiceCaller;
 import com.fieldforce.models.RegistrationModel;
 import com.fieldforce.models.TodayModel;
 import com.fieldforce.ui.adapters.DocumentIdAdapter;
+import com.fieldforce.utility.App;
 import com.fieldforce.utility.AppConstants;
 import com.fieldforce.utility.AppPreferences;
 import com.fieldforce.utility.CommonUtility;
 import com.fieldforce.utility.MultipartUtility;
 import com.fieldforce.webservices.ApiConstants;
+import com.fieldforce.webservices.JsonResponse;
+import com.fieldforce.webservices.WebRequest;
+import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -39,7 +51,7 @@ import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Service extends android.app.Service {
+public class Service extends android.app.Service implements ApiServiceCaller {
 
 
     protected static final int NOTIFICATION_ID = 1337;
@@ -176,8 +188,9 @@ public class Service extends android.app.Service {
 //        Log.i(TAG, "Scheduling...");
         //schedule the timer, to wake up every 1 second
 //        timer.schedule(timerTask, 90000, 1800000); // 30 minutes
-//        timer.schedule(timerTask, 1000, 1000); // 2 minutes
-        timer.schedule(timerTask, 90000, 300000); // 5 minutes
+//        timer.schedule(timerTask, 1000, 600000); // 2 minutes
+//        timer.schedule(timerTask, 1000, 120000); // 2 minutes
+        timer.schedule(timerTask, 1000, 10000); // 10 seconds
     }
 
     /**
@@ -194,7 +207,52 @@ public class Service extends android.app.Service {
                             AppConstants.CARD_STATUS_COMPLETED);
                     if (registrationToUpload != null && registrationToUpload.size() > 0) {
                         for (int i = 0; i < registrationToUpload.size(); i++) {
-                            new UploadData().execute();
+
+                            Log.d("ffffffffffffff",""+registrationToUpload.get(0).consumerSubCategory);
+
+
+                            ArrayList<String> checklist11 = new ArrayList<>();
+                            String data = registrationToUpload.get(0).documents;
+                            String[] items = data.split("\\|");
+                            Collections.addAll(checklist11, items);
+
+                            ArrayList<String> documentOne = new ArrayList<>();
+                            for (int j = 0; j < checklist11.size(); j++) {
+                                documentOne.add(j,checklist11.get(j));
+                            }
+                            registrationToUpload.get(0).documents = documentOne.toString();
+
+                            ArrayList<String> checklist12 = new ArrayList<>();
+                            String data1 = registrationToUpload.get(0).documentsAdd;
+                            String[] items1 = data1.split("\\|");
+                            Collections.addAll(checklist12, items1);
+
+                            ArrayList<String> documentTwo = new ArrayList<>();
+
+                            for (int k = 0; k < DocumentIdAdapter.checkParamsListAddress.size(); k++) {
+                                checklist12.add(k, DocumentIdAdapter.checkParamsListAddress.get(k));
+
+                            }
+
+                            for (int l = 0; l < checklist12.size(); l++) {
+                                documentTwo.add(l,checklist12.get(l));
+                            }
+
+                            registrationToUpload.get(0).documentsAdd = documentTwo.toString();
+//                            new UploadData().execute();
+
+
+                            Log.d("dddddddddddd",""+registrationToUpload.get(0).documents);
+                            Log.d("cccccccccccc",""+registrationToUpload.get(0).documentsAdd);
+
+                            JSONObject jObject = getReadingJson(registrationToUpload);
+
+                            Log.d("yyyyyyyyyyyyy",""+jObject);
+
+                            uploadMeterReading(jObject);
+
+
+
                         }
                     }
                 }
@@ -229,7 +287,86 @@ public class Service extends android.app.Service {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public class UploadData extends AsyncTask<String, String, String> {
+    @Override
+    public void onAsyncSuccess(JsonResponse jsonResponse, String label) {
+        switch (label) {
+            case ApiConstants.UPLOAD_NSC_FORM: {
+
+                try {
+
+                    if (jsonResponse.result.equals(jsonResponse.SUCCESS)) {
+
+                        String nscId = jsonResponse.nsc_id;
+                        DocumentIdAdapter.checkParamsListId.clear();
+                        DocumentIdAdapter.checkParamsListAddress.clear();
+                        if (registrationToUpload.get(0).isNscNew.equals("false")) {
+                            todayModel.completedOn = CommonUtility.getCompletionDate();
+                            DatabaseManager.updateEnquiryCardStatus(CommonUtility.getCompletionDate(), registrationToUpload.get(0).enquiryNo, AppConstants.CARD_STATUS_CLOSED, nscId);
+                            DatabaseManager.updateAllEnquiryCardStatus(CommonUtility.getCompletionDate(), registrationToUpload.get(0).enquiryNo, AppConstants.CARD_STATUS_CLOSED, nscId);
+                        } else if (registrationToUpload.get(0).isNscNew.equals("true")) {
+                            newTodayModel.nscId = nscId;
+                            newTodayModel.screen = getString(R.string.enquiry);
+                            newTodayModel.completedOn = CommonUtility.getCompletionDate();
+                            newTodayModel.consumerName = registrationToUpload.get(0).name;
+                            newTodayModel.mobileNumber = registrationToUpload.get(0).mobile;
+                            newTodayModel.stateId = registrationToUpload.get(0).state;
+                            newTodayModel.cityId = registrationToUpload.get(0).city;
+                            newTodayModel.area = registrationToUpload.get(0).areaName;
+                            DatabaseManager.updateNewEnquiryCardStatus(CommonUtility.getCompletionDate(), registrationToUpload.get(0).id, AppConstants.CARD_STATUS_CLOSED, nscId);
+                            DatabaseManager.updateAllNewEnquiryCardStatus(CommonUtility.getCompletionDate(), registrationToUpload.get(0).id, AppConstants.CARD_STATUS_CLOSED, nscId);
+                        } else {
+                            DatabaseManager.updateRejectedCardStatus(CommonUtility.getCompletionDate(), registrationToUpload.get(0).registrationNo,
+                                    AppConstants.CARD_STATUS_CLOSED);
+                            DatabaseManager.deleteRejectedRegistration(mContext, registrationToUpload.get(0).registrationNo,
+                                    AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+                        }
+
+                        DatabaseManager.deleteRegistration(mContext, registrationToUpload.get(0).id,
+                                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+
+
+
+
+                        /*if (File1 != null)
+                            File1.delete();
+                        if (File2 != null)
+                            File2.delete();
+                        if (File3 != null)
+                            File3.delete();
+                        if (File4 != null)
+                            File4.delete();
+                        if (File5 != null)
+                            File5.delete();*/
+
+
+
+                        /*if (fileCheque != null)
+                            fileCheque.delete();
+                        if (fileDD != null)
+                            fileDD.delete();*/
+
+                    } else {
+                        Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void onAsyncFail(String message, String label, NetworkResponse response) {
+
+    }
+
+    @Override
+    public void onAsyncCompletelyFail(String message, String label) {
+
+    }
+
+    /*public class UploadData extends AsyncTask<String, String, String> {
 
 
         @SuppressLint("WrongThread")
@@ -300,7 +437,6 @@ public class Service extends android.app.Service {
                 multipartUtility.addFormField("floor_no", registrationToUpload.get(0).floorNo);
 
 
-
                 ArrayList<String> checklist11 = new ArrayList<>();
                 String data = registrationToUpload.get(0).documents;
                 String[] items = data.split("\\|");
@@ -308,43 +444,60 @@ public class Service extends android.app.Service {
 
                 for (int i = 0; i < checklist11.size(); i++) {
                     multipartUtility.addFormField("documents", checklist11.get(i));
+
                 }
 
                 ArrayList<String> checklist12 = new ArrayList<>();
                 String data1 = registrationToUpload.get(0).documentsAdd;
-                String[] items1 = data.split("\\|");
+                String[] items1 = data1.split("\\|");
                 Collections.addAll(checklist12, items1);
 
                 for (int i = 0; i < DocumentIdAdapter.checkParamsListAddress.size(); i++) {
                     checklist12.add(i, DocumentIdAdapter.checkParamsListAddress.get(i));
+
                 }
 
                 for (int i = 0; i < checklist12.size(); i++) {
                     multipartUtility.addFormField("documents_add", checklist12.get(i));
                 }
+
+
                 if (!registrationToUpload.get(0).File0.isEmpty()) {
-                    multipartUtility.addFilePart("File0", getImage(registrationToUpload.get(0).File0));
+                    multipartUtility.addFormField("File0", registrationToUpload.get(0).File0);
+                } else {
+                    multipartUtility.addFormField("File0", "");
                 }
                 if (!registrationToUpload.get(0).File1.isEmpty()) {
                     multipartUtility.addFilePart("File1", getImage(registrationToUpload.get(0).File1));
+                } else {
+                    multipartUtility.addFormField("File1", "");
                 }
                 if (!registrationToUpload.get(0).FileAddProof0.isEmpty()) {
                     multipartUtility.addFilePart("File_add_proof0", getImage(registrationToUpload.get(0).FileAddProof0));
+                } else {
+                    multipartUtility.addFormField("File_add_proof0", "");
                 }
                 if (!registrationToUpload.get(0).FileAddProof1.isEmpty()) {
                     multipartUtility.addFilePart("File_add_proof1", getImage(registrationToUpload.get(0).FileAddProof1));
+                } else {
+                    multipartUtility.addFormField("File_add_proof1", "");
                 }
                 if (!registrationToUpload.get(0).FileNocProof.isEmpty()) {
                     multipartUtility.addFilePart("File_noc_proof", getImage(registrationToUpload.get(0).FileNocProof));
+                } else {
+                    multipartUtility.addFormField("File_noc_proof", "");
                 }
 
                 if (!registrationToUpload.get(0).FileChequeDD.isEmpty()) {
                     multipartUtility.addFilePart("File_cheque_dd", getImage(registrationToUpload.get(0).FileChequeDD));
+                } else {
+                    multipartUtility.addFormField("File_cheque_dd", "");
                 }
                 if (!registrationToUpload.get(0).FileSign.isEmpty()) {
                     multipartUtility.addFilePart("File_sign", getImage(registrationToUpload.get(0).FileSign));
+                } else {
+                    multipartUtility.addFormField("File_sign", "");
                 }
-
 
                 multipartUtility.addFormField("image_count", registrationToUpload.get(0).imageCount);
                 multipartUtility.addFormField("image_count_add", registrationToUpload.get(0).imageCountAdd);
@@ -403,7 +556,7 @@ public class Service extends android.app.Service {
 
 
 
-                        /*if (File1 != null)
+                        *//*if (File1 != null)
                             File1.delete();
                         if (File2 != null)
                             File2.delete();
@@ -412,14 +565,14 @@ public class Service extends android.app.Service {
                         if (File4 != null)
                             File4.delete();
                         if (File5 != null)
-                            File5.delete();*/
+                            File5.delete();*//*
 
 
 
-                        /*if (fileCheque != null)
+                        *//*if (fileCheque != null)
                             fileCheque.delete();
                         if (fileDD != null)
-                            fileDD.delete();*/
+                            fileDD.delete();*//*
 
                     } else {
                         Toast.makeText(mContext, response.getString("message"), Toast.LENGTH_SHORT).show();
@@ -429,13 +582,13 @@ public class Service extends android.app.Service {
                 }
             }
         }
-    }
+    }*/
 
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title" + System.currentTimeMillis(), null);
         return Uri.parse(path);
     }
 
@@ -453,6 +606,41 @@ public class Service extends android.app.Service {
         File file = new File(getRealPathFromURI(tempUri));
         return file;
 
+    }
+
+
+    public JSONObject getReadingJson(ArrayList<RegistrationModel> readings) {
+        JSONObject jsonObject = null;
+        try {
+
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(readings);
+            JSONArray jsonArray = new JSONArray(jsonString);
+            jsonObject = new JSONObject();
+            jsonObject.put("values", jsonArray);
+
+
+            /*
+
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(readings);
+            Log.d("vvvvvvvvvvvvvvvv",""+jsonString);
+            JSONObject tempJsonObject = new JSONObject(jsonString);*/
+
+
+
+//            jsonObject = new JSONObject(S);
+//            jsonObject.put("readings", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+
+    private void uploadMeterReading(JSONObject object) {
+        JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, object, ApiConstants.UPLOAD_NSC_FORM, this, null);
+        App.getInstance().addToRequestQueue(request, ApiConstants.UPLOAD_NSC_FORM);
     }
 
 }
