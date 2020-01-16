@@ -243,7 +243,7 @@ public class Service extends android.app.Service implements ApiServiceCaller {
 
 
                             Log.d("dddddddddddd",""+registrationToUpload.get(0).documents);
-                            Log.d("cccccccccccc",""+registrationToUpload.get(0).documentsAdd);
+                            Log.d("rrrrrrrrrrrr",""+registrationToUpload.get(0).documentsAdd);
 
                             JSONObject jObject = getReadingJson(registrationToUpload);
 

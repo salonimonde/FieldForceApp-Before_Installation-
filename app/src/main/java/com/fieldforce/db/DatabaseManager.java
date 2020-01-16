@@ -6017,7 +6017,7 @@ public class DatabaseManager {
         registrationModel.FileAddProof0 = add01;
 
         ImageModel add02 = new ImageModel();
-        add01.name = "nsc_add02_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+        add02.name = "nsc_add02_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
                 + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
         add02.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_1)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_1)) : "";
         add02.content_type = "image/jpeg";

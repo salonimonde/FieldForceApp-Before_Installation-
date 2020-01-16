@@ -1724,7 +1724,8 @@
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
 
                                 <EditText
                                     android:id="@+id/edt_cheque_ifsc"
@@ -1773,7 +1774,7 @@
                                 android:textColorHint="@color/colorProfileEditText"
                                 android:textSize="@dimen/text_size_h4"
                                 android:theme="@style/EditTextNSC"
-                                android:visibility="visible" />
+                                android:visibility="gone" />
 
                             <RelativeLayout
                                 android:id="@+id/relative_cheque"
@@ -1886,7 +1887,8 @@
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
 
                                 <EditText
                                     android:id="@+id/edt_dd_ifsc"
@@ -1978,7 +1980,7 @@
                                 android:textColorHint="@color/colorProfileEditText"
                                 android:textSize="@dimen/text_size_h4"
                                 android:theme="@style/EditTextNSC"
-                                android:visibility="visible" />
+                                android:visibility="gone" />
 
                             <RelativeLayout
                                 android:id="@+id/relative_dd"
