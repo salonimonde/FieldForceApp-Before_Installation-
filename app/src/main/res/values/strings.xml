@@ -82,7 +82,7 @@
     <string name="enter_reading">Enter Reading</string>
     <string name="value">Value</string>
     <string name="units">Units</string>
-    <string name="date">Date*</string>
+    <string name="date">Date</string>
     <string name="total_assign">Total Assigned</string>
     <string name="install_add">Installation Address</string>
     <string name="fault_image">Fault Image</string>
@@ -335,8 +335,8 @@
     <string name="image_2">IMAGE 02</string>
     <string name="address_proof">Address Proof</string>
     <string name="amount_payable">Amount Payable</string>
-    <string name="cheque_number">Cheque Number *</string>
-    <string name="branch">Branch*</string>
+    <string name="cheque_number">Cheque Number</string>
+    <string name="branch">Branch</string>
     <string name="rs">Rs</string>
     <string name="meter_digits">Meter Digits *</string>
     <string name="meter_make">Meter Make *</string>
@@ -432,7 +432,7 @@
     <string name="enter_dd_number">Enter DD Number</string>
     <string name="please_specify_other_bank_name">Please Specify Other Bank Name</string>
 
-    <string name="select_bank">Select Bank*</string>
+    <string name="select_bank">Select Bank</string>
     <string name="please_select_bank">Please Select Bank</string>
     <string name="others">Others</string>
 
@@ -509,7 +509,7 @@
     <string name="time_required_for_network">Time Required For Network</string>
 
     <string name="please_select_reason_for_rejection">Please Select Reason For Rejection</string>
-    <string name="dd_number">DD Number*</string>
+    <string name="dd_number">DD Number</string>
     <string name="enter_bank_name">Enter Bank Name*</string>
     <string name="enter_initial_reading">Enter Initial Reading*</string>
     <string name="please_enter_initial_reading">Please Enter Initial Reading</string>

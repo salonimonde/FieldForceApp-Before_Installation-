@@ -16,10 +16,12 @@ import com.fieldforce.db.tables.ComplaintJobCardTable;
 import com.fieldforce.db.tables.ConsumerEnquiryTable;
 import com.fieldforce.db.tables.ConversionJobCardTable;
 import com.fieldforce.db.tables.DecommissionJobCardTable;
+import com.fieldforce.db.tables.IdProofTable;
 import com.fieldforce.db.tables.LoginTable;
 import com.fieldforce.db.tables.CommissionJobCardTable;
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
 import com.fieldforce.db.tables.NotificationTable;
+import com.fieldforce.db.tables.PaymentTable;
 import com.fieldforce.db.tables.PreventiveJobCardTable;
 import com.fieldforce.db.tables.RegistrationTable;
 import com.fieldforce.db.tables.RejectedJobCardTable;
@@ -146,6 +148,16 @@ public class DatabaseProvider extends ContentProvider {
                         selection, selectionArgs, sortOrder);
                 break;
             }
+            case PaymentTable.PATH_TOKEN: {
+                result = doQuery(db, uri, PaymentTable.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
+            case IdProofTable.PATH_TOKEN: {
+                result = doQuery(db, uri, IdProofTable.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
         }
 
         return result;
@@ -254,6 +266,17 @@ public class DatabaseProvider extends ContentProvider {
                         BankTable.CONTENT_URI, uri, values);
                 break;
             }
+
+            case PaymentTable.PATH_TOKEN: {
+                result = doInsert(db, PaymentTable.TABLE_NAME,
+                        PaymentTable.CONTENT_URI, uri, values);
+                break;
+            }
+            case IdProofTable.PATH_TOKEN: {
+                result = doInsert(db, IdProofTable.TABLE_NAME,
+                        IdProofTable.CONTENT_URI, uri, values);
+                break;
+            }
         }
 
         if (result == null) {
@@ -340,6 +363,14 @@ public class DatabaseProvider extends ContentProvider {
             }
             case BankTable.PATH_TOKEN: {
                 table = BankTable.TABLE_NAME;
+                break;
+            }
+            case PaymentTable.PATH_TOKEN: {
+                table = PaymentTable.TABLE_NAME;
+                break;
+            }
+            case IdProofTable.PATH_TOKEN: {
+                table = IdProofTable.TABLE_NAME;
                 break;
             }
         }
@@ -458,6 +489,16 @@ public class DatabaseProvider extends ContentProvider {
                         selectionArgs);
                 break;
             }
+            case PaymentTable.PATH_TOKEN: {
+                result = doDelete(db, uri, PaymentTable.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
+            case IdProofTable.PATH_TOKEN: {
+                result = doDelete(db, uri, IdProofTable.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
         }
         return result;
     }
@@ -558,6 +599,16 @@ public class DatabaseProvider extends ContentProvider {
             }
             case BankTable.PATH_TOKEN: {
                 result = doUpdate(db, uri, BankTable.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+            case PaymentTable.PATH_TOKEN: {
+                result = doUpdate(db, uri, PaymentTable.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+            case IdProofTable.PATH_TOKEN: {
+                result = doUpdate(db, uri, IdProofTable.TABLE_NAME, selection,
                         selectionArgs, values);
                 break;
             }

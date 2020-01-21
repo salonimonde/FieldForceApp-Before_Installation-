@@ -48,6 +48,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -189,7 +190,7 @@ public class Service extends android.app.Service implements ApiServiceCaller {
         //schedule the timer, to wake up every 1 second
 //        timer.schedule(timerTask, 90000, 1800000); // 30 minutes
 //        timer.schedule(timerTask, 1000, 600000); // 2 minutes
-//        timer.schedule(timerTask, 1000, 120000); // 2 minutes
+        //timer.schedule(timerTask, 1000, 120000); // 2 minutes
         timer.schedule(timerTask, 1000, 10000); // 10 seconds
     }
 
@@ -210,17 +211,18 @@ public class Service extends android.app.Service implements ApiServiceCaller {
 
                             Log.d("ffffffffffffff",""+registrationToUpload.get(0).consumerSubCategory);
 
-
-                            ArrayList<String> checklist11 = new ArrayList<>();
+                            List<String> checklist11 = new ArrayList<>();
                             String data = registrationToUpload.get(0).documents;
                             String[] items = data.split("\\|");
                             Collections.addAll(checklist11, items);
+                            Log.e("TAG","CheckList"+checklist11);
 
-                            ArrayList<String> documentOne = new ArrayList<>();
+                            List<String> documentOne = new ArrayList<>();
                             for (int j = 0; j < checklist11.size(); j++) {
                                 documentOne.add(j,checklist11.get(j));
                             }
-                            registrationToUpload.get(0).documents = documentOne.toString();
+                            registrationToUpload.get(0).documents = documentOne.get(0);
+                            Log.d("TAG","DocumentOne"+registrationToUpload.get(0).documents);
 
                             ArrayList<String> checklist12 = new ArrayList<>();
                             String data1 = registrationToUpload.get(0).documentsAdd;
@@ -238,12 +240,9 @@ public class Service extends android.app.Service implements ApiServiceCaller {
                                 documentTwo.add(l,checklist12.get(l));
                             }
 
-                            registrationToUpload.get(0).documentsAdd = documentTwo.toString();
-//                            new UploadData().execute();
 
-
-                            Log.d("dddddddddddd",""+registrationToUpload.get(0).documents);
-                            Log.d("cccccccccccc",""+registrationToUpload.get(0).documentsAdd);
+                            registrationToUpload.get(0).documentsAdd = documentTwo.get(0);
+                            Log.d("TAG","DocumentTwo"+registrationToUpload.get(0).documentsAdd);
 
                             JSONObject jObject = getReadingJson(registrationToUpload);
 

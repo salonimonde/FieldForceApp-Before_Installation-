@@ -16,9 +16,11 @@ import com.fieldforce.db.tables.ComplaintJobCardTable;
 import com.fieldforce.db.tables.ConsumerEnquiryTable;
 import com.fieldforce.db.tables.ConversionJobCardTable;
 import com.fieldforce.db.tables.DecommissionJobCardTable;
+import com.fieldforce.db.tables.IdProofTable;
 import com.fieldforce.db.tables.LoginTable;
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
 import com.fieldforce.db.tables.NotificationTable;
+import com.fieldforce.db.tables.PaymentTable;
 import com.fieldforce.db.tables.PreventiveJobCardTable;
 import com.fieldforce.db.tables.RegistrationTable;
 import com.fieldforce.db.tables.RejectedJobCardTable;
@@ -61,6 +63,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createAllJobCardTable(db);
         createAreaTable(db);
         createBankTable(db);
+        createSchemeTable(db);
+        createDocumentTable(db);
+
 
     }
 
@@ -437,6 +442,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 RegistrationTable.Cols.CARD_STATUS + " VARCHAR, " +
                 RegistrationTable.Cols.IS_REJECTED + " VARCHAR, " +
                 RegistrationTable.Cols.NSC_ID + " VARCHAR, " +
+                RegistrationTable.Cols.FILE_CONSUMER_PHOTO + " BLOB, " +
                 RegistrationTable.Cols.AREA_NAME + " VARCHAR";
                 createTable(db, RegistrationTable.TABLE_NAME, RegistrationTableFields);
     }
@@ -464,6 +470,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String BankTableFields = BankTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 BankTable.Cols.BANK_NAME + " VARCHAR";
         createTable(db, BankTable.TABLE_NAME, BankTableFields);
+    }
+
+    private void createSchemeTable(SQLiteDatabase db){
+        String SchemeTableFields = PaymentTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                PaymentTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
+                PaymentTable.Cols.SCHEME_ID + " VARCHAR, " +
+                PaymentTable.Cols.SCHEME_NAME + " VARCHAR, " +
+                PaymentTable.Cols.SCHEME_AMOUNT + " VARCHAR";
+        createTable(db, PaymentTable.TABLE_NAME, SchemeTableFields);
+    }
+
+    private void createDocumentTable(SQLiteDatabase db){
+        String DocumentTableFields = IdProofTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                IdProofTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
+                IdProofTable.Cols.IDPROOF_ID + " VARCHAR, " +
+                IdProofTable.Cols.DOCUMENT_NAME + " VARCHAR, "+
+                IdProofTable.Cols.DOCUMENT_TYPE + " VARCHAR";
+        createTable(db, IdProofTable.TABLE_NAME, DocumentTableFields);
     }
 
     public void dropTable(SQLiteDatabase db, String name) {

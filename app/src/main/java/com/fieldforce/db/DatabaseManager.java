@@ -21,9 +21,11 @@ import com.fieldforce.db.tables.ComplaintJobCardTable;
 import com.fieldforce.db.tables.ConsumerEnquiryTable;
 import com.fieldforce.db.tables.ConversionJobCardTable;
 import com.fieldforce.db.tables.DecommissionJobCardTable;
+import com.fieldforce.db.tables.IdProofTable;
 import com.fieldforce.db.tables.LoginTable;
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
 import com.fieldforce.db.tables.NotificationTable;
+import com.fieldforce.db.tables.PaymentTable;
 import com.fieldforce.db.tables.PreventiveJobCardTable;
 import com.fieldforce.db.tables.RegistrationTable;
 import com.fieldforce.db.tables.RejectedJobCardTable;
@@ -217,6 +219,191 @@ public class DatabaseManager {
     }
 
     // Area Related Functions end here
+
+    // Database functions related to payment created be Jayshree 21-01-2020
+
+
+    public static void savePaymentScheme(Context loginActivity, ArrayList<Consumer> scheme) {
+        for (Consumer schemeName : scheme){
+            DatabaseManager.savePaymentInfo(loginActivity, schemeName);
+
+        }
+    }
+
+    private static void savePaymentInfo(Context context, Consumer schemeName) {
+        if (schemeName != null) {
+            ContentValues values = getContentValuesPaymentInfoTable(context, schemeName);
+            String condition = PaymentTable.Cols.SCHEME_ID + "='" + schemeName.schemeId + "'";
+            saveSchemeValues(context, PaymentTable.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValuesPaymentInfoTable(Context context, Consumer consumer) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(PaymentTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(PaymentTable.Cols.SCHEME_ID, consumer.schemeId != null ? consumer.schemeId : "");
+            values.put(PaymentTable.Cols.SCHEME_NAME, consumer.schemeName != null ? consumer.schemeName : "");
+            values.put(PaymentTable.Cols.SCHEME_AMOUNT, consumer.schemeAmount != null ? consumer.schemeAmount : "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void saveSchemeValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+
+    public static ArrayList<Consumer> getPayment(Context context, String userId) {
+        String condition = PaymentTable.Cols.USER_LOGIN_ID + "='" + userId + "'";
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(PaymentTable.CONTENT_URI, null,
+                condition, null, PaymentTable.Cols.ID + " ASC ");
+        ArrayList<Consumer> payment = getSchemeFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return payment;
+    }
+
+    private static ArrayList<Consumer> getSchemeFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getPaymentFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getPaymentFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.schemeName = cursor.getString(cursor.getColumnIndex(PaymentTable.Cols.SCHEME_NAME)) != null ? cursor.getString(cursor.getColumnIndex(PaymentTable.Cols.SCHEME_NAME)) : "";
+        consumerModel.schemeAmount = cursor.getString(cursor.getColumnIndex(PaymentTable.Cols.SCHEME_AMOUNT)) != null ? cursor.getString(cursor.getColumnIndex(PaymentTable.Cols.SCHEME_AMOUNT)) : "";
+        return consumerModel;
+    }
+
+    // payment Related Functions end here
+
+
+    // Database functions related to ID created be Jayshree 21-01-2020
+
+    public static void saveIDProof(Context loginActivity, ArrayList<Consumer> idProof, String type) {
+        for (Consumer consumerIdProof : idProof){
+            DatabaseManager.saveIdProofInfo(loginActivity, consumerIdProof, type);
+
+        }
+    }
+
+    private static void saveIdProofInfo(Context context, Consumer consumer, String type) {
+        if (consumer != null) {
+            ContentValues values = getContentValueIdProofInfoTable(context, consumer, type);
+            String condition = IdProofTable.Cols.IDPROOF_ID + "='" + consumer.document_id + "'";
+            saveIdProofValues(context, IdProofTable.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValueIdProofInfoTable(Context context, Consumer consumer, String type) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(IdProofTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(IdProofTable.Cols.IDPROOF_ID, consumer.document_id != null ? consumer.document_id : "");
+            values.put(IdProofTable.Cols.DOCUMENT_NAME, consumer.document != null ? consumer.document : "");
+            values.put(IdProofTable.Cols.DOCUMENT_TYPE, consumer.document_type != null ? consumer.document_type : "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void saveIdProofValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+
+    public static ArrayList<Consumer> getIdProof(Context context, String userId) {
+        String condition = IdProofTable.Cols.USER_LOGIN_ID + "='" + userId + "'";
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(IdProofTable.CONTENT_URI, null,
+                condition, null, IdProofTable.Cols.IDPROOF_ID + " ASC ");
+        ArrayList<Consumer> idproof = getIdProofFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return idproof;
+    }
+
+    private static ArrayList<Consumer> getIdProofFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getIdProofsFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getIdProofsFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.document_id = cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.IDPROOF_ID)) != null ? cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.IDPROOF_ID)) : "";
+        consumerModel.document = cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.DOCUMENT_NAME)) != null ? cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.DOCUMENT_NAME)) : "";
+        return consumerModel;
+    }
+
+    // Document Related Functions end here
+
 
 
     // Bank Related Functions start here
@@ -5873,6 +6060,7 @@ public class DatabaseManager {
             values.put(RegistrationTable.Cols.CARD_STATUS, cardStatus);
             values.put(RegistrationTable.Cols.FIELD_CHEQUE_DD, registrationModel.FileChequeDD != null ? registrationModel.FileChequeDD.image : "");
             values.put(RegistrationTable.Cols.FILE_SIGN, registrationModel.FileSign != null ? registrationModel.FileSign.image : "");
+            values.put(RegistrationTable.Cols.FILE_CONSUMER_PHOTO, registrationModel.FileConsumerPhoto != null ? registrationModel.FileConsumerPhoto.image : "");
 
 
         } catch (Exception e) {
@@ -6017,7 +6205,7 @@ public class DatabaseManager {
         registrationModel.FileAddProof0 = add01;
 
         ImageModel add02 = new ImageModel();
-        add01.name = "nsc_add02_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+        add02.name = "nsc_add02_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
                 + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
         add02.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_1)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_ADD_PROOF_1)) : "";
         add02.content_type = "image/jpeg";
@@ -6039,11 +6227,20 @@ public class DatabaseManager {
 
 
         ImageModel noc = new ImageModel();
-        sign.name = "nsc_noc_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+        noc.name = "nsc_noc_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
                 + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
-        sign.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_NOC_PROOF)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_NOC_PROOF)) : "";
-        sign.content_type = "image/jpeg";
-        registrationModel.FileNocProof = sign;
+        noc.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_NOC_PROOF)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_NOC_PROOF)) : "";
+        noc.content_type = "image/jpeg";
+        registrationModel.FileNocProof = noc;
+
+
+
+        ImageModel consumerPhoto = new ImageModel();
+        consumerPhoto.name = "nsc_consumerphoto_" + AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, "")
+                + "_" + dateValue + "_" + cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.ID)) + ".JPEG";
+        consumerPhoto.image = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_CONSUMER_PHOTO)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.FILE_CONSUMER_PHOTO)) : "";
+        consumerPhoto.content_type = "image/jpeg";
+        registrationModel.FileConsumerPhoto = consumerPhoto;
 
         return registrationModel;
     }

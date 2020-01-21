@@ -69,6 +69,7 @@ public class JsonResponse {
     public ArrayList<Consumer> area_list;
 
 
+
     public ArrayList<RegistrationModel> data;
 
 }

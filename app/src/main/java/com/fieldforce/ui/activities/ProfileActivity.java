@@ -246,8 +246,6 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     }
 
     public void showDialogDatabase(final Context context) {
-
-
         Typeface regular = App.getMontserratRegularFont();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View promptView = layoutInflater.inflate(R.layout.dialog_for_database, null);

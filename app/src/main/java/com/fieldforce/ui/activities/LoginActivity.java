@@ -201,13 +201,12 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                     if (jsonResponse.area_list != null) {
                         ArrayList<Consumer> consumer = new ArrayList<>();
                         consumer.addAll(jsonResponse.area_list);
-
                         DatabaseManager.saveArea(mContext, consumer);
                         getBankNames();
-                        dismissLoadingDialog();
+                        //dismissLoadingDialog();
                     } else {
                         if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
-                            dismissLoadingDialog();
+//                            dismissLoadingDialog();
                             Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -217,24 +216,65 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
             case ApiConstants.GET_BANK_NAME_URL: {
                 if (jsonResponse.result != null) {
                     if (jsonResponse.banklist != null) {
-
-
                         ArrayList<Consumer> bank = new ArrayList<>();
                         bank.addAll(jsonResponse.banklist);
-
                         Log.d("tttttttttttt", "" + bank);
                         DatabaseManager.saveBankNames(mContext, bank);
+                        getPaymentScheme();
+                        //dismissLoadingDialog();
 
 
                     } else {
                         if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
-                            dismissLoadingDialog();
+//                            dismissLoadingDialog();
                             Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
             }
             break;
+            case ApiConstants.GET_PAYMENT_SCHEMES: {
+                if (jsonResponse != null) {
+                        if (jsonResponse.scheme_list != null) {
+                            ArrayList<Consumer> paymentList = new ArrayList<>();
+                            paymentList.addAll(jsonResponse.scheme_list);
+                            Log.d("paymentList", "MMMMMM" + paymentList);
+                            DatabaseManager.savePaymentScheme(mContext, paymentList);
+                            getDocumentList();
+                            //dismissLoadingDialog();
+
+
+                        } else {
+                            if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+//                                dismissLoadingDialog();
+                                Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                }
+            }
+            break;
+            case ApiConstants.GET_DOCUMENT_LIST: {
+                if (jsonResponse != null) {
+                    if (jsonResponse.document_list != null && jsonResponse.document_address_list != null ) {
+                        ArrayList<Consumer> documnetList = new ArrayList<>();
+                        documnetList.addAll(jsonResponse.document_list);
+                        documnetList.addAll(jsonResponse.document_address_list);
+                        Log.d("document", "MMMMMM" + documnetList);
+                        DatabaseManager.saveIDProof(mContext, documnetList,"type");
+                        //dismissLoadingDialog();
+
+
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+//                                dismissLoadingDialog();
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+            break;
+
+
         }
     }
 
@@ -295,6 +335,33 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_BANK_NAME_URL, this, "");
                 App.getInstance().addToRequestQueue(request, ApiConstants.GET_BANK_NAME_URL);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+    }
+
+    private void getPaymentScheme() {
+        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            try {
+                JSONObject jsonObject = new JSONObject();
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
+                        ApiConstants.GET_PAYMENT_SCHEMES, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_PAYMENT_SCHEMES);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+    }
+
+    private void getDocumentList() {
+        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            try {
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
+                        ApiConstants.GET_DOCUMENT_LIST, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_DOCUMENT_LIST);
             } catch (Exception e) {
                 e.printStackTrace();
             }

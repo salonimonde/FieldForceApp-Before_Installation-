@@ -132,6 +132,9 @@ public class Consumer implements Serializable {
     @SerializedName("document_id")
     public String document_id;
 
+    @SerializedName("document_type")
+    public String document_type;
+
     @SerializedName("transaction_mode")
     public String transaction_mode;
 

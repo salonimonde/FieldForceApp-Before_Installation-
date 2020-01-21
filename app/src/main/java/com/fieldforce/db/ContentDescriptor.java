@@ -13,9 +13,11 @@ import com.fieldforce.db.tables.ComplaintJobCardTable;
 import com.fieldforce.db.tables.ConsumerEnquiryTable;
 import com.fieldforce.db.tables.ConversionJobCardTable;
 import com.fieldforce.db.tables.DecommissionJobCardTable;
+import com.fieldforce.db.tables.IdProofTable;
 import com.fieldforce.db.tables.LoginTable;
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
 import com.fieldforce.db.tables.NotificationTable;
+import com.fieldforce.db.tables.PaymentTable;
 import com.fieldforce.db.tables.PreventiveJobCardTable;
 import com.fieldforce.db.tables.RegistrationTable;
 import com.fieldforce.db.tables.RejectedJobCardTable;
@@ -61,6 +63,8 @@ public class ContentDescriptor
         matcher.addURI(AUTHORITY, RejectedJobCardTable.PATH, RejectedJobCardTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, AreaTable.PATH, AreaTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, BankTable.PATH, BankTable.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, PaymentTable.PATH, PaymentTable.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, IdProofTable.PATH, IdProofTable.PATH_TOKEN);
 
         return matcher;
     }

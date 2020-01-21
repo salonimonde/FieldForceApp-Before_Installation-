@@ -207,16 +207,15 @@ public class RegistrationModel implements Serializable {
     @SerializedName("billing_society_name")
     public String societyName;
 
-
-
-
-
     @SerializedName("File_cheque_dd")
     public ImageModel FileChequeDD;
 
-
     @SerializedName("File_sign")
     public ImageModel FileSign;
+
+    @SerializedName("File_consumer_photo")
+    public ImageModel FileConsumerPhoto;
+
 
 
 

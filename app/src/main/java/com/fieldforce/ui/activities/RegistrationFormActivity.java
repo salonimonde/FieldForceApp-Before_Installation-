@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -186,11 +187,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private int Count = 0;
     private ImageView imgTakeID1, imgTakeID2, imgCancelID1, imgCancelID2, imgTakeADD1,
             imgTakeADD2, imgCancelADD1, imgCancelADD2, imgTakeNoc, imgCancelNoc, imgCheque, imgDD,
-            imgCancelCheque, imgCancelDD;
+            imgCancelCheque, imgCancelDD,imgConsumerPhoto;
     private File File1 = null, File2 = null, File3 = null, File4 = null, File5 = null,
-            fileCheque = null, fileDD = null, fileConsumerSign = null;
+            fileCheque = null, fileDD = null, fileConsumerSign = null, fileConsumerPhoto = null;
     private String imgId1, imgId2 = "", imgId3 = "", imgId4 = "", imgId5 = "",
-            imgIdCheque = "", imgIdDD = "";
+            imgIdCheque = "", imgIdDD = "",imgPhoto="";
 
     private String enquiryId = "";
 
@@ -201,7 +202,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
     private TodayModel todayModel, newTodayModel;
     private RegistrationModel registrationModel, newRegistrationModel;
-
 
     private String latitude, longitude;
     private String premise = "", isConnected = "NO";
@@ -228,14 +228,13 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private AlertDialog alert, alert1;
 
     private Bitmap idBitmap1 = null, idBitmap2 = null, addBitmap1 = null, addBitmap2 = null, nocBitmap = null,
-            bitmapChequeDD = null, bitmapSign = null;
+            bitmapChequeDD = null, bitmapSign = null,bitmapConsumerPhoto = null;
 
     private LinearLayout viewConsumerSignature;
     private SignatureView signatureViewConsumer;
 
 
-    private ArrayList<Consumer> consumerArea, bankNames;
-
+    private ArrayList<Consumer> consumerArea, bankNames,schemeName,documentList;
 
     private String mStrOTP;
 
@@ -326,6 +325,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         imgTakeNoc = findViewById(R.id.img_take_noc);
         imgCheque = findViewById(R.id.img_take_cheque);
         imgDD = findViewById(R.id.img_take_dd);
+        imgConsumerPhoto=findViewById(R.id.image_view_consumer);
+        //defaultConsumerPhoto();
+        //imgConsumerPhoto.setImageResource(R.drawable.ic_action_default_user_icon);
+
 
         imgCancelADD1 = findViewById(R.id.img_cancel_add1);
         imgCancelADD2 = findViewById(R.id.img_cancel_add2);
@@ -342,6 +345,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         imgTakeNoc.setOnClickListener(this);
         imgCheque.setOnClickListener(this);
         imgDD.setOnClickListener(this);
+        imgConsumerPhoto.setOnClickListener(this);
 
         btnPreviousOne.setOnClickListener(this);
         btnPreviousTwo.setOnClickListener(this);
@@ -442,6 +446,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         radioYes = findViewById(R.id.radio_yes);
         radioNo = findViewById(R.id.radio_no);
 
+
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -457,17 +462,14 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         });
 
         //jayshree changes
-
         edtFlatNumber.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
 
             }
 
@@ -614,7 +616,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             public void onNothingSelected(AdapterView<?> parentView) {
             }
         });*/
-
         spinnerPremisesType = findViewById(R.id.spinner_premises_type);
         ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, mContext.getResources().getStringArray(R.array.premises)) {
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -901,6 +902,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         }
 
         getBankNames();
+        //getPaymentScheme();
         // initiateVerification();
 
         getCategory();
@@ -1016,6 +1018,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 relativeViewPayment.setVisibility(View.VISIBLE);
                 getPaymentScheme();
             }
+
         } else if (view == btnNext4) {
             checkPaymentValidations();
         } else if (view == btnClearConsumer) {
@@ -1096,6 +1099,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             Count = 7;
             fileDD = null;
             callCamera();
+        }else if(view.equals(imgConsumerPhoto)){
+            Count = 8;
+            fileConsumerPhoto = null;
+            showPictureDialog();
         } else if (view == relativeIdProof) {
             if (idProof) {
                 nestedIdProof.setVisibility(View.VISIBLE);
@@ -1228,6 +1235,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             if (!imgRemoveList.contains(imgIdDD))
                 imgRemoveList.add(imgIdDD);
         }
+
     }
 
     private void callCamera() {
@@ -1317,8 +1325,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     private void getArea() {
-
-
         consumerArea = DatabaseManager.getAreas(mContext,
                 AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
 
@@ -1346,7 +1352,19 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     private void getDocumentList() {
-        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+        documentList = DatabaseManager.getIdProof(mContext,
+                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+        DocumentIdAdapter.checkParamsListId.clear();
+        DocumentIdAdapter.checkParamsListAddress.clear();
+
+        DocumentIdAdapter Adapter = new DocumentIdAdapter(mContext, documentList, getString(R.string.edit_id_proof));
+        recyclerIDDoc.setAdapter(Adapter);
+
+        DocumentIdAdapter Adapter2 = new DocumentIdAdapter(mContext, documentList, getString(R.string.edit_add_proof));
+        recyclerViewAddDoc.setAdapter(Adapter2);
+
+
+        /*if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             try {
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_DOCUMENT_LIST, this, "");
@@ -1355,11 +1373,24 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 e.printStackTrace();
             }
         } else
-            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();*/
     }
 
     private void getPaymentScheme() {
-        showLoadingDialog();
+
+        schemeName = DatabaseManager.getPayment(mContext,
+                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+
+        hashMapPaymentScheme.clear();
+        hashMapPaymentScheme.put(getString(R.string.select_payment_scheme_mandatory), "0");
+        for (Consumer con : schemeName)
+            hashMapPaymentScheme.put(con.getSchemeName(), con.getSchemeAmount());
+
+        Log.d("1111111111", "" + hashMapPaymentScheme);
+        setSchemeSpinner();
+
+
+        /*showLoadingDialog();
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             try {
                 JSONObject jsonObject = new JSONObject();
@@ -1370,7 +1401,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 e.printStackTrace();
             }
         } else
-            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();*/
     }
 
     private void setStateSpinner() {
@@ -1925,7 +1956,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                                         relativeViewAddressInfo.setVisibility(View.VISIBLE);
                                         newTodayModel.consumerName = edtConsumerName.getText().toString().trim();
                                         newTodayModel.mobileNumber = edtMobile.getText().toString().trim();
-
                                         getArea();
                                     } else {
                                         showDialogForAadhar();
@@ -1980,6 +2010,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                                                 newTodayModel.state = edtState.getText().toString();
                                                 newTodayModel.stateId = stateId;
                                                 newTodayModel.area = spinnerArea.getSelectedItem().toString();
+
+
                                                 getDocumentList();
                                             } else
                                                 Toast.makeText(mContext, getString(R.string.error_select_premises), Toast.LENGTH_SHORT).show();
@@ -2519,7 +2551,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     }
                     imgTakeID1.setImageBitmap(bitmap);
 //                    imgTakeID1.setImageBitmap(bitmap);
-
                     idBitmap1 = bitmap;
                     Uri tempUri = getImageUri(mContext, bitmap);
 
@@ -2643,7 +2674,24 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     bitmapChequeDD = bitmap;
                     Uri tempUri = getImageUri(mContext, bitmap);
                     fileDD = new File(getRealPathFromURI(tempUri));
+                }else if (Count == 8) {
+                    Count = 0;
+                    if (fileConsumerPhoto != null) {
+                        if (imgRemoveList.size() > 0) {
+                            if (imgRemoveList.contains(imgPhoto)) {
+                                imgRemoveList.remove(imgPhoto);
+                            } else {
+                                imgRemoveList.add(imgPhoto);
+                            }
+                        }
+                    }
+                    imgConsumerPhoto.setImageBitmap(bitmap);
+                    bitmapConsumerPhoto = bitmap;
+                    Uri tempUri = getImageUri(mContext, bitmap);
+                    fileConsumerPhoto = new File(getRealPathFromURI(tempUri));
                 }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -3005,7 +3053,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
     public void doSubmitOps() {
 
-
         registrationModel.enquiryId = !enquiryId.isEmpty() ? enquiryId : "";
         registrationModel.consumerCategory = selectedCategory;
         registrationModel.consumerSubCategory = selectSubCategory;
@@ -3023,8 +3070,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         if(edtPlotNo.getText().toString().length()>9){
             registrationModel.plotNo = edtPlotNo.getText().toString();
         }
-        //registrationModel.floorNo = edtFloor.getText().toString();
-        //registrationModel.plotNo = edtPlotNo.getText().toString();
+
         if(edtWing.getText().toString().length()>6){
             registrationModel.wing = edtWing.getText().toString();
         }
@@ -3087,15 +3133,19 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
         ArrayList<String> checklist11 = new ArrayList<>();
         for (int i = 0; i < checkValueList.size(); i++) {
-            checklist11.add(i, checkValueList.get(i));
+            checklist11.add(i,checkValueList.get(i));
         }
-
+        Log.d("TAG","Checklist"+checklist11);
         ArrayList<String> documentOne = new ArrayList<>();
-        for (int i = 0; i < checklist11.size(); i++) {
-            documentOne.add(checklist11.get(i) + "|");
-        }
 
+
+        for (int i = 0; i < checklist11.size(); i++) {
+            documentOne.add(checklist11.get(i) +"");
+        }
         registrationModel.documents = documentOne.toString();
+        Log.e("TAG","SAVE"+registrationModel.documents);
+
+
         ArrayList<String> documentTwo = new ArrayList<>();
 
         ArrayList<String> checklist12 = new ArrayList<>();
@@ -3104,11 +3154,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         }
 
         for (int i = 0; i < checklist12.size(); i++) {
-            documentTwo.add(checklist12.get(i) + "|");
+            documentTwo.add(checklist12.get(i) + "");
         }
 
         registrationModel.documentsAdd = documentTwo.toString();
-
 
         ImageModel imageFile0 = new ImageModel();
         ImageModel imageFile1 = new ImageModel();
@@ -3117,6 +3166,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         ImageModel imageNocFile0 = new ImageModel();
         ImageModel imageSignFile0 = new ImageModel();
         ImageModel imageChequeDDFile0 = new ImageModel();
+        ImageModel imageConsumerPhoto=new ImageModel();
 
 
         imageFile0.image = CommonUtility.getBitmapEncodedString(idBitmap1);
@@ -3126,6 +3176,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         imageNocFile0.image = CommonUtility.getBitmapEncodedString(nocBitmap);
         imageSignFile0.image = CommonUtility.getBitmapEncodedString(bitmapSign);
         imageChequeDDFile0.image = CommonUtility.getBitmapEncodedString(bitmapChequeDD);
+        imageConsumerPhoto.image=CommonUtility.getBitmapEncodedString(bitmapConsumerPhoto);
 
         registrationModel.File0 = imageFile0;
         registrationModel.File1 = imageFile1;
@@ -3134,12 +3185,14 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.FileNocProof = imageNocFile0;
         registrationModel.FileSign = imageSignFile0;
         registrationModel.FileChequeDD = imageChequeDDFile0;
+        registrationModel.FileConsumerPhoto=imageConsumerPhoto;
 
 
         registrationModel.isRejected = String.valueOf(isRejected);
 
 
         long id = DatabaseManager.saveRegistrationNSC(mContext, registrationModel, RegistrationFormActivity.formActivity, AppConstants.CARD_STATUS_COMPLETED);
+
 
         if (comingFrom.equals(getString(R.string.edit_nsc))) {
             todayModel.completedOn = CommonUtility.getCompletionDate();
@@ -3266,6 +3319,9 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 if (File5 != null) {
                     multipartUtility.addFilePart("File_noc_proof", File5);
                 }
+                if(fileConsumerPhoto!=null){
+                    multipartUtility.addFilePart("File_consumer_photo", fileConsumerPhoto);
+                }
 
                 if (spinnerPaymentMethod.getSelectedItem().toString().trim().equals(getString(R.string.cheque))) {
                     multipartUtility.addFilePart("File_cheque_dd", fileCheque);
@@ -3359,6 +3415,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                             fileCheque.delete();
                         if (fileDD != null)
                             fileDD.delete();
+                        if (fileConsumerPhoto != null)
+                            fileConsumerPhoto.delete();
 
                     } else {
                         Toast.makeText(mContext, response.getString("message"), Toast.LENGTH_SHORT).show();
@@ -3534,8 +3592,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
 
     }
-
-
     //OTP Changes by Jayshree on 13-01-2020
     private void getOTP() {
         Random otp = new Random();
@@ -3657,6 +3713,14 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     Toast.LENGTH_LONG).show();
         }
 
+    }
+    private void defaultConsumerPhoto() {
+        Bitmap icon = BitmapFactory.decodeResource(getResources(),R.drawable.ic_action_default_user_icon);
+        imgConsumerPhoto.setImageBitmap(icon);
+        bitmapConsumerPhoto = icon;
+        Uri tempUri = getImageUri(mContext, icon);
+        fileConsumerPhoto = new File(getRealPathFromURI(tempUri));
+        Log.d("TAG","PHOTO"+fileConsumerPhoto);
     }
 
     // OTP Change by Jayshree Completed
