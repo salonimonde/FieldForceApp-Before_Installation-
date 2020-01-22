@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fieldforce.R;
+import com.fieldforce.db.tables.AddProofTable;
 import com.fieldforce.db.tables.AllJobCardTable;
 import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
@@ -399,6 +400,95 @@ public class DatabaseManager {
         Consumer consumerModel = new Consumer();
         consumerModel.document_id = cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.IDPROOF_ID)) != null ? cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.IDPROOF_ID)) : "";
         consumerModel.document = cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.DOCUMENT_NAME)) != null ? cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.DOCUMENT_NAME)) : "";
+        return consumerModel;
+    }
+
+    // DocumentAddress Related Functions end here
+
+    public static void saveAddProof(Context loginActivity, ArrayList<Consumer> addProof) {
+        for (Consumer consumerAddProof : addProof){
+            DatabaseManager.saveAddProofInfo(loginActivity, consumerAddProof);
+
+        }
+    }
+
+    private static void saveAddProofInfo(Context context, Consumer consumer) {
+        if (consumer != null) {
+            ContentValues values = getContentValueAddProofInfoTable(context, consumer);
+            String condition = AddProofTable.Cols.ADDPROOF_ID + "='" + consumer.document_id + "'";
+            saveAddProofValues(context, AddProofTable.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValueAddProofInfoTable(Context context, Consumer consumer) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(AddProofTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(AddProofTable.Cols.ADDPROOF_ID, consumer.document_id != null ? consumer.document_id : "");
+            values.put(AddProofTable.Cols.DOCUMENT_NAME, consumer.document != null ? consumer.document : "");
+            values.put(AddProofTable.Cols.DOCUMENT_TYPE, consumer.document_type != null ? consumer.document_type : "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void saveAddProofValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+
+    public static ArrayList<Consumer> getAddProof(Context context, String userId) {
+        String condition = AddProofTable.Cols.USER_LOGIN_ID + "='" + userId + "'";
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(AddProofTable.CONTENT_URI, null,
+                condition, null, AddProofTable.Cols.ADDPROOF_ID + " ASC ");
+        ArrayList<Consumer> addproof = getAddProofFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return addproof;
+    }
+
+    private static ArrayList<Consumer> getAddProofFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getAddProofsFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getAddProofsFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.document_id = cursor.getString(cursor.getColumnIndex(AddProofTable.Cols.ADDPROOF_ID)) != null ? cursor.getString(cursor.getColumnIndex(AddProofTable.Cols.ADDPROOF_ID)) : "";
+        consumerModel.document = cursor.getString(cursor.getColumnIndex(AddProofTable.Cols.DOCUMENT_NAME)) != null ? cursor.getString(cursor.getColumnIndex(AddProofTable.Cols.DOCUMENT_NAME)) : "";
         return consumerModel;
     }
 

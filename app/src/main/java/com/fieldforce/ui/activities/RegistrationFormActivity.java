@@ -234,7 +234,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private SignatureView signatureViewConsumer;
 
 
-    private ArrayList<Consumer> consumerArea, bankNames,schemeName,documentList;
+    private ArrayList<Consumer> consumerArea, bankNames,schemeName,documentList,addDocumnetList;
 
     private String mStrOTP;
 
@@ -1211,6 +1211,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             imgRemoveList.add(imgId4);
             File4 = null;
             if (imageCountAdd > 0) {
+//                imageCountAdd--;
                 imageCountAdd--;
             }
             imgTakeADD2.setImageResource(R.drawable.ic_action_camera1);
@@ -1351,20 +1352,41 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();*/
     }
 
-    private void getDocumentList() {
+    private void getDocumentListID() {
         documentList = DatabaseManager.getIdProof(mContext,
                 AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
         DocumentIdAdapter.checkParamsListId.clear();
-        DocumentIdAdapter.checkParamsListAddress.clear();
+
 
         DocumentIdAdapter Adapter = new DocumentIdAdapter(mContext, documentList, getString(R.string.edit_id_proof));
         recyclerIDDoc.setAdapter(Adapter);
 
-        DocumentIdAdapter Adapter2 = new DocumentIdAdapter(mContext, documentList, getString(R.string.edit_add_proof));
+
+
+       /* if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            try {
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
+                        ApiConstants.GET_DOCUMENT_LIST, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_DOCUMENT_LIST);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();*/
+    }
+
+    private void getAddDocumentList() {
+        addDocumnetList = DatabaseManager.getAddProof(mContext,
+                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+
+          DocumentIdAdapter.checkParamsListAddress.clear();
+
+
+        DocumentIdAdapter Adapter2 = new DocumentIdAdapter(mContext, addDocumnetList, getString(R.string.edit_add_proof));
         recyclerViewAddDoc.setAdapter(Adapter2);
 
 
-        /*if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+       /* if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             try {
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_DOCUMENT_LIST, this, "");
@@ -2010,9 +2032,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                                                 newTodayModel.state = edtState.getText().toString();
                                                 newTodayModel.stateId = stateId;
                                                 newTodayModel.area = spinnerArea.getSelectedItem().toString();
-
-
-                                                getDocumentList();
+                                                getDocumentListID();
+                                                getAddDocumentList();
                                             } else
                                                 Toast.makeText(mContext, getString(R.string.error_select_premises), Toast.LENGTH_SHORT).show();
                                         else

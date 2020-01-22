@@ -255,12 +255,15 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
             break;
             case ApiConstants.GET_DOCUMENT_LIST: {
                 if (jsonResponse != null) {
-                    if (jsonResponse.document_list != null && jsonResponse.document_address_list != null ) {
+                    if (jsonResponse.document_list != null || jsonResponse.document_address_list != null ) {
                         ArrayList<Consumer> documnetList = new ArrayList<>();
+                        ArrayList<Consumer> adddocumnetList = new ArrayList<>();
                         documnetList.addAll(jsonResponse.document_list);
-                        documnetList.addAll(jsonResponse.document_address_list);
+                        adddocumnetList.addAll(jsonResponse.document_address_list);
                         Log.d("document", "MMMMMM" + documnetList);
                         DatabaseManager.saveIDProof(mContext, documnetList,"type");
+                        DatabaseManager.saveAddProof(mContext, adddocumnetList);
+
                         //dismissLoadingDialog();
 
 
@@ -273,6 +276,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                 }
             }
             break;
+
 
 
         }

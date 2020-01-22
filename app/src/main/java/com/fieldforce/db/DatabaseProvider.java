@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import com.fieldforce.db.tables.AddProofTable;
 import com.fieldforce.db.tables.AllJobCardTable;
 import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
@@ -158,6 +159,11 @@ public class DatabaseProvider extends ContentProvider {
                         selection, selectionArgs, sortOrder);
                 break;
             }
+            case AddProofTable.PATH_TOKEN: {
+                result = doQuery(db, uri, AddProofTable.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
         }
 
         return result;
@@ -277,6 +283,11 @@ public class DatabaseProvider extends ContentProvider {
                         IdProofTable.CONTENT_URI, uri, values);
                 break;
             }
+            case AddProofTable.PATH_TOKEN: {
+                result = doInsert(db, AddProofTable.TABLE_NAME,
+                        AddProofTable.CONTENT_URI, uri, values);
+                break;
+            }
         }
 
         if (result == null) {
@@ -371,6 +382,10 @@ public class DatabaseProvider extends ContentProvider {
             }
             case IdProofTable.PATH_TOKEN: {
                 table = IdProofTable.TABLE_NAME;
+                break;
+            }
+            case AddProofTable.PATH_TOKEN: {
+                table = AddProofTable.TABLE_NAME;
                 break;
             }
         }
@@ -499,6 +514,11 @@ public class DatabaseProvider extends ContentProvider {
                         selectionArgs);
                 break;
             }
+            case AddProofTable.PATH_TOKEN: {
+                result = doDelete(db, uri, AddProofTable.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
         }
         return result;
     }
@@ -612,6 +632,12 @@ public class DatabaseProvider extends ContentProvider {
                         selectionArgs, values);
                 break;
             }
+            case AddProofTable.PATH_TOKEN: {
+                result = doUpdate(db, uri, AddProofTable.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+
 
         }
 

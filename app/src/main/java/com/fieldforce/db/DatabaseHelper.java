@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.fieldforce.db.tables.AddProofTable;
 import com.fieldforce.db.tables.AllJobCardTable;
 import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
@@ -65,6 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createBankTable(db);
         createSchemeTable(db);
         createDocumentTable(db);
+        createAddDocumentTable(db);
 
 
     }
@@ -488,6 +490,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 IdProofTable.Cols.DOCUMENT_NAME + " VARCHAR, "+
                 IdProofTable.Cols.DOCUMENT_TYPE + " VARCHAR";
         createTable(db, IdProofTable.TABLE_NAME, DocumentTableFields);
+    }
+    private void createAddDocumentTable(SQLiteDatabase db){
+        String AddDocumentTableFields = AddProofTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                AddProofTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
+                AddProofTable.Cols.ADDPROOF_ID + " VARCHAR, " +
+                AddProofTable.Cols.DOCUMENT_NAME + " VARCHAR, "+
+                AddProofTable.Cols.DOCUMENT_TYPE + " VARCHAR";
+        createTable(db, AddProofTable.TABLE_NAME, AddDocumentTableFields);
     }
 
     public void dropTable(SQLiteDatabase db, String name) {

@@ -3,6 +3,7 @@ package com.fieldforce.db;
 import android.content.UriMatcher;
 import android.net.Uri;
 
+import com.fieldforce.db.tables.AddProofTable;
 import com.fieldforce.db.tables.AllJobCardTable;
 import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
@@ -65,6 +66,7 @@ public class ContentDescriptor
         matcher.addURI(AUTHORITY, BankTable.PATH, BankTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, PaymentTable.PATH, PaymentTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, IdProofTable.PATH, IdProofTable.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, AddProofTable.PATH, AddProofTable.PATH_TOKEN);
 
         return matcher;
     }
