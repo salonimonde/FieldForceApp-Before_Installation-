@@ -216,6 +216,9 @@ public class RegistrationModel implements Serializable {
     @SerializedName("File_consumer_photo")
     public ImageModel FileConsumerPhoto;
 
+    @SerializedName("ward_name")
+    public ImageModel wardName;
+
 
 
 

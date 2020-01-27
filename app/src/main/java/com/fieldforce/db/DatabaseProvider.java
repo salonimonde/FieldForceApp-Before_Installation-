@@ -13,6 +13,7 @@ import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
 import com.fieldforce.db.tables.BankTable;
 import com.fieldforce.db.tables.BreakDownJobCardTable;
+import com.fieldforce.db.tables.CategoryTable;
 import com.fieldforce.db.tables.ComplaintJobCardTable;
 import com.fieldforce.db.tables.ConsumerEnquiryTable;
 import com.fieldforce.db.tables.ConversionJobCardTable;
@@ -23,11 +24,14 @@ import com.fieldforce.db.tables.CommissionJobCardTable;
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
 import com.fieldforce.db.tables.NotificationTable;
 import com.fieldforce.db.tables.PaymentTable;
+import com.fieldforce.db.tables.Pincode;
 import com.fieldforce.db.tables.PreventiveJobCardTable;
 import com.fieldforce.db.tables.RegistrationTable;
 import com.fieldforce.db.tables.RejectedJobCardTable;
 import com.fieldforce.db.tables.ServiceJobCardTable;
 import com.fieldforce.db.tables.SiteVerificationJobCardTable;
+import com.fieldforce.db.tables.SubCategoryTable;
+import com.fieldforce.db.tables.WardTable;
 
 
 /**
@@ -164,6 +168,27 @@ public class DatabaseProvider extends ContentProvider {
                         selection, selectionArgs, sortOrder);
                 break;
             }
+            case WardTable.PATH_TOKEN: {
+                result = doQuery(db, uri, WardTable.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
+            case CategoryTable.PATH_TOKEN: {
+                result = doQuery(db, uri, CategoryTable.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
+            case SubCategoryTable.PATH_TOKEN: {
+                result = doQuery(db, uri, SubCategoryTable.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
+            case Pincode.PATH_TOKEN: {
+                result = doQuery(db, uri, Pincode.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
+
         }
 
         return result;
@@ -288,6 +313,26 @@ public class DatabaseProvider extends ContentProvider {
                         AddProofTable.CONTENT_URI, uri, values);
                 break;
             }
+            case WardTable.PATH_TOKEN: {
+                result = doInsert(db, WardTable.TABLE_NAME,
+                        WardTable.CONTENT_URI, uri, values);
+                break;
+            }
+            case CategoryTable.PATH_TOKEN: {
+                result = doInsert(db, CategoryTable.TABLE_NAME,
+                        CategoryTable.CONTENT_URI, uri, values);
+                break;
+            }
+            case SubCategoryTable.PATH_TOKEN: {
+                result = doInsert(db, SubCategoryTable.TABLE_NAME,
+                        SubCategoryTable.CONTENT_URI, uri, values);
+                break;
+            }
+            case Pincode.PATH_TOKEN: {
+                result = doInsert(db, Pincode.TABLE_NAME,
+                        Pincode.CONTENT_URI, uri, values);
+                break;
+            }
         }
 
         if (result == null) {
@@ -386,6 +431,22 @@ public class DatabaseProvider extends ContentProvider {
             }
             case AddProofTable.PATH_TOKEN: {
                 table = AddProofTable.TABLE_NAME;
+                break;
+            }
+            case WardTable.PATH_TOKEN: {
+                table = AddProofTable.TABLE_NAME;
+                break;
+            }
+            case CategoryTable.PATH_TOKEN: {
+                table = CategoryTable.TABLE_NAME;
+                break;
+            }
+            case SubCategoryTable.PATH_TOKEN: {
+                table = SubCategoryTable.TABLE_NAME;
+                break;
+            }
+            case Pincode.PATH_TOKEN: {
+                table = Pincode.TABLE_NAME;
                 break;
             }
         }
@@ -519,6 +580,26 @@ public class DatabaseProvider extends ContentProvider {
                         selectionArgs);
                 break;
             }
+            case WardTable.PATH_TOKEN: {
+                result = doDelete(db, uri, WardTable.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
+            case CategoryTable.PATH_TOKEN: {
+                result = doDelete(db, uri, CategoryTable.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
+            case SubCategoryTable.PATH_TOKEN: {
+                result = doDelete(db, uri, SubCategoryTable.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
+            case Pincode.PATH_TOKEN: {
+                result = doDelete(db, uri, Pincode.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
         }
         return result;
     }
@@ -634,6 +715,26 @@ public class DatabaseProvider extends ContentProvider {
             }
             case AddProofTable.PATH_TOKEN: {
                 result = doUpdate(db, uri, AddProofTable.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+            case WardTable.PATH_TOKEN: {
+                result = doUpdate(db, uri, WardTable.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+            case CategoryTable.PATH_TOKEN: {
+                result = doUpdate(db, uri, CategoryTable.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+            case SubCategoryTable.PATH_TOKEN: {
+                result = doUpdate(db, uri, SubCategoryTable.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+            case Pincode.PATH_TOKEN: {
+                result = doUpdate(db, uri, Pincode.TABLE_NAME, selection,
                         selectionArgs, values);
                 break;
             }

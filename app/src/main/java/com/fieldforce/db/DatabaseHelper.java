@@ -12,6 +12,7 @@ import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
 import com.fieldforce.db.tables.BankTable;
 import com.fieldforce.db.tables.BreakDownJobCardTable;
+import com.fieldforce.db.tables.CategoryTable;
 import com.fieldforce.db.tables.CommissionJobCardTable;
 import com.fieldforce.db.tables.ComplaintJobCardTable;
 import com.fieldforce.db.tables.ConsumerEnquiryTable;
@@ -22,11 +23,14 @@ import com.fieldforce.db.tables.LoginTable;
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
 import com.fieldforce.db.tables.NotificationTable;
 import com.fieldforce.db.tables.PaymentTable;
+import com.fieldforce.db.tables.Pincode;
 import com.fieldforce.db.tables.PreventiveJobCardTable;
 import com.fieldforce.db.tables.RegistrationTable;
 import com.fieldforce.db.tables.RejectedJobCardTable;
 import com.fieldforce.db.tables.ServiceJobCardTable;
 import com.fieldforce.db.tables.SiteVerificationJobCardTable;
+import com.fieldforce.db.tables.SubCategoryTable;
+import com.fieldforce.db.tables.WardTable;
 
 import java.text.MessageFormat;
 
@@ -67,6 +71,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createSchemeTable(db);
         createDocumentTable(db);
         createAddDocumentTable(db);
+        createWardTable(db);
+        createCategoryTable(db);
+        createSubCategoryTable(db);
+        createPincodeTable(db);
 
 
     }
@@ -92,7 +100,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 LoginTable.Cols.CITY_ID + " VARCHAR, " +
                 LoginTable.Cols.USER_TYPE + " VARCHAR, " +
                 LoginTable.Cols.LOGIN_LAT + " VARCHAR, " +
+                LoginTable.Cols.USER_DISTRICT + " VARCHAR, " +
+                LoginTable.Cols.DISTRICT_ID + " VARCHAR, " +
                 LoginTable.Cols.LOGIN_LNG + " VARCHAR";
+
+
         createTable(db, LoginTable.TABLE_NAME, loginTableFields);
     }
 
@@ -498,6 +510,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 AddProofTable.Cols.DOCUMENT_NAME + " VARCHAR, "+
                 AddProofTable.Cols.DOCUMENT_TYPE + " VARCHAR";
         createTable(db, AddProofTable.TABLE_NAME, AddDocumentTableFields);
+    }
+    private void createWardTable(SQLiteDatabase db){
+        String WardTableFields = WardTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                WardTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
+                WardTable.Cols.WARD_ID + " VARCHAR, " +
+                WardTable.Cols.WARD_NAME + " VARCHAR, " +
+                WardTable.Cols.AREA_ID + " VARCHAR";
+        createTable(db, WardTable.TABLE_NAME, WardTableFields);
+    }
+    private void createCategoryTable(SQLiteDatabase db){
+        String CategoryTableFields = CategoryTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                CategoryTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
+                CategoryTable.Cols.CATEGORY_ID + " VARCHAR, " +
+                CategoryTable.Cols.CATEGORY_NAME + " VARCHAR";
+        createTable(db, CategoryTable.TABLE_NAME, CategoryTableFields);
+    }
+    private void createSubCategoryTable(SQLiteDatabase db){
+        String SubCategoryTableFields = SubCategoryTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                SubCategoryTable.Cols.SUBCATEGORY_ID + " VARCHAR, " +
+                SubCategoryTable.Cols.SUBCATEGORY_NAME + " VARCHAR";
+        createTable(db, SubCategoryTable.TABLE_NAME, SubCategoryTableFields);
+    }
+    private void createPincodeTable(SQLiteDatabase db){
+        String PincodeTableFields = Pincode.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                Pincode.Cols.USER_LOGIN_ID + " VARCHAR, " +
+                Pincode.Cols.AREA_ID + " VARCHAR, " +
+                Pincode.Cols.PINCODE_ID + " VARCHAR, " +
+                Pincode.Cols.PINCODE + " VARCHAR";
+        createTable(db, Pincode.TABLE_NAME, PincodeTableFields);
     }
 
     public void dropTable(SQLiteDatabase db, String name) {

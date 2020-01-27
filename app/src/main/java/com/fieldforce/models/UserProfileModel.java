@@ -58,6 +58,27 @@ public class UserProfileModel implements Serializable {
     public String userType;
 
 
+    @SerializedName("district")
+    public String district;
+
+    @SerializedName("district_id")
+    public String districtId;
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
+    }
 
     public String screen;
 

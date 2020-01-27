@@ -41,5 +41,7 @@ public class LoginTable
         public static final String STATE_ID = "state_id";
         public static final String CITY_ID = "city_id";
         public static final String USER_TYPE = "user_type";
+        public static final String USER_DISTRICT = "user_district";
+        public static final String DISTRICT_ID = "district_id";
     }
 }

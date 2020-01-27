@@ -9,6 +9,7 @@ import com.fieldforce.db.tables.AreaTable;
 import com.fieldforce.db.tables.AssetJobCardTable;
 import com.fieldforce.db.tables.BankTable;
 import com.fieldforce.db.tables.BreakDownJobCardTable;
+import com.fieldforce.db.tables.CategoryTable;
 import com.fieldforce.db.tables.CommissionJobCardTable;
 import com.fieldforce.db.tables.ComplaintJobCardTable;
 import com.fieldforce.db.tables.ConsumerEnquiryTable;
@@ -19,11 +20,14 @@ import com.fieldforce.db.tables.LoginTable;
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
 import com.fieldforce.db.tables.NotificationTable;
 import com.fieldforce.db.tables.PaymentTable;
+import com.fieldforce.db.tables.Pincode;
 import com.fieldforce.db.tables.PreventiveJobCardTable;
 import com.fieldforce.db.tables.RegistrationTable;
 import com.fieldforce.db.tables.RejectedJobCardTable;
 import com.fieldforce.db.tables.ServiceJobCardTable;
 import com.fieldforce.db.tables.SiteVerificationJobCardTable;
+import com.fieldforce.db.tables.SubCategoryTable;
+import com.fieldforce.db.tables.WardTable;
 
 
 /**
@@ -67,6 +71,10 @@ public class ContentDescriptor
         matcher.addURI(AUTHORITY, PaymentTable.PATH, PaymentTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, IdProofTable.PATH, IdProofTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, AddProofTable.PATH, AddProofTable.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, WardTable.PATH, WardTable.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, CategoryTable.PATH, CategoryTable.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, SubCategoryTable.PATH, SubCategoryTable.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, Pincode.PATH, Pincode.PATH_TOKEN);
 
         return matcher;
     }

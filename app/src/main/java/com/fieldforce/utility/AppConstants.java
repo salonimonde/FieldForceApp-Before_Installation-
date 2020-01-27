@@ -37,6 +37,7 @@ public class AppConstants {
     public static final String NAME = "name";
     public static final String STATE = "state";
     public static final String CITY = "city";
+    public static final String AREA_ID = "area_id";
 
 
     public static final String MOBILE_NO = "mobile_no";
@@ -56,6 +57,10 @@ public class AppConstants {
     public static final String VENDOR_ID = "vendor_id";
     public static final String FIELD_FORCE_ID = "field_force_id";
     public static final String USER_TYPE = "user_type";
+
+
+    public static final String USER_DISTRICT = "user_district";
+    public static final String DISTRICT_ID = "district_id";
 
     public final static int PLAY_SERVICES_RESOLUTION_REQUEST = 100;
     public final static int UPDATE_INTERVAL = 500, FASTEST_INTERVAL = 500, DISPLACEMENT = 0;

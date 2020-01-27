@@ -191,6 +191,8 @@ public class Consumer implements Serializable {
 
     @SerializedName("category")
     public String category;
+    @SerializedName("category_id")
+    public String categoryId;
 
     @SerializedName("name")
     public String name;
@@ -275,6 +277,28 @@ public class Consumer implements Serializable {
 
     @SerializedName("area")
     public String area;
+
+    @SerializedName("ward_id")
+    public String wardID;
+
+    @SerializedName("ward")
+    public String ward;
+
+    public String getWardID() {
+        return wardID;
+    }
+
+    public void setWardID(String wardID) {
+        this.wardID = wardID;
+    }
+
+    public String getWard() {
+        return ward;
+    }
+
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
 
     public ArrayList<Consumer> document_list;
     public ArrayList<Consumer> document_address_list;

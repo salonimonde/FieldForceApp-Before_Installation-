@@ -14,23 +14,32 @@ import com.fieldforce.R;
 import com.fieldforce.db.tables.AddProofTable;
 import com.fieldforce.db.tables.AllJobCardTable;
 import com.fieldforce.db.tables.AreaTable;
+
 import com.fieldforce.db.tables.AssetJobCardTable;
 import com.fieldforce.db.tables.BankTable;
 import com.fieldforce.db.tables.BreakDownJobCardTable;
+import com.fieldforce.db.tables.CategoryTable;
 import com.fieldforce.db.tables.CommissionJobCardTable;
+
 import com.fieldforce.db.tables.ComplaintJobCardTable;
 import com.fieldforce.db.tables.ConsumerEnquiryTable;
+
 import com.fieldforce.db.tables.ConversionJobCardTable;
 import com.fieldforce.db.tables.DecommissionJobCardTable;
 import com.fieldforce.db.tables.IdProofTable;
 import com.fieldforce.db.tables.LoginTable;
+
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
 import com.fieldforce.db.tables.NotificationTable;
 import com.fieldforce.db.tables.PaymentTable;
+import com.fieldforce.db.tables.Pincode;
 import com.fieldforce.db.tables.PreventiveJobCardTable;
 import com.fieldforce.db.tables.RegistrationTable;
 import com.fieldforce.db.tables.RejectedJobCardTable;
+
 import com.fieldforce.db.tables.ServiceJobCardTable;
+import com.fieldforce.db.tables.SubCategoryTable;
+import com.fieldforce.db.tables.WardTable;
 import com.fieldforce.models.Consumer;
 import com.fieldforce.models.ImageModel;
 import com.fieldforce.models.NotificationCard;
@@ -122,6 +131,10 @@ public class DatabaseManager {
             values.put(LoginTable.Cols.STATE_ID, userProfileModel.stateId != null ? userProfileModel.stateId : "");
             values.put(LoginTable.Cols.CITY_ID, userProfileModel.cityId != null ? userProfileModel.cityId : "");
             values.put(LoginTable.Cols.USER_TYPE, userProfileModel.userType != null ? userProfileModel.userType : "");
+
+
+            values.put(LoginTable.Cols.USER_DISTRICT, userProfileModel.district != null ? userProfileModel.district : "");
+            values.put(LoginTable.Cols.DISTRICT_ID, userProfileModel.districtId != null ? userProfileModel.districtId : "");
 
 
         } catch (Exception e) {
@@ -222,8 +235,6 @@ public class DatabaseManager {
     // Area Related Functions end here
 
     // Database functions related to payment created be Jayshree 21-01-2020
-
-
     public static void savePaymentScheme(Context loginActivity, ArrayList<Consumer> scheme) {
         for (Consumer schemeName : scheme){
             DatabaseManager.savePaymentInfo(loginActivity, schemeName);
@@ -310,9 +321,7 @@ public class DatabaseManager {
         consumerModel.schemeAmount = cursor.getString(cursor.getColumnIndex(PaymentTable.Cols.SCHEME_AMOUNT)) != null ? cursor.getString(cursor.getColumnIndex(PaymentTable.Cols.SCHEME_AMOUNT)) : "";
         return consumerModel;
     }
-
     // payment Related Functions end here
-
 
     // Database functions related to ID created be Jayshree 21-01-2020
 
@@ -403,7 +412,9 @@ public class DatabaseManager {
         return consumerModel;
     }
 
-    // DocumentAddress Related Functions end here
+    // IdProof Related Functions end here
+
+    // Database functions related to AddressProof created be Jayshree 22-01-2020
 
     public static void saveAddProof(Context loginActivity, ArrayList<Consumer> addProof) {
         for (Consumer consumerAddProof : addProof){
@@ -492,12 +503,286 @@ public class DatabaseManager {
         return consumerModel;
     }
 
-    // Document Related Functions end here
+    // AddresssDocument Related Functions end here
+
+    // Database functions related to Category created be Jayshree 22-01-2020
+
+    public static void saveCategory(Context loginActivity, ArrayList<Consumer> category) {
+        for (Consumer consumerCategory : category){
+            DatabaseManager.saveCategoryInfo(loginActivity, consumerCategory);
+
+        }
+    }
+
+    private static void saveCategoryInfo(Context context, Consumer consumer) {
+        if (consumer != null) {
+            ContentValues values = getContentValueCategoryInfoTable(context, consumer);
+            String condition = CategoryTable.Cols.CATEGORY_ID + "='" + consumer.consumerCategoryId + "'";
+            saveCategoryValues(context, CategoryTable.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValueCategoryInfoTable(Context context, Consumer consumer) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(CategoryTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(CategoryTable.Cols.CATEGORY_ID, consumer.consumerCategoryId != null ? consumer.consumerCategoryId : "");
+            values.put(CategoryTable.Cols.CATEGORY_NAME, consumer.consumerCategory != null ? consumer.consumerCategory : "");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void saveCategoryValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+
+    public static ArrayList<Consumer> getCategory(Context context, String userId) {
+        String condition = CategoryTable.Cols.USER_LOGIN_ID + "='" + userId + "'";
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(CategoryTable.CONTENT_URI, null,
+                condition, null, CategoryTable.Cols.CATEGORY_ID + " ASC ");
+        ArrayList<Consumer> category = getCategoryFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return category;
+    }
+
+    private static ArrayList<Consumer> getCategoryFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getCategorysFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getCategorysFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.consumerCategoryId = cursor.getString(cursor.getColumnIndex(CategoryTable.Cols.CATEGORY_ID)) != null ? cursor.getString(cursor.getColumnIndex(CategoryTable.Cols.CATEGORY_ID)) : "";
+        consumerModel.consumerCategory = cursor.getString(cursor.getColumnIndex(CategoryTable.Cols.CATEGORY_NAME)) != null ? cursor.getString(cursor.getColumnIndex(CategoryTable.Cols.CATEGORY_NAME)) : "";
+        return consumerModel;
+    }
+
+    // Category Related Functions end here
+
+    // Database functions related to SubCategory created be Jayshree 25-01-2020
+
+    public static void saveSubCategory(Context loginActivity, ArrayList<Consumer> SubCategory) {
+        for (Consumer consumerSubCategory : SubCategory){
+            DatabaseManager.saveSubCategoryInfo(loginActivity, consumerSubCategory);
+
+        }
+    }
+
+    private static void saveSubCategoryInfo(Context context, Consumer consumer) {
+        if (consumer != null) {
+            ContentValues values = getContentValueSubCategoryInfoTable(context, consumer);
+            String condition = SubCategoryTable.Cols.SUBCATEGORY_ID + "='" + consumer.consumer_subcategory_id + "'";
+            saveSubCategoryValues(context, SubCategoryTable.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValueSubCategoryInfoTable(Context context, Consumer consumer) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(SubCategoryTable.Cols.SUBCATEGORY_ID, consumer.consumer_subcategory_id != null ? consumer.consumer_subcategory_id : "");
+            values.put(SubCategoryTable.Cols.SUBCATEGORY_NAME, consumer.consumer_subcategory != null ? consumer.consumer_subcategory : "");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void saveSubCategoryValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+
+    public static ArrayList<Consumer> getSubCategory(Context context, String userId) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(SubCategoryTable.CONTENT_URI, null,
+                null, null, SubCategoryTable.Cols.SUBCATEGORY_ID + " ASC ");
+        ArrayList<Consumer> subCategory = getSubCategoryFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return subCategory;
+    }
+
+    private static ArrayList<Consumer> getSubCategoryFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getSubCategorysFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getSubCategorysFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.consumer_subcategory_id = cursor.getString(cursor.getColumnIndex(SubCategoryTable.Cols.SUBCATEGORY_ID)) != null ? cursor.getString(cursor.getColumnIndex(SubCategoryTable.Cols.SUBCATEGORY_ID)) : "";
+        consumerModel.consumer_subcategory = cursor.getString(cursor.getColumnIndex(SubCategoryTable.Cols.SUBCATEGORY_NAME)) != null ? cursor.getString(cursor.getColumnIndex(SubCategoryTable.Cols.SUBCATEGORY_NAME)) : "";
+        return consumerModel;
+    }
+
+    // SubCategory Related Functions end here
+
+    // Database functions related to Ward created be Jayshree 23-01-2020
+
+    public static void saveWard(Context loginActivity, ArrayList<Consumer> ward, String areaId) {
+        for (Consumer consumerWard : ward){
+            DatabaseManager.saveWardInfo(loginActivity, consumerWard, areaId);
+
+        }
+    }
+
+    private static void saveWardInfo(Context context, Consumer consumer, String areaId) {
+        if (consumer != null) {
+            ContentValues values = getContentValueWardInfoTable(context, consumer, areaId);
+            String condition = WardTable.Cols.WARD_ID + "='" + consumer.wardID + "'";
+            saveWardValues(context, WardTable.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValueWardInfoTable(Context context, Consumer consumer, String areaId) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(WardTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(WardTable.Cols.WARD_ID, consumer.wardID != null ? consumer.wardID : "");
+            values.put(WardTable.Cols.WARD_NAME, consumer.ward != null ? consumer.ward : "");
+            values.put(WardTable.Cols.AREA_ID, consumer.areaID != null ? consumer.areaID : "");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void saveWardValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+
+    public static ArrayList<Consumer> getWard(Context context, String userId, String areaId) {
+        String condition = WardTable.Cols.USER_LOGIN_ID + "='" + userId + "' AND " + WardTable.Cols.AREA_ID + "='" + areaId +"'";
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(WardTable.CONTENT_URI, null,
+                condition, null, WardTable.Cols.WARD_ID + " ASC ");
+        ArrayList<Consumer> ward = getWardFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return ward;
+    }
+
+    private static ArrayList<Consumer> getWardFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getWardsFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getWardsFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.wardID = cursor.getString(cursor.getColumnIndex(WardTable.Cols.WARD_ID)) != null ? cursor.getString(cursor.getColumnIndex(WardTable.Cols.WARD_ID)) : "";
+        consumerModel.ward = cursor.getString(cursor.getColumnIndex(WardTable.Cols.WARD_NAME)) != null ? cursor.getString(cursor.getColumnIndex(WardTable.Cols.WARD_NAME)) : "";
+        consumerModel.areaID = cursor.getString(cursor.getColumnIndex(WardTable.Cols.AREA_ID)) != null ? cursor.getString(cursor.getColumnIndex(WardTable.Cols.AREA_ID)) : "";
+
+        return consumerModel;
+    }
+
+    // Ward Related Functions end here
+
 
 
 
     // Bank Related Functions start here
-
     public static void saveBankNames(Context loginActivity, ArrayList<Consumer> banks) {
         for (Consumer bankName : banks){
             DatabaseManager.saveBankInfo(loginActivity, bankName);
@@ -577,6 +862,103 @@ public class DatabaseManager {
         consumerModel.bank_name = cursor.getString(cursor.getColumnIndex(BankTable.Cols.BANK_NAME)) != null ? cursor.getString(cursor.getColumnIndex(BankTable.Cols.BANK_NAME)) : "";
         return consumerModel;
     }
+    // Bank Related Functions end here
+
+    // Database functions related to Pincode created be Jayshree 25-01-2020
+
+    public static void savePincode(Context loginActivity, ArrayList<Consumer> pincode, String areaId) {
+        for (Consumer consumerPincode : pincode){
+            DatabaseManager.savePincodeInfo(loginActivity, consumerPincode, areaId);
+
+        }
+    }
+
+    private static void savePincodeInfo(Context context, Consumer consumer, String areaId) {
+        if (consumer != null) {
+            ContentValues values = getContentValuePincodeInfoTable(context, consumer, areaId);
+            String condition = Pincode.Cols.PINCODE_ID + "='" + consumer.pincode_id + "'";
+            savePincodeValues(context, Pincode.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValuePincodeInfoTable(Context context, Consumer consumer, String areaId) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(Pincode.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(Pincode.Cols.PINCODE_ID, consumer.pincode_id != null ? consumer.pincode_id : "");
+            values.put(Pincode.Cols.PINCODE, consumer.pincode != null ? consumer.pincode : "");
+            values.put(Pincode.Cols.AREA_ID, consumer.areaID != null ? consumer.areaID : "");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void savePincodeValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+
+    public static ArrayList<Consumer> getPincode(Context context, String userId, String areaId) {
+        String condition = Pincode.Cols.USER_LOGIN_ID + "='" + userId + "' AND " + Pincode.Cols.AREA_ID + "='" + areaId +"'";
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(Pincode.CONTENT_URI, null,
+                condition, null, Pincode.Cols.PINCODE_ID + " ASC ");
+        ArrayList<Consumer> pincode = getPincodeFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return pincode;
+    }
+
+    private static ArrayList<Consumer> getPincodeFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getPincodesFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getPincodesFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.pincode_id = cursor.getString(cursor.getColumnIndex(Pincode.Cols.PINCODE_ID)) != null ? cursor.getString(cursor.getColumnIndex(Pincode.Cols.PINCODE_ID)) : "";
+        consumerModel.pincode = cursor.getString(cursor.getColumnIndex(Pincode.Cols.PINCODE)) != null ? cursor.getString(cursor.getColumnIndex(Pincode.Cols.PINCODE)) : "";
+        consumerModel.areaID = cursor.getString(cursor.getColumnIndex(Pincode.Cols.AREA_ID)) != null ? cursor.getString(cursor.getColumnIndex(Pincode.Cols.AREA_ID)) : "";
+
+        return consumerModel;
+    }
+
+
+    // Pincode Related Functions end here
+
 
     //Notification Table related methods
 
@@ -6178,6 +6560,7 @@ public class DatabaseManager {
     public static ArrayList<RegistrationModel> getRegistration(Context context, String userId, int limit, String cardStatus) {
         String condition = RegistrationTable.Cols.USER_LOGIN_ID + "='" + userId + "' AND "
                 + RegistrationTable.Cols.CARD_STATUS + "='" +cardStatus+"'";
+
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(RegistrationTable.CONTENT_URI, null,
                 condition, null, RegistrationTable.Cols.USER_LOGIN_ID + " ASC " + " LIMIT " + limit);

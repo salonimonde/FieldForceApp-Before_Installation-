@@ -49,6 +49,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     private EditText edtID, edtPassword;
     private Button btnLogin;
     private String userId, userPass;
+    String area_Id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +155,9 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                                 userProfileModel.vendorId = jsonResponse.responsedata.getVendorId();
                                 userProfileModel.fieldForceId = jsonResponse.responsedata.getFieldForceId();
                                 userProfileModel.userType = jsonResponse.responsedata.getUserType();
+                                userProfileModel.districtId = jsonResponse.responsedata.getDistrictId();
+                                userProfileModel.district = jsonResponse.responsedata.getDistrict();
+
 
                                 DatabaseManager.saveLoginDetails(mContext, userProfileModel);
 
@@ -170,6 +174,9 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                                 AppPreferences.getInstance(mContext).putString(AppConstants.VENDOR_ID, jsonResponse.responsedata.getVendorId());
                                 AppPreferences.getInstance(mContext).putString(AppConstants.FIELD_FORCE_ID, jsonResponse.responsedata.getFieldForceId());
                                 AppPreferences.getInstance(mContext).putString(AppConstants.USER_TYPE, jsonResponse.responsedata.getUserType());
+                                AppPreferences.getInstance(mContext).putString(AppConstants.DISTRICT_ID, jsonResponse.responsedata.getDistrictId());
+                                AppPreferences.getInstance(mContext).putString(AppConstants.USER_DISTRICT, jsonResponse.responsedata.getDistrict());
+
 //                                AppPreferences.getInstance(mContext).putString(AppConstants.USER_TYPE, AppConstants.BLANK_STRING);
 //                                AppPreferences.getInstance(mContext).putString(AppConstants.PROFILE_IMAGE_URL, jsonResponse.responsedata.getProfile_image());
 
@@ -177,8 +184,15 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                                 AppPreferences.getInstance(mContext).putString(AppConstants.COMING_FROM, getString(R.string.all));
                                 AppPreferences.getInstance(mContext).putString(AppConstants.SCREEN_NO, "0");
 
-
+                                getCategory();
+                                getBankNames();
+                                getSubCategory();
                                 getArea();
+                                getWardList();
+                                getPinCode();
+                                getDocumentList();
+                                getPaymentScheme();
+
                                 Intent intent = new Intent(mContext, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -196,33 +210,50 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                 }
             }
             break;
+            case ApiConstants.GET_CONSUMER_CATEGORY_URL: {
+                if (jsonResponse != null) {
+                    if (jsonResponse.categoary_list != null) {
+                        ArrayList<Consumer> categoryList = new ArrayList<>();
+                        categoryList.addAll(jsonResponse.categoary_list);
+                        Log.d("categoryList", "MMMMMM" + categoryList);
+                        DatabaseManager.saveCategory(mContext, categoryList);
+                        //getSubCategory();
+
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+//                                dismissLoadingDialog();
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+            break;
+            case ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL: {
+                if (jsonResponse != null) {
+                    if (jsonResponse.consumer_subcategoary_List != null) {
+                        ArrayList<Consumer> subCategoryList = new ArrayList<>();
+                        subCategoryList.addAll(jsonResponse.consumer_subcategoary_List);
+                        Log.d("SubcategoryList", "MMMMMM" + subCategoryList);
+                        DatabaseManager.saveSubCategory(mContext, subCategoryList);
+                        //getArea();
+
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+//                                dismissLoadingDialog();
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+            break;
             case ApiConstants.GET_AREA_SP: {
                 if (jsonResponse != null) {
                     if (jsonResponse.area_list != null) {
                         ArrayList<Consumer> consumer = new ArrayList<>();
                         consumer.addAll(jsonResponse.area_list);
+                        area_Id = consumer.get(0).getAreaID();
                         DatabaseManager.saveArea(mContext, consumer);
-                        getBankNames();
-                        //dismissLoadingDialog();
-                    } else {
-                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
-//                            dismissLoadingDialog();
-                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            }
-            break;
-            case ApiConstants.GET_BANK_NAME_URL: {
-                if (jsonResponse.result != null) {
-                    if (jsonResponse.banklist != null) {
-                        ArrayList<Consumer> bank = new ArrayList<>();
-                        bank.addAll(jsonResponse.banklist);
-                        Log.d("tttttttttttt", "" + bank);
-                        DatabaseManager.saveBankNames(mContext, bank);
-                        getPaymentScheme();
-                        //dismissLoadingDialog();
-
+                        //getWardList();
 
                     } else {
                         if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
@@ -233,23 +264,38 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                 }
             }
             break;
-            case ApiConstants.GET_PAYMENT_SCHEMES: {
+            case ApiConstants.GET_WARD: {
                 if (jsonResponse != null) {
-                        if (jsonResponse.scheme_list != null) {
-                            ArrayList<Consumer> paymentList = new ArrayList<>();
-                            paymentList.addAll(jsonResponse.scheme_list);
-                            Log.d("paymentList", "MMMMMM" + paymentList);
-                            DatabaseManager.savePaymentScheme(mContext, paymentList);
-                            getDocumentList();
-                            //dismissLoadingDialog();
-
-
-                        } else {
-                            if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+                    if (jsonResponse.ward_list != null) {
+                        ArrayList<Consumer> wardlist = new ArrayList<>();
+                        wardlist.addAll(jsonResponse.ward_list);
+                        Log.d("WardList", "MMMMMM" + wardlist);
+                        DatabaseManager.saveWard(mContext, wardlist, "");
+                        //getPinCode();
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
 //                                dismissLoadingDialog();
-                                Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
                         }
+                    }
+                }
+            }
+            break;
+            case ApiConstants.GET_PIN_CODE: {
+                if (jsonResponse != null) {
+                    if (jsonResponse.pincode_list != null) {
+                        ArrayList<Consumer> pincode = new ArrayList<>();
+                        pincode.addAll(jsonResponse.pincode_list);
+                        Log.d("pincode", "MMMMMM" + pincode);
+                        DatabaseManager.savePincode(mContext, pincode,"");
+                        //getDocumentList();
+
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+//                                dismissLoadingDialog();
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             }
             break;
@@ -263,7 +309,25 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                         Log.d("document", "MMMMMM" + documnetList);
                         DatabaseManager.saveIDProof(mContext, documnetList,"type");
                         DatabaseManager.saveAddProof(mContext, adddocumnetList);
-
+                        //getPaymentScheme();
+                        //dismissLoadingDialog();
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+//                                dismissLoadingDialog();
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+            break;
+            case ApiConstants.GET_PAYMENT_SCHEMES: {
+                if (jsonResponse != null) {
+                    if (jsonResponse.scheme_list != null) {
+                        ArrayList<Consumer> paymentList = new ArrayList<>();
+                        paymentList.addAll(jsonResponse.scheme_list);
+                        Log.d("paymentList", "MMMMMM" + paymentList);
+                        DatabaseManager.savePaymentScheme(mContext, paymentList);
+                        //getBankNames();
                         //dismissLoadingDialog();
 
 
@@ -276,8 +340,23 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                 }
             }
             break;
-
-
+            case ApiConstants.GET_BANK_NAME_URL: {
+                if (jsonResponse.result != null) {
+                    if (jsonResponse.banklist != null) {
+                        ArrayList<Consumer> bank = new ArrayList<>();
+                        bank.addAll(jsonResponse.banklist);
+                        Log.d("tttttttttttt", "" + bank);
+                        DatabaseManager.saveBankNames(mContext, bank);
+                        dismissLoadingDialog();
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+//                            dismissLoadingDialog();
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+            break;
 
         }
     }
@@ -293,7 +372,6 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
 
         }
     }
-
     @Override
     public void onAsyncCompletelyFail(String message, String label) {
         switch (label) {
@@ -317,6 +395,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
 
     private void getArea() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            showLoadingDialog();
             try {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
@@ -333,9 +412,8 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     public void getBankNames() {
 
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
-//            showLoadingDialog();
+          showLoadingDialog();
             try {
-
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_BANK_NAME_URL, this, "");
                 App.getInstance().addToRequestQueue(request, ApiConstants.GET_BANK_NAME_URL);
@@ -348,6 +426,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
 
     private void getPaymentScheme() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            showLoadingDialog();
             try {
                 JSONObject jsonObject = new JSONObject();
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
@@ -362,10 +441,88 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
 
     private void getDocumentList() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            showLoadingDialog();
             try {
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_DOCUMENT_LIST, this, "");
                 App.getInstance().addToRequestQueue(request, ApiConstants.GET_DOCUMENT_LIST);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void getWardList() {
+        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            try {
+                showLoadingDialog();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
+                        ApiConstants.GET_WARD, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_WARD);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+    }
+
+    private void getCategory() {
+        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            showLoadingDialog();
+            try {
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
+                        ApiConstants.GET_CONSUMER_CATEGORY_URL, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_CONSUMER_CATEGORY_URL);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+    }
+
+    private void getSubCategory() {
+        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            try {
+                showLoadingDialog();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("consumer_categoary_id",  AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
+                        ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+    }
+
+    private void getPinCode() {
+        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            try {
+                showLoadingDialog();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, "") );
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
+                        ApiConstants.GET_PIN_CODE, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_PIN_CODE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+    }
+    private void getLocation() {
+        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            showLoadingDialog();
+            try {
+
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
+                        ApiConstants.GET_LOCATION_URL, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_LOCATION_URL);
             } catch (Exception e) {
                 e.printStackTrace();
             }

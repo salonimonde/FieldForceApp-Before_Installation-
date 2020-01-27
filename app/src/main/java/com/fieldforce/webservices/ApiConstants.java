@@ -38,6 +38,8 @@ public class ApiConstants {
     public static final String UPLOAD_NSC_FORM = BASE_URL_CIS + "new-connection/";
     public static final String GET_PAYMENT_SCHEMES = BASE_URL_CIS + "get_consumer_scheme";
     public static final String CHECK_AADHAR_NO = BASE_URL_CIS + "check_aadhar_no";
+    public static final String GET_WARD = BASE_URL_CIS + "get_ward/";
+
 
     //Api for Site Verification
     public static final String GET_SITE_VERIFICATION_JOB_CARDS = BASE_URL_CIS + "get_site_verification_card/";
