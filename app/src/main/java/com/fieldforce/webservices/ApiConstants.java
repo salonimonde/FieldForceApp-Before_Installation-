@@ -39,6 +39,8 @@ public class ApiConstants {
     public static final String GET_PAYMENT_SCHEMES = BASE_URL_CIS + "get_consumer_scheme";
     public static final String CHECK_AADHAR_NO = BASE_URL_CIS + "check_aadhar_no";
     public static final String GET_WARD = BASE_URL_CIS + "get_ward/";
+    public static final String GET_LOCATION_REGISTRATION = BASE_URL_CIS + "get_location/";
+    public static final String GET_LANDMARK = BASE_URL_CIS + "get_landmark/";
 
 
     //Api for Site Verification

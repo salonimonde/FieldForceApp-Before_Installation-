@@ -40,14 +40,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
     }
 
     @Override
-    public HistoryAdapter.HistoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HistoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.cell_history, null);
-        HistoryAdapter.HistoryHolder viewHolder = new HistoryAdapter.HistoryHolder(view);
+        HistoryHolder viewHolder = new HistoryHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(HistoryAdapter.HistoryHolder holder, int position) {
+    public void onBindViewHolder(HistoryHolder holder, int position) {
 //        CommonUtility.setAnimation(holder.itemView, position, -1, mContext);
         if (screenName.equals(CommonUtility.getString(mContext, R.string.enquiry))) {
             holder.relativeModule.setBackgroundColor(CommonUtility.getColor(mContext, R.color.colorMenuCream));

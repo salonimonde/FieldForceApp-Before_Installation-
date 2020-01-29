@@ -33,9 +33,10 @@
 
         <LinearLayout
             android:id="@+id/linear_profile"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="40dp"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
@@ -73,6 +74,14 @@
                 android:textSize="@dimen/text_size_h2" />
 
         </LinearLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_consumer"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/layout_background"
+            android:src="@drawable/ic_action_breakdown"
+            android:padding="@dimen/margin_h2"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

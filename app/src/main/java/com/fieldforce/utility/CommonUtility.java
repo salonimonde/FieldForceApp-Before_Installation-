@@ -133,7 +133,6 @@ public class CommonUtility {
                         }
                     }
                 });
-
         ViewGroup group = (ViewGroup) snackBarView.getView();
         group.setBackgroundColor(getColor(context, R.color.colorPrimary));
         snackBarView.show();

@@ -42,14 +42,14 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
     }
     @NonNull
     @Override
-    public SearchHistoryAdapter.SearchHistoryHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public SearchHistoryHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.cell_history, null);
-        SearchHistoryAdapter.SearchHistoryHolder viewHolder = new SearchHistoryAdapter.SearchHistoryHolder(view);
+        SearchHistoryHolder viewHolder = new SearchHistoryHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchHistoryAdapter.SearchHistoryHolder searchHistoryHolder, int position) {
+    public void onBindViewHolder(@NonNull SearchHistoryHolder searchHistoryHolder, int position) {
         CommonUtility.setAnimation(searchHistoryHolder.itemView, position, -1, mContext);
         if (screenName.equals(CommonUtility.getString(mContext, R.string.enquiry))) {
             searchHistoryHolder.relativeModule.setBackgroundColor(CommonUtility.getColor(mContext, R.color.colorMenuCream));

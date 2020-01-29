@@ -21,4 +21,3 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         DatabaseManager.saveNotification(this, notificationCard);
     }
 }
-

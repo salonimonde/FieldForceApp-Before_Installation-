@@ -38,7 +38,7 @@ public class AssetParametersAdapter extends RecyclerView.Adapter<AssetParameters
     @Override
     public AssetParametersHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.cell_work, null);
-        AssetParametersAdapter.AssetParametersHolder viewHolder = new AssetParametersAdapter.AssetParametersHolder(view);
+        AssetParametersHolder viewHolder = new AssetParametersHolder(view);
         return viewHolder;
     }
 

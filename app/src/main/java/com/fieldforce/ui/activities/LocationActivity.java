@@ -197,13 +197,10 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                             LatLng position = marker.getPosition(); //
                             newMarkerLat = position.latitude;
                             newMarkerLong = position.longitude;
-
                             mapOperations(currentLat, currentLong, String.valueOf(newMarkerLat), String.valueOf(newMarkerLong));
-
                             return true;
                         }
                     });
-
                 }
             };
             handler.postDelayed(runnable, 5000);*/
@@ -582,5 +579,3 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 }
-
-

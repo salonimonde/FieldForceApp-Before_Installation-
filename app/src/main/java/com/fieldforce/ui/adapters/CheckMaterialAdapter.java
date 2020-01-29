@@ -29,7 +29,7 @@ public class CheckMaterialAdapter extends RecyclerView.Adapter<CheckMaterialAdap
     @Override
     public CheckMaterialHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.cell_material_list_layout, null);
-        CheckMaterialAdapter.CheckMaterialHolder viewHolder = new CheckMaterialAdapter.CheckMaterialHolder(view);
+        CheckMaterialHolder viewHolder = new CheckMaterialHolder(view);
         return viewHolder;
     }
 

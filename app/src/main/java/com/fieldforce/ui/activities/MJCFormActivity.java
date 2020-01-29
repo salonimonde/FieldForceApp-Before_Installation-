@@ -667,14 +667,12 @@ public class MJCFormActivity extends ParentActivity implements View.OnClickListe
     /*private void captureLocation() {
         createLocationRequest();
         startLocationUpdates();
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 CommonUtility.askForPermissions(mContext, App.getInstance().permissions);
             }
             return;
         }
-
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             latitude = String.valueOf(mLastLocation.getLatitude());

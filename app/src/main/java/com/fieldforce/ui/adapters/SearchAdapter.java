@@ -48,14 +48,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
     }
 
     @Override
-    public SearchAdapter.SearchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SearchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.cell_open, null);
-        SearchAdapter.SearchHolder viewHolder = new SearchAdapter.SearchHolder(view);
+        SearchHolder viewHolder = new SearchHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(SearchAdapter.SearchHolder holder, final int position) {
+    public void onBindViewHolder(SearchHolder holder, final int position) {
         CommonUtility.setAnimation(holder.itemView, position, -1, mContext);
 
         if (screenName.equals(CommonUtility.getString(mContext, R.string.enquiry))) {

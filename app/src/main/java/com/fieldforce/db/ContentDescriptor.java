@@ -16,6 +16,8 @@ import com.fieldforce.db.tables.ConsumerEnquiryTable;
 import com.fieldforce.db.tables.ConversionJobCardTable;
 import com.fieldforce.db.tables.DecommissionJobCardTable;
 import com.fieldforce.db.tables.IdProofTable;
+import com.fieldforce.db.tables.LandmarkTable;
+import com.fieldforce.db.tables.LocationTable;
 import com.fieldforce.db.tables.LoginTable;
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
 import com.fieldforce.db.tables.NotificationTable;
@@ -75,6 +77,8 @@ public class ContentDescriptor
         matcher.addURI(AUTHORITY, CategoryTable.PATH, CategoryTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, SubCategoryTable.PATH, SubCategoryTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, Pincode.PATH, Pincode.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, LocationTable.PATH, LocationTable.PATH_TOKEN);
+        matcher.addURI(AUTHORITY, LandmarkTable.PATH, LandmarkTable.PATH_TOKEN);
 
         return matcher;
     }

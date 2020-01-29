@@ -192,6 +192,8 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                                 getPinCode();
                                 getDocumentList();
                                 getPaymentScheme();
+                                getLocation();
+                                getLandmark();
 
                                 Intent intent = new Intent(mContext, MainActivity.class);
                                 startActivity(intent);
@@ -347,7 +349,41 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                         bank.addAll(jsonResponse.banklist);
                         Log.d("tttttttttttt", "" + bank);
                         DatabaseManager.saveBankNames(mContext, bank);
-                        dismissLoadingDialog();
+                        //dismissLoadingDialog();
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+//                            dismissLoadingDialog();
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+            break;
+            case ApiConstants.GET_LOCATION_REGISTRATION: {
+                if (jsonResponse.result != null) {
+                    if (jsonResponse.location_list != null) {
+                        ArrayList<Consumer> locationArrayList = new ArrayList<>();
+                        locationArrayList.addAll(jsonResponse.location_list);
+                        Log.d("location", "" + locationArrayList);
+                        DatabaseManager.saveLocation(mContext, locationArrayList,"");
+                        //dismissLoadingDialog();
+                    } else {
+                        if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
+//                            dismissLoadingDialog();
+                            Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+            break;
+            case ApiConstants.GET_LANDMARK: {
+                if (jsonResponse.result != null) {
+                    if (jsonResponse.landmark_list != null) {
+                        ArrayList<Consumer> landmarkArrayList = new ArrayList<>();
+                        landmarkArrayList.addAll(jsonResponse.landmark_list);
+                        Log.d("landmark", "" + landmarkArrayList);
+                        DatabaseManager.saveLandmark(mContext, landmarkArrayList,"");
+                        //dismissLoadingDialog();
                     } else {
                         if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
 //                            dismissLoadingDialog();
@@ -395,7 +431,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
 
     private void getArea() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
-            showLoadingDialog();
+            //showLoadingDialog();
             try {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
@@ -412,7 +448,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     public void getBankNames() {
 
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
-          showLoadingDialog();
+          //showLoadingDialog();
             try {
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_BANK_NAME_URL, this, "");
@@ -426,7 +462,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
 
     private void getPaymentScheme() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
-            showLoadingDialog();
+            //showLoadingDialog();
             try {
                 JSONObject jsonObject = new JSONObject();
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
@@ -441,7 +477,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
 
     private void getDocumentList() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
-            showLoadingDialog();
+            //showLoadingDialog();
             try {
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_DOCUMENT_LIST, this, "");
@@ -457,7 +493,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     private void getWardList() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             try {
-                showLoadingDialog();
+                //showLoadingDialog();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
@@ -472,7 +508,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
 
     private void getCategory() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
-            showLoadingDialog();
+            //showLoadingDialog();
             try {
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_CONSUMER_CATEGORY_URL, this, "");
@@ -487,7 +523,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     private void getSubCategory() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             try {
-                showLoadingDialog();
+                //showLoadingDialog();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("consumer_categoary_id",  AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
@@ -503,7 +539,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     private void getPinCode() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             try {
-                showLoadingDialog();
+                //showLoadingDialog();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, "") );
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
@@ -517,12 +553,29 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     }
     private void getLocation() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
-            showLoadingDialog();
             try {
+                //showLoadingDialog();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, "") );
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
+                        ApiConstants.GET_LOCATION_REGISTRATION, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_LOCATION_REGISTRATION);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+    }
 
-                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
-                        ApiConstants.GET_LOCATION_URL, this, "");
-                App.getInstance().addToRequestQueue(request, ApiConstants.GET_LOCATION_URL);
+    private void getLandmark() {
+        if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
+            try {
+                //showLoadingDialog();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, "") );
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
+                        ApiConstants.GET_LANDMARK, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_LANDMARK);
             } catch (Exception e) {
                 e.printStackTrace();
             }

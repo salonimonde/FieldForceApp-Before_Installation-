@@ -216,8 +216,13 @@ public class RegistrationModel implements Serializable {
     @SerializedName("File_consumer_photo")
     public ImageModel FileConsumerPhoto;
 
+    @SerializedName("ward")
+    public String ward;
+
     @SerializedName("ward_name")
-    public ImageModel wardName;
+    public String wardName;
+
+
 
 
 

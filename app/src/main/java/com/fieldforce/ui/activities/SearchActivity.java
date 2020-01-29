@@ -154,12 +154,12 @@ public class SearchActivity extends ParentActivity implements View.OnClickListen
         searchView = (SearchView) myActionMenuItem.getActionView();
 
         searchView.setLayoutParams(new ActionBar.LayoutParams(Gravity.CENTER));
-        EditText searchEditText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText searchEditText = searchView.findViewById(R.id.search_src_text);
         searchEditText.setTextColor(getResources().getColor(R.color.colorBlack));
         searchEditText.setHintTextColor(getResources().getColor(R.color.colorTextFaint));
         LinearLayout searchEditFrame = searchView.findViewById(R.id.search_edit_frame);
         ((LinearLayout.LayoutParams) searchEditFrame.getLayoutParams()).topMargin = 15;
-        ImageView searchClose = searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        ImageView searchClose = searchView.findViewById(R.id.search_close_btn);
         searchClose.setImageResource(R.drawable.ic_action_cross);
 
         searchView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS);
@@ -482,4 +482,3 @@ public class SearchActivity extends ParentActivity implements View.OnClickListen
         resetRecycler(false);
     }
 }
-

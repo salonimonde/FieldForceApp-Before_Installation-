@@ -51,7 +51,7 @@ public class SopAdapter extends RecyclerView.Adapter<SopAdapter.SopHolder> {
     public SopHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.cell_work, null);
-        SopAdapter.SopHolder viewHolder = new SopAdapter.SopHolder(view);
+        SopHolder viewHolder = new SopHolder(view);
         return viewHolder;
     }
 

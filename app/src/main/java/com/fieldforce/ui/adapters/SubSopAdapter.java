@@ -62,7 +62,7 @@ public class SubSopAdapter extends RecyclerView.Adapter<SubSopAdapter.SubSopHold
     @Override
     public SubSopHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.cell_sop, null);
-        SubSopAdapter.SubSopHolder viewHolder = new SubSopAdapter.SubSopHolder(view);
+        SubSopHolder viewHolder = new SubSopHolder(view);
         return viewHolder;
     }
 

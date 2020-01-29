@@ -38,7 +38,7 @@ public class DocumentIdAdapter extends RecyclerView.Adapter<DocumentIdAdapter.Do
     @Override
     public DocumentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.cell_work, null);
-        DocumentIdAdapter.DocumentHolder viewHolder = new DocumentIdAdapter.DocumentHolder(view);
+        DocumentHolder viewHolder = new DocumentHolder(view);
         return viewHolder;
     }
 

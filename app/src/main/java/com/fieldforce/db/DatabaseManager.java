@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
@@ -27,6 +28,8 @@ import com.fieldforce.db.tables.ConsumerEnquiryTable;
 import com.fieldforce.db.tables.ConversionJobCardTable;
 import com.fieldforce.db.tables.DecommissionJobCardTable;
 import com.fieldforce.db.tables.IdProofTable;
+import com.fieldforce.db.tables.LandmarkTable;
+import com.fieldforce.db.tables.LocationTable;
 import com.fieldforce.db.tables.LoginTable;
 
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
@@ -958,6 +961,198 @@ public class DatabaseManager {
 
 
     // Pincode Related Functions end here
+
+    // Database functions related to Location created be Jayshree 28-01-2020
+
+    public static void saveLocation(Context loginActivity, ArrayList<Consumer> locationArrayList, String areaId) {
+        for (Consumer consumerLocation : locationArrayList){
+            DatabaseManager.saveLocationInfo(loginActivity, consumerLocation, areaId);
+
+        }
+    }
+
+    private static void saveLocationInfo(Context context, Consumer consumer, String areaId) {
+        if (consumer != null) {
+            ContentValues values = getContentValueLocationInfoTable(context, consumer, areaId);
+            String condition = LocationTable.Cols.LOCATION_ID + "='" + consumer.locationID + "'";
+            saveLocationValues(context, LocationTable.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValueLocationInfoTable(Context context, Consumer consumer, String areaId) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(LocationTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(LocationTable.Cols.LOCATION_ID, consumer.locationID != null ? consumer.locationID : "");
+            values.put(LocationTable.Cols.LOCATION_NAME, consumer.location != null ? consumer.location : "");
+            values.put(LocationTable.Cols.AREA_ID, consumer.areaID != null ? consumer.areaID : "");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void saveLocationValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+
+    public static ArrayList<Consumer> getLocation(Context context, String userId, String areaId) {
+        String condition = LocationTable.Cols.USER_LOGIN_ID + "='" + userId + "' AND " + LocationTable.Cols.AREA_ID + "='" + areaId +"'";
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(LocationTable.CONTENT_URI, null,
+                condition, null, LocationTable.Cols.LOCATION_ID + " ASC ");
+        ArrayList<Consumer> location = getLocationFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return location;
+    }
+
+    private static ArrayList<Consumer> getLocationFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getLocationsFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getLocationsFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.locationID = cursor.getString(cursor.getColumnIndex(LocationTable.Cols.LOCATION_ID)) != null ? cursor.getString(cursor.getColumnIndex(LocationTable.Cols.LOCATION_ID)) : "";
+        consumerModel.location = cursor.getString(cursor.getColumnIndex(LocationTable.Cols.LOCATION_NAME)) != null ? cursor.getString(cursor.getColumnIndex(LocationTable.Cols.LOCATION_NAME)) : "";
+        consumerModel.areaID = cursor.getString(cursor.getColumnIndex(LocationTable.Cols.AREA_ID)) != null ? cursor.getString(cursor.getColumnIndex(LocationTable.Cols.AREA_ID)) : "";
+
+        return consumerModel;
+    }
+
+
+    // Location Related Functions end here
+
+
+
+    // Database functions related to Landmark created be Jayshree 28-01-2020
+
+    public static void saveLandmark(Context loginActivity, ArrayList<Consumer> landmarkArrayList, String areaId) {
+        for (Consumer consumerLandmark : landmarkArrayList){
+            DatabaseManager.saveLandmarkInfo(loginActivity, consumerLandmark, areaId);
+
+        }
+    }
+
+    private static void saveLandmarkInfo(Context context, Consumer consumer, String areaId) {
+        if (consumer != null) {
+            ContentValues values = getContentValueLandmarkInfoTable(context, consumer, areaId);
+            String condition = LandmarkTable.Cols.LANDMARK_ID + "='" + consumer.landmarkID + "'";
+            saveLandmarkValues(context, LandmarkTable.CONTENT_URI, values, condition);
+        }
+    }
+
+    private static ContentValues getContentValueLandmarkInfoTable(Context context, Consumer consumer, String areaId) {
+        ContentValues values = new ContentValues();
+        try {
+            values.put(LandmarkTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(LandmarkTable.Cols.LANDMARK_ID, consumer.landmarkID != null ? consumer.landmarkID : "");
+            values.put(LandmarkTable.Cols.LANDMARK_NAME, consumer.landmark != null ? consumer.landmark : "");
+            values.put(LandmarkTable.Cols.AREA_ID, consumer.areaID != null ? consumer.areaID : "");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+    private static void saveLandmarkValues(Context context, Uri table, ContentValues values, String condition) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(table, null,
+                condition, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            resolver.update(table, values, condition, null);
+        } else {
+            resolver.insert(table, values);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+
+
+    public static ArrayList<Consumer> getLandmark(Context context, String userId, String areaId) {
+        String condition = LandmarkTable.Cols.USER_LOGIN_ID + "='" + userId + "' AND " + LandmarkTable.Cols.AREA_ID + "='" + areaId +"'";
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(LandmarkTable.CONTENT_URI, null,
+                condition, null, LandmarkTable.Cols.LANDMARK_ID + " ASC ");
+        ArrayList<Consumer> landmark = getLandmarkFromCursor(context, cursor);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return landmark;
+    }
+
+    private static ArrayList<Consumer> getLandmarkFromCursor(Context context, Cursor cursor) {
+        ArrayList<Consumer> consumerModels = null;
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                Consumer consumerModel;
+                consumerModels = new ArrayList<Consumer>();
+                while (!cursor.isAfterLast()) {
+                    consumerModel = getLandmarksFromCursor(context, cursor);
+                    consumerModels.add(consumerModel);
+                    cursor.moveToNext();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return consumerModels;
+    }
+
+
+    private static Consumer getLandmarksFromCursor(Context context, Cursor cursor) {
+        Consumer consumerModel = new Consumer();
+        consumerModel.landmarkID = cursor.getString(cursor.getColumnIndex(LandmarkTable.Cols.LANDMARK_ID)) != null ? cursor.getString(cursor.getColumnIndex(LandmarkTable.Cols.LANDMARK_ID)) : "";
+        consumerModel.landmark = cursor.getString(cursor.getColumnIndex(LandmarkTable.Cols.LANDMARK_NAME)) != null ? cursor.getString(cursor.getColumnIndex(LandmarkTable.Cols.LANDMARK_NAME)) : "";
+        consumerModel.areaID = cursor.getString(cursor.getColumnIndex(LandmarkTable.Cols.AREA_ID)) != null ? cursor.getString(cursor.getColumnIndex(LandmarkTable.Cols.AREA_ID)) : "";
+
+        return consumerModel;
+    }
+
+
+    // Landmark Related Functions end here
 
 
     //Notification Table related methods

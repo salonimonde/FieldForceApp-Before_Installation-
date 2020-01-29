@@ -178,16 +178,13 @@ public class MainActivity extends ParentActivity implements SwipeRefreshLayout.O
 //        final HorizontalScrollView horizontalScrollView = findViewById(R.id.hsv);
         /*final LinearLayout mLinearLayout = findViewById(R.id.linear_layout_menus);
         mLinearLayout.removeAllViews();
-
         int[] menuImages = new int[]{R.drawable.ic_action_asset_indexing, R.drawable.ic_action_site_verification,
                 R.drawable.ic_action_meter_installation, R.drawable.ic_action_convert, R.drawable.ic_action_services,
                 R.drawable.ic_action_complaints, R.drawable.ic_action_preventive, R.drawable.ic_action_breakdown,
                 R.drawable.ic_action_commissioning, R.drawable.ic_action_decommissioning, R.drawable.ic_action_all};
-
         int[] menuNames = new int[]{R.string.asset_indexing, R.string.site_verification, R.string.installation,
                 R.string.convert, R.string.services, R.string.complaint, R.string.preventive, R.string.breakdown,
                 R.string.commissioning, R.string.decommissioning, R.string.recovery};
-
         int[] menuColor = new int[]{R.color.colorMenuCream, R.color.colorMenuBlue, R.color.colorMenuGrey, R.color.colorMenuOrange,
                 R.color.colorMenuCream, R.color.colorMenuBlue, R.color.colorMenuGrey, R.color.colorMenuOrange,
                 R.color.colorMenuCream, R.color.colorMenuBlue, R.color.colorMenuGrey};*/
@@ -442,7 +439,3 @@ public class MainActivity extends ParentActivity implements SwipeRefreshLayout.O
         }, 1000);
     }
 }
-
-
-
-

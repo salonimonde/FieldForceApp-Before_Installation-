@@ -19,6 +19,8 @@ import com.fieldforce.db.tables.ConsumerEnquiryTable;
 import com.fieldforce.db.tables.ConversionJobCardTable;
 import com.fieldforce.db.tables.DecommissionJobCardTable;
 import com.fieldforce.db.tables.IdProofTable;
+import com.fieldforce.db.tables.LandmarkTable;
+import com.fieldforce.db.tables.LocationTable;
 import com.fieldforce.db.tables.LoginTable;
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
 import com.fieldforce.db.tables.NotificationTable;
@@ -75,6 +77,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createCategoryTable(db);
         createSubCategoryTable(db);
         createPincodeTable(db);
+        createLocationTable(db);
+        createLandmarkTable(db);
 
 
     }
@@ -539,6 +543,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Pincode.Cols.PINCODE_ID + " VARCHAR, " +
                 Pincode.Cols.PINCODE + " VARCHAR";
         createTable(db, Pincode.TABLE_NAME, PincodeTableFields);
+    }
+    private void createLocationTable(SQLiteDatabase db){
+        String LocationTableFields = LocationTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                LocationTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
+                LocationTable.Cols.AREA_ID + " VARCHAR, " +
+                LocationTable.Cols.LOCATION_ID + " VARCHAR, " +
+                LocationTable.Cols.LOCATION_NAME + " VARCHAR";
+        createTable(db, LocationTable.TABLE_NAME, LocationTableFields);
+    }
+
+    private void createLandmarkTable(SQLiteDatabase db){
+        String LandmarkTableFields = LandmarkTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                LandmarkTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
+                LandmarkTable.Cols.AREA_ID + " VARCHAR, " +
+                LandmarkTable.Cols.LANDMARK_ID + " VARCHAR, " +
+                LandmarkTable.Cols.LANDMARK_NAME + " VARCHAR";
+        createTable(db, LandmarkTable.TABLE_NAME, LandmarkTableFields);
     }
 
     public void dropTable(SQLiteDatabase db, String name) {

@@ -19,6 +19,8 @@ import com.fieldforce.db.tables.ConsumerEnquiryTable;
 import com.fieldforce.db.tables.ConversionJobCardTable;
 import com.fieldforce.db.tables.DecommissionJobCardTable;
 import com.fieldforce.db.tables.IdProofTable;
+import com.fieldforce.db.tables.LandmarkTable;
+import com.fieldforce.db.tables.LocationTable;
 import com.fieldforce.db.tables.LoginTable;
 import com.fieldforce.db.tables.CommissionJobCardTable;
 import com.fieldforce.db.tables.MeterInstalltionJobCardTable;
@@ -188,6 +190,16 @@ public class DatabaseProvider extends ContentProvider {
                         selection, selectionArgs, sortOrder);
                 break;
             }
+            case LocationTable.PATH_TOKEN: {
+                result = doQuery(db, uri, LocationTable.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
+            case LandmarkTable.PATH_TOKEN: {
+                result = doQuery(db, uri, LandmarkTable.TABLE_NAME, projection,
+                        selection, selectionArgs, sortOrder);
+                break;
+            }
 
         }
 
@@ -333,6 +345,16 @@ public class DatabaseProvider extends ContentProvider {
                         Pincode.CONTENT_URI, uri, values);
                 break;
             }
+            case LocationTable.PATH_TOKEN: {
+                result = doInsert(db, LocationTable.TABLE_NAME,
+                        LocationTable.CONTENT_URI, uri, values);
+                break;
+            }
+            case LandmarkTable.PATH_TOKEN: {
+                result = doInsert(db, LandmarkTable.TABLE_NAME,
+                        LandmarkTable.CONTENT_URI, uri, values);
+                break;
+            }
         }
 
         if (result == null) {
@@ -447,6 +469,14 @@ public class DatabaseProvider extends ContentProvider {
             }
             case Pincode.PATH_TOKEN: {
                 table = Pincode.TABLE_NAME;
+                break;
+            }
+            case LocationTable.PATH_TOKEN: {
+                table = LocationTable.TABLE_NAME;
+                break;
+            }
+            case LandmarkTable.PATH_TOKEN: {
+                table = LandmarkTable.TABLE_NAME;
                 break;
             }
         }
@@ -600,6 +630,16 @@ public class DatabaseProvider extends ContentProvider {
                         selectionArgs);
                 break;
             }
+            case LocationTable.PATH_TOKEN: {
+                result = doDelete(db, uri, LocationTable.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
+            case LandmarkTable.PATH_TOKEN: {
+                result = doDelete(db, uri, LandmarkTable.TABLE_NAME, selection,
+                        selectionArgs);
+                break;
+            }
         }
         return result;
     }
@@ -735,6 +775,16 @@ public class DatabaseProvider extends ContentProvider {
             }
             case Pincode.PATH_TOKEN: {
                 result = doUpdate(db, uri, Pincode.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+            case LocationTable.PATH_TOKEN: {
+                result = doUpdate(db, uri, LocationTable.TABLE_NAME, selection,
+                        selectionArgs, values);
+                break;
+            }
+            case LandmarkTable.PATH_TOKEN: {
+                result = doUpdate(db, uri, LandmarkTable.TABLE_NAME, selection,
                         selectionArgs, values);
                 break;
             }

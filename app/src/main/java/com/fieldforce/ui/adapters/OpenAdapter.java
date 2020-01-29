@@ -44,15 +44,15 @@ public class OpenAdapter extends RecyclerView.Adapter<OpenAdapter.LandingHolder>
     }
 
     @Override
-    public OpenAdapter.LandingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LandingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.cell_open, null);
-        OpenAdapter.LandingHolder viewHolder = new OpenAdapter.LandingHolder(view);
+        LandingHolder viewHolder = new LandingHolder(view);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(OpenAdapter.LandingHolder holder, final int position) {
+    public void onBindViewHolder(LandingHolder holder, final int position) {
 
         if (screenName.equals(CommonUtility.getString(mContext, R.string.enquiry))) {
             holder.imgModule.setImageResource(R.drawable.ic_action_all);

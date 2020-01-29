@@ -69,6 +69,7 @@ public class JsonResponse {
     public ArrayList<Consumer> area_list;
     public ArrayList<Consumer> location_list;
     public ArrayList<Consumer> ward_list;
+    public ArrayList<Consumer> landmark_list;
 
 
 

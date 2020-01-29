@@ -284,6 +284,50 @@ public class Consumer implements Serializable {
     @SerializedName("ward")
     public String ward;
 
+    @SerializedName("location_id")
+    public String locationID;
+
+    @SerializedName("location")
+    public String location;
+
+    @SerializedName("landmark_id")
+    public String landmarkID;
+
+    @SerializedName("landmark")
+    public String landmark;
+
+    public String getLandmarkID() {
+        return landmarkID;
+    }
+
+    public void setLandmarkID(String landmarkID) {
+        this.landmarkID = landmarkID;
+    }
+
+    public String getLandmark() {
+        return landmark;
+    }
+
+    public void setLandmark(String landmark) {
+        this.landmark = landmark;
+    }
+
+    public String getLocationID() {
+        return locationID;
+    }
+
+    public void setLocationID(String locationID) {
+        this.locationID = locationID;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public String getWardID() {
         return wardID;
     }
