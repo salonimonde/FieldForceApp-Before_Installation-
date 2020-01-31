@@ -31,7 +31,7 @@ public class App extends MultiDexApplication {
         super.onCreate();
         mInstance = this;
 
-//        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
         permissions = new ArrayList<>();
         permissions.add(Manifest.permission.CAMERA);
         permissions.add(Manifest.permission.READ_PHONE_STATE);

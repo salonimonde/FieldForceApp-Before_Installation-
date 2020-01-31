@@ -192,6 +192,7 @@ public class Service extends android.app.Service implements ApiServiceCaller {
 //        timer.schedule(timerTask, 1000, 600000); // 2 minutes
         //timer.schedule(timerTask, 1000, 120000); // 2 minutes
         timer.schedule(timerTask, 1000, 10000); // 10 seconds
+        //timer.schedule(timerTask, 60000, 3600000); // 1 hour
     }
 
     /**
@@ -203,14 +204,13 @@ public class Service extends android.app.Service implements ApiServiceCaller {
             public void run() {
                 Log.i("in timer", "in timer ++++  " + (counter++));
                 if (isNetworkAvailable()) {
+                    Log.d("Timerrrrrrrrrrrrrr","");
                     registrationToUpload = DatabaseManager.getRegistration(mContext,
                             AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), ApiConstants.UPLOAD_COUNT,
                             AppConstants.CARD_STATUS_COMPLETED);
                     if (registrationToUpload != null && registrationToUpload.size() > 0) {
                         for (int i = 0; i < registrationToUpload.size(); i++) {
-
                             Log.d("ffffffffffffff",""+registrationToUpload.get(0).consumerSubCategory);
-
                             List<String> checklist11 = new ArrayList<>();
                             String data = registrationToUpload.get(0).documents;
                             String[] items = data.split("\\|");

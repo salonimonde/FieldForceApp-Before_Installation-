@@ -185,15 +185,15 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                                 AppPreferences.getInstance(mContext).putString(AppConstants.SCREEN_NO, "0");
 
                                 getCategory();
-                                getBankNames();
                                 getSubCategory();
+                                getBankNames();
                                 getArea();
-                                getWardList();
+                                //getWardList();
                                 getPinCode();
                                 getDocumentList();
                                 getPaymentScheme();
-                                getLocation();
-                                getLandmark();
+                                //getLocation();
+                                //getLandmark();
 
                                 Intent intent = new Intent(mContext, MainActivity.class);
                                 startActivity(intent);
@@ -523,12 +523,16 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     private void getSubCategory() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             try {
-                //showLoadingDialog();
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("consumer_categoary_id",  AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
-                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
+
+                JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL, this, "");
                 App.getInstance().addToRequestQueue(request, ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL);
+                //showLoadingDialog();
+                //JSONObject jsonObject = new JSONObject();
+                //jsonObject.put("city_id",  AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
+                /*JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
+                        ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL, this, "");
+                App.getInstance().addToRequestQueue(request, ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL);*/
             } catch (Exception e) {
                 e.printStackTrace();
             }

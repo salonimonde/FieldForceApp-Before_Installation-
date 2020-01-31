@@ -334,7 +334,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         imgTakeNoc = findViewById(R.id.img_take_noc);
         imgCheque = findViewById(R.id.img_take_cheque);
         imgDD = findViewById(R.id.img_take_dd);
-        imgConsumerPhoto=findViewById(R.id.image_view_consumer);
+        //imgConsumerPhoto=findViewById(R.id.image_view_consumer);
         //defaultConsumerPhoto();
         //imgConsumerPhoto.setImageResource(R.drawable.ic_action_default_user_icon);
 
@@ -354,7 +354,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         imgTakeNoc.setOnClickListener(this);
         imgCheque.setOnClickListener(this);
         imgDD.setOnClickListener(this);
-        imgConsumerPhoto.setOnClickListener(this);
+
+        //imgConsumerPhoto.setOnClickListener(this); TODO
 
         btnPreviousOne.setOnClickListener(this);
         btnPreviousTwo.setOnClickListener(this);
@@ -420,7 +421,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         edtRoadNo = findViewById(R.id.edt_road_name);
         edtLandmark = findViewById(R.id.edt_landmark);
         edtDistrict = findViewById(R.id.edt_district);
-        edtWard = findViewById(R.id.edt_ward);
+        //edtWard = findViewById(R.id.edt_ward);
 
         recyclerIDDoc = findViewById(R.id.rc_document);
         layoutManager = new LinearLayoutManager(this.getApplicationContext());
@@ -439,11 +440,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         spinnerBankName = findViewById(R.id.spinner_bank_name);
         spinnerArea = findViewById(R.id.sp_area);
         spinnerBankNameCheque = findViewById(R.id.spinner_bank_name_cheque);
-        spinnerWard = findViewById(R.id.sp_ward);
+        //spinnerWard = findViewById(R.id.sp_ward);TODO
 
 
-        spinnerLocation = findViewById(R.id.sp_location);
-        spinnerLandmark = findViewById(R.id.sp_landmark);
+        //spinnerLocation = findViewById(R.id.sp_location);TODO
+        //spinnerLandmark = findViewById(R.id.sp_landmark);TODO
 
 
         linearChequeDetails = findViewById(R.id.linear_cheque_details);
@@ -461,7 +462,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         radioYes = findViewById(R.id.radio_yes);
         radioNo = findViewById(R.id.radio_no);
 
-         Toolbar toolbar =findViewById(R.id.toolbar);
+        // Toolbar toolbar =findViewById(R.id.toolbar);
 
         //toolImage= toolbar.findViewById(R.id.img_consumer);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -524,7 +525,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             @Override
             public void afterTextChanged(Editable editable) {
 
-                String prefix = getString(R.string.floor_no_new);
+                String prefix = getString(R.string.floor_no_new)+" ";
                 if (!editable.toString().startsWith(prefix)) {
                     String cleanString;
                     String deletedPrefix = prefix.substring(0, prefix.length() - 1);
@@ -555,7 +556,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             @Override
             public void afterTextChanged(Editable editable) {
 
-                String prefix = getString(R.string.plot_no_new);
+                String prefix = getString(R.string.plot_no_new)+" ";
                 if (!editable.toString().startsWith(prefix)) {
                     String cleanString;
                     String deletedPrefix = prefix.substring(0, prefix.length() - 1);
@@ -584,7 +585,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String prefix = getString(R.string.wing_new);
+                String prefix = getString(R.string.wing_new)+" ";
                 if (!editable.toString().startsWith(prefix)) {
                     String cleanString;
                     String deletedPrefix = prefix.substring(0, prefix.length() - 1);
@@ -737,6 +738,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                     edtChequeDate.setText(String.format("%02d", dayOfMonth) + "/" + String.format("%02d", (monthOfYear + 1)) + "/" + year);
                                     selectedChequeDate = edtChequeDate.getText().toString().trim();
+                                    Log.d("ChequDate",""+selectedChequeDate);
                                 }
                             }, mYear, mMonth, mDay);
                             datePickerDialog.getDatePicker().setMinDate(newDate.getTime());
@@ -768,6 +770,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                                 @Override
                                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                     edtDDDate.setText(String.format("%02d", dayOfMonth) + "/" + String.format("%02d", (monthOfYear + 1)) + "/" + year);
+                                    Log.d("gggggggggggggggg",""+edtDDDate);
+
                                 }
                             }, mYear, mMonth, mDay);
                             datePickerDialog.getDatePicker().setMinDate(newDate.getTime());
@@ -1581,11 +1585,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             }
         }
         else areaArray.add(getString(R.string.select_area));
-
-
-
-
-
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, areaArray) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
@@ -1625,12 +1624,13 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     selectedAreaLandmark = areaListLandmark.get(0);
                     Log.d("222222222222", "" + selectedArea);
                     if (selectedArea.equals("0")) {
-                        hashMapWard.clear();
-                        setWardSpinner();
+                        hashMapPinCode.clear();
+                        setPinCodeSpinner();
                     }
                     else
-                        getWard(selectedArea);
-                    if(selectedAreaPincode.equals("0")){
+                        getPinCode(selectedArea);
+                    //TODO
+                    /*if(selectedAreaPincode.equals("0")){
                         hashMapPinCode.clear();
                         setPinCodeSpinner();
                     }
@@ -1648,7 +1648,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     }
                     else
                         getLandmark(selectedAreaLandmark);
-
+*/
                 }
             }
 
@@ -1664,7 +1664,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         Collection<String> keySet;
         ArrayList<String> keySetArray = new ArrayList<>();
         //hashMapWard.put("0", getString(R.string.select_ward));
-        if (hashMapWard != null && hashMapWard.size() > 1) {
+        if (hashMapWard != null && hashMapWard.size() > 0) {
             for (int i = 0; i < hashMapWard.size(); i++) {
                 valueSet = sortByKey(hashMapWard).values();
                 Log.d("valueSet", "" + valueSet);
@@ -1676,8 +1676,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             //else wardArray.add(getString(R.string.select_ward));
         }
         else wardArray.add(getString(R.string.select_ward));
-
-        if(hashMapWard.size() == 2) {
+        //TODO
+       /* if(hashMapWard.size() == 2) {
             for (int i = 0; i < hashMapWard.size(); i++) {
                 valueSet = sortByKey(hashMapWard).values();
                 wardArray = new ArrayList<>(valueSet);
@@ -1686,7 +1686,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 keySetArray = new ArrayList<>(keySet);
 
             }
-         }
+         }*/
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, wardArray) {
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -2276,8 +2276,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         if (edtFlatNumber.getText().toString().trim().length() > 0 && edtFlatNumber.getText().toString().length() > 10)
             if (edtSocietyBuildingName.getText().toString().trim().length() > 0)
                 if (edtRoadNo.getText().toString().trim().length() > 0)
-                    if (spinnerLandmark.getSelectedItemPosition() != 0)
-                        if (spinnerLocation.getSelectedItemPosition() != 0)
+                    if (edtLandmark.getText().toString().trim().length() > 0)
+                        if (edtLocation.getText().toString().trim().length() > 0)
                             if (spinnerState.getSelectedItemPosition() != 0)
                                 if (spinnerCity.getSelectedItemPosition() != 0)
                                     if (spinnerArea.getSelectedItemPosition() != 0)
@@ -3362,10 +3362,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.flatNo = edtFlatNumber.getText().toString();
 
 
-        if(edtFloor.getText().toString().length()>7){
+        if(edtFloor.getText().toString().length()>8){
             registrationModel.floorNo = edtFloor.getText().toString();
         }
-        if(edtPlotNo.getText().toString().length()>9){
+        if(edtPlotNo.getText().toString().length()>10){
             registrationModel.plotNo = edtPlotNo.getText().toString();
         }
 
@@ -3386,10 +3386,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.area = selectedArea;
         registrationModel.areaName = spinnerArea.getSelectedItem().toString();
         registrationModel.city = cityId;
-        registrationModel.ward = selectedWard;
-        registrationModel.wardName = spinnerWard.getSelectedItem().toString();
-        registrationModel.location = selectedLocation;
-        registrationModel.landmark = selectedLandmark;
+        //registrationModel.ward = selectedWard;
+        //registrationModel.wardName = spinnerWard.getSelectedItem().toString();
+        //registrationModel.location = selectedLocation;
+        //registrationModel.landmark = selectedLandmark;
 
 
 
@@ -3399,12 +3399,14 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.premise = spinnerPremisesType.getSelectedItem().toString();
         registrationModel.chequeNo = edtChequeNo.getText().toString();
         registrationModel.chequeBranch = edtChequeBranch.getText().toString();
+        //registrationModel.chequeDate = selectedChequeDate;
         registrationModel.chequeDate = edtChequeDate.getText().toString();
         registrationModel.chequeBank = selectedBankCheckName;
         registrationModel.chequeMicr = edtIFSCCheque.getText().toString().trim();
         registrationModel.ddNo = edtDDNo.getText().toString();
         registrationModel.bankName = selectedBankName;
         registrationModel.ddDate = edtDDDate.getText().toString().trim();
+        Log.d("mcvnvjjjjjjjvvvvvvvvvv", "" +  registrationModel.chequeDate );
         registrationModel.ddMicr = edtIFSCDD.getText().toString().trim();
         registrationModel.ddBranch = edtDDBranch.getText().toString().trim();
         registrationModel.latitude = latitude;
