@@ -2285,7 +2285,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private void validateAddressInfo() {
         if (edtFlatNumber.getText().toString().trim().length() > 0 && edtFlatNumber.getText().toString().length() > 10)
             if (edtSocietyBuildingName.getText().toString().trim().length() > 0)
-                //if (edtRoadNo.getText().toString().trim().length() > 0)
                 if (edtRoadNo.getText().toString().trim().length() > 0)
                     if (hashMapLandmark != null && hashMapLandmark.size() > 1 && spinnerLandmark.getSelectedItemPosition() > 0 || hashMapLandmark.size() == 2 && spinnerLandmark.getSelectedItemPosition() != 1)
                         if ( hashMapLocation != null && hashMapLocation.size() > 1 && spinnerLocation.getSelectedItemPosition() > 0 || hashMapLocation.size() == 2 && spinnerLocation.getSelectedItemPosition() != 1)
