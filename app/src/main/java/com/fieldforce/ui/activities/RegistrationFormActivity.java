@@ -334,7 +334,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         imgTakeNoc = findViewById(R.id.img_take_noc);
         imgCheque = findViewById(R.id.img_take_cheque);
         imgDD = findViewById(R.id.img_take_dd);
-        //imgConsumerPhoto=findViewById(R.id.image_view_consumer);
+        imgConsumerPhoto=findViewById(R.id.image_view_consumer);
         //defaultConsumerPhoto();
         //imgConsumerPhoto.setImageResource(R.drawable.ic_action_default_user_icon);
 
@@ -355,7 +355,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         imgCheque.setOnClickListener(this);
         imgDD.setOnClickListener(this);
 
-        //imgConsumerPhoto.setOnClickListener(this); TODO
+        imgConsumerPhoto.setOnClickListener(this);
 
         btnPreviousOne.setOnClickListener(this);
         btnPreviousTwo.setOnClickListener(this);
@@ -440,11 +440,9 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         spinnerBankName = findViewById(R.id.spinner_bank_name);
         spinnerArea = findViewById(R.id.sp_area);
         spinnerBankNameCheque = findViewById(R.id.spinner_bank_name_cheque);
-        //spinnerWard = findViewById(R.id.sp_ward);TODO
-
-
-        //spinnerLocation = findViewById(R.id.sp_location);TODO
-        //spinnerLandmark = findViewById(R.id.sp_landmark);TODO
+        spinnerWard = findViewById(R.id.sp_ward);
+        spinnerLocation = findViewById(R.id.sp_location);
+        spinnerLandmark = findViewById(R.id.sp_landmark);
 
 
         linearChequeDetails = findViewById(R.id.linear_cheque_details);
@@ -1521,7 +1519,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         pinCodeArray = new ArrayList<>();
         Collection<String> keySet;
         ArrayList<String> keySetArray = new ArrayList<>();
-        if (hashMapPinCode != null && hashMapPinCode.size() > 0) {
+        if (hashMapPinCode != null && hashMapPinCode.size() > 1) {
             for (int i = 0; i < hashMapPinCode.size(); i++) {
                 valueSet = sortByKey(hashMapPinCode).values();
                 pinCodeArray = new ArrayList<>(valueSet);
@@ -1529,6 +1527,18 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 keySetArray = new ArrayList<>(keySet);
             }
         } else pinCodeArray.add(getString(R.string.select_pin_code));
+
+
+        if(hashMapPinCode.size() == 2) {
+            for (int i = 0; i < hashMapPinCode.size(); i++) {
+                valueSet = sortByKey(hashMapPinCode).values();
+                pinCodeArray = new ArrayList<>(valueSet);
+                pinCodeArray.remove(0);
+                keySet = sortByKey(hashMapPinCode).keySet();
+                keySetArray = new ArrayList<>(keySet);
+
+            }
+        }
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, pinCodeArray) {
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -1617,25 +1627,18 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     areaListPincode = getKeysFromValue(haspMapArea, spinnerArea.getSelectedItem().toString());
                     areaListLocation = getKeysFromValue(haspMapArea, spinnerArea.getSelectedItem().toString());
                     areaListLandmark = getKeysFromValue(haspMapArea, spinnerArea.getSelectedItem().toString());
-
                     selectedArea = areaList.get(0);
                     selectedAreaPincode = areaListPincode.get(0);
                     selectedAreaLocation = areaListLocation.get(0);
                     selectedAreaLandmark = areaListLandmark.get(0);
                     Log.d("222222222222", "" + selectedArea);
                     if (selectedArea.equals("0")) {
-                        hashMapPinCode.clear();
-                        setPinCodeSpinner();
+                        hashMapWard.clear();
+                        setWardSpinner();
                     }
                     else
-                        getPinCode(selectedArea);
-                    //TODO
-                    /*if(selectedAreaPincode.equals("0")){
-                        hashMapPinCode.clear();
-                        setPinCodeSpinner();
-                    }
-                    else
-                        getPinCode(selectedAreaPincode);
+                        getWard(selectedArea);
+
                     if(selectedAreaLocation.equals("0")){
                         hashMapLocation.clear();
                         setLocationSpinner();
@@ -1648,7 +1651,12 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     }
                     else
                         getLandmark(selectedAreaLandmark);
-*/
+                    if(selectedAreaPincode.equals("0")){
+                        hashMapPinCode.clear();
+                        setPinCodeSpinner();
+                    }
+                    else
+                        getPinCode(selectedAreaPincode);
                 }
             }
 
@@ -1664,7 +1672,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         Collection<String> keySet;
         ArrayList<String> keySetArray = new ArrayList<>();
         //hashMapWard.put("0", getString(R.string.select_ward));
-        if (hashMapWard != null && hashMapWard.size() > 0) {
+        if (hashMapWard != null && hashMapWard.size() > 1) {
             for (int i = 0; i < hashMapWard.size(); i++) {
                 valueSet = sortByKey(hashMapWard).values();
                 Log.d("valueSet", "" + valueSet);
@@ -1676,8 +1684,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             //else wardArray.add(getString(R.string.select_ward));
         }
         else wardArray.add(getString(R.string.select_ward));
-        //TODO
-       /* if(hashMapWard.size() == 2) {
+
+        if(hashMapWard.size() == 2) {
             for (int i = 0; i < hashMapWard.size(); i++) {
                 valueSet = sortByKey(hashMapWard).values();
                 wardArray = new ArrayList<>(valueSet);
@@ -1686,7 +1694,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 keySetArray = new ArrayList<>(keySet);
 
             }
-         }*/
+        }
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, wardArray) {
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -1726,11 +1734,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 if (hashMapWard != null && hashMapWard.size() > 0 ) {
                     wardList = getKeysFromValue(hashMapWard, spinnerWard.getSelectedItem().toString());
                     selectedWard = wardList.get(0);
-                    Log.d("selectedWard", "" + selectedWard);
-                    if (selectedWard.equals("0")) {
-                        hashMapPinCode.clear();
+                    //Log.d("selectedWard", "" + selectedWard);
+                    /*if (selectedWard.equals("0")) {
+                        hashMapWard.clear();
                         //setPinCodeSpinner();
-                    } /*else
+                    }*/ /*else
                         getPinCode(selectedWard);*/
 
                 }
@@ -1759,13 +1767,14 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         }
         else locationArray.add(getString(R.string.select_location));
 
-        if(hashMapLocation != null && hashMapLocation.size() == 1){
-            locationArray.remove(getString(R.string.select_location));
+        if(hashMapLocation.size() == 2) {
             for (int i = 0; i < hashMapLocation.size(); i++) {
                 valueSet = sortByKey(hashMapLocation).values();
                 locationArray = new ArrayList<>(valueSet);
+                locationArray.remove(0);
                 keySet = sortByKey(hashMapLocation).keySet();
                 keySetArray = new ArrayList<>(keySet);
+
             }
         }
         //else  wardArray.remove(getString(R.string.select_ward));
@@ -1804,11 +1813,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 if (hashMapLocation != null && hashMapLocation.size() > 0) {
                     locationList = getKeysFromValue(hashMapLocation, spinnerLocation.getSelectedItem().toString());
                     selectedLocation = locationList.get(0);
-                    Log.d("222222222222", "" + selectedWard);
+                    /*Log.d("222222222222", "" + selectedWard);
                     if (selectedLocation.equals("0")) {
                         hashMapLocation.clear();
                         //setPinCodeSpinner();
-                    } /*else
+                    } *//*else
                         getPinCode(selectedWard);*/
 
                 }
@@ -1835,13 +1844,14 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         }
         else landmarkArray.add(getString(R.string.select_landmark));
 
-        if(hashMapLandmark != null && hashMapLandmark.size() == 1){
-            landmarkArray.remove(getString(R.string.select_landmark));
+        if(hashMapLandmark.size() == 2) {
             for (int i = 0; i < hashMapLandmark.size(); i++) {
                 valueSet = sortByKey(hashMapLandmark).values();
                 landmarkArray = new ArrayList<>(valueSet);
+                landmarkArray.remove(0);
                 keySet = sortByKey(hashMapLandmark).keySet();
                 keySetArray = new ArrayList<>(keySet);
+
             }
         }
         //else  wardArray.remove(getString(R.string.select_ward));
@@ -1880,11 +1890,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 if (hashMapLandmark != null && hashMapLandmark.size() > 0) {
                     landmarkList = getKeysFromValue(hashMapLandmark, spinnerLandmark.getSelectedItem().toString());
                     selectedLandmark = landmarkList.get(0);
-                    Log.d("222222222222", "" + selectedLandmark);
+                    /*Log.d("222222222222", "" + selectedLandmark);
                     if (selectedLandmark.equals("0")) {
                         hashMapLandmark.clear();
                         //setPinCodeSpinner();
-                    } /*else
+                    }*/ /*else
                         getPinCode(selectedWard);*/
 
                 }
@@ -2276,12 +2286,12 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         if (edtFlatNumber.getText().toString().trim().length() > 0 && edtFlatNumber.getText().toString().length() > 10)
             if (edtSocietyBuildingName.getText().toString().trim().length() > 0)
                 if (edtRoadNo.getText().toString().trim().length() > 0)
-                    if (edtLandmark.getText().toString().trim().length() > 0)
-                        if (edtLocation.getText().toString().trim().length() > 0)
+                    if (hashMapLandmark != null && hashMapLandmark.size() > 1 && spinnerLandmark.getSelectedItemPosition() > 0 || hashMapLandmark.size() == 2 && spinnerLandmark.getSelectedItemPosition() != 1)
+                        if ( hashMapLocation != null && hashMapLocation.size() > 1 && spinnerLocation.getSelectedItemPosition() > 0 || hashMapLocation.size() == 2 && spinnerLocation.getSelectedItemPosition() != 1)
                             if (spinnerState.getSelectedItemPosition() != 0)
                                 if (spinnerCity.getSelectedItemPosition() != 0)
                                     if (spinnerArea.getSelectedItemPosition() != 0)
-                                        if (spinnerPinCode.getSelectedItemPosition() != 0)
+                                        if (hashMapPinCode != null && hashMapPinCode.size() > 1 && spinnerPinCode.getSelectedItemPosition() > 0 || hashMapPinCode.size() == 2 && spinnerPinCode.getSelectedItemPosition() != 1)
                                             if (spinnerPremisesType.getSelectedItemPosition() != 0) {
                                                 relativeViewAddressInfo.setVisibility(View.GONE);
                                                 relativeViewUploadDoc.setVisibility(View.VISIBLE);
@@ -2314,7 +2324,13 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 Toast.makeText(mContext, getString(R.string.error_valid_society_building_name), Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(mContext, getString(R.string.error_valid_building_no), Toast.LENGTH_SHORT).show();
+
+
+
+
+
     }
+
 
     private boolean validateIdProof() {
         boolean checkValue = false;
@@ -3376,25 +3392,35 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 //        registrationModel.plotNo = edtPlotNo.getText().toString();
 //        registrationModel.wing = edtWing.getText().toString();
         registrationModel.roadNo = edtRoadNo.getText().toString();
-        registrationModel.landmark = edtLandmark.getText().toString();
+        //registrationModel.landmark = edtLandmark.getText().toString();
 
 
         registrationModel.district = edtDistrict.getText().toString();
         registrationModel.buildingName = edtSocietyBuildingName.getText().toString();
         registrationModel.societyName = edtSocietyName.getText().toString();
-        registrationModel.location = edtLocation.getText().toString();
+        //registrationModel.location = edtLocation.getText().toString();
         registrationModel.area = selectedArea;
         registrationModel.areaName = spinnerArea.getSelectedItem().toString();
         registrationModel.city = cityId;
-        //registrationModel.ward = selectedWard;
-        //registrationModel.wardName = spinnerWard.getSelectedItem().toString();
-        //registrationModel.location = selectedLocation;
-        //registrationModel.landmark = selectedLandmark;
+        registrationModel.ward = selectedWard;
+        Log.d("Wwwwwwwwwwwwww",""+registrationModel.ward);
+
+        registrationModel.wardName = spinnerWard.getSelectedItem().toString();
+        Log.d("WradName",""+registrationModel.wardName);
+
+        registrationModel.location = selectedLocation;
+        registrationModel.locationName = spinnerLocation.getSelectedItem().toString();
+
+        Log.d("bbbbbbbbbbbbbbbb",""+registrationModel.location);
+        registrationModel.landmark = selectedLandmark;
+
+        registrationModel.landmarkName = spinnerLandmark.getSelectedItem().toString();
 
 
 
         //registrationModel.district = districtId;
         registrationModel.pincode = selectedPinCode;
+        Log.d("ppppppppppppppp",""+registrationModel.pincode);
         registrationModel.mobile = edtMobile.getText().toString();
         registrationModel.premise = spinnerPremisesType.getSelectedItem().toString();
         registrationModel.chequeNo = edtChequeNo.getText().toString();

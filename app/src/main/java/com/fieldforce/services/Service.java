@@ -190,8 +190,8 @@ public class Service extends android.app.Service implements ApiServiceCaller {
         //schedule the timer, to wake up every 1 second
 //        timer.schedule(timerTask, 90000, 1800000); // 30 minutes
 //        timer.schedule(timerTask, 1000, 600000); // 2 minutes
-        //timer.schedule(timerTask, 1000, 120000); // 2 minutes
-        timer.schedule(timerTask, 1000, 10000); // 10 seconds
+         timer.schedule(timerTask, 1000, 120000); // 2 minutes
+        //timer.schedule(timerTask, 1000, 10000); // 10 seconds
         //timer.schedule(timerTask, 60000, 3600000); // 1 hour
     }
 
@@ -223,6 +223,11 @@ public class Service extends android.app.Service implements ApiServiceCaller {
                             }
                             registrationToUpload.get(0).documents = documentOne.get(0);
                             Log.d("TAG","DocumentOne"+registrationToUpload.get(0).documents);
+
+                            Log.d("qqqqqqqqqqq",""+registrationToUpload.get(0).ward);
+                            Log.d("qqqqqqqqqqq",""+registrationToUpload.get(0).pincode);
+                            Log.d("qqqqqqqqqqq",""+registrationToUpload.get(0).location);
+
 
                             ArrayList<String> checklist12 = new ArrayList<>();
                             String data1 = registrationToUpload.get(0).documentsAdd;

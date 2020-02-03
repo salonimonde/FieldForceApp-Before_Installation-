@@ -461,6 +461,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 RegistrationTable.Cols.IS_REJECTED + " VARCHAR, " +
                 RegistrationTable.Cols.NSC_ID + " VARCHAR, " +
                 RegistrationTable.Cols.FILE_CONSUMER_PHOTO + " BLOB, " +
+                RegistrationTable.Cols.WARD + " VARCHAR, " +
                 RegistrationTable.Cols.AREA_NAME + " VARCHAR";
                 createTable(db, RegistrationTable.TABLE_NAME, RegistrationTableFields);
     }

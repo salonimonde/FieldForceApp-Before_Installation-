@@ -36,6 +36,9 @@ public class RegistrationModel implements Serializable {
     @SerializedName("location")
     public String location;
 
+    @SerializedName("location_name")
+    public String locationName;
+
     @SerializedName("area")
     public String area;
 
@@ -164,6 +167,8 @@ public class RegistrationModel implements Serializable {
 
     @SerializedName("landmark")
     public String landmark;
+    @SerializedName("landmark_name")
+    public String landmarkName;
 
     @SerializedName("district")
     public String district;
@@ -221,13 +226,6 @@ public class RegistrationModel implements Serializable {
 
     @SerializedName("ward_name")
     public String wardName;
-
-
-
-
-
-
-
 
 
 

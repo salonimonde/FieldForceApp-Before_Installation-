@@ -82,5 +82,7 @@ public class RegistrationTable {
         public static final String FIELD_CHEQUE_DD = "File_cheque_dd";
         public static final String FILE_SIGN = "File_sign";
         public static final String FILE_CONSUMER_PHOTO = "File_consumerphoto";
+        public static final String  WARD = "ward";
+
     }
 }

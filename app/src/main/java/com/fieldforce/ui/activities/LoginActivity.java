@@ -188,12 +188,12 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                                 getSubCategory();
                                 getBankNames();
                                 getArea();
-                                //getWardList();
+                                getWardList();
                                 getPinCode();
                                 getDocumentList();
                                 getPaymentScheme();
-                                //getLocation();
-                                //getLandmark();
+                                getLocation();
+                                getLandmark();
 
                                 Intent intent = new Intent(mContext, MainActivity.class);
                                 startActivity(intent);

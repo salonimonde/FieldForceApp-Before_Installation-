@@ -4622,6 +4622,7 @@ public class DatabaseManager {
                 registrationModel.landmark = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.LANDMARK)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.LANDMARK)) : "";
                 registrationModel.district = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.DISTRICT)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.DISTRICT)) : "";
                 registrationModel.societyName = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.SOCIETY_NAME)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.SOCIETY_NAME)) : "";
+                registrationModel.ward = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.WARD)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.WARD)) : "";
 
                 searchlist.add(registrationModel);
             }
@@ -4847,6 +4848,7 @@ public class DatabaseManager {
             values.put(RegistrationTable.Cols.LANDMARK , registrationModel.landmark != null ? registrationModel.landmark: "");
             values.put(RegistrationTable.Cols.DISTRICT , registrationModel.district != null ? registrationModel.district : "");
             values.put(RegistrationTable.Cols.SOCIETY_NAME , registrationModel.societyName != null ? registrationModel.societyName : "");
+            values.put(RegistrationTable.Cols.WARD , registrationModel.ward != null ? registrationModel.ward : "");
 
 
         } catch (Exception e) {
@@ -5120,6 +5122,7 @@ public class DatabaseManager {
         registrationModel.landmark = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.LANDMARK)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.LANDMARK)) : "";
         registrationModel.district = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.DISTRICT)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.DISTRICT)) : "";
         registrationModel.societyName = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.SOCIETY_NAME)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.SOCIETY_NAME)) : "";
+        registrationModel.ward = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.WARD)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.WARD)) : "";
 
         return registrationModel;
     }
@@ -6728,6 +6731,7 @@ public class DatabaseManager {
             values.put(RegistrationTable.Cols.FIELD_CHEQUE_DD, registrationModel.FileChequeDD != null ? registrationModel.FileChequeDD.image : "");
             values.put(RegistrationTable.Cols.FILE_SIGN, registrationModel.FileSign != null ? registrationModel.FileSign.image : "");
             values.put(RegistrationTable.Cols.FILE_CONSUMER_PHOTO, registrationModel.FileConsumerPhoto != null ? registrationModel.FileConsumerPhoto.image : "");
+            values.put(RegistrationTable.Cols.WARD, registrationModel.ward != null ? registrationModel.ward : "");
 
 
         } catch (Exception e) {
@@ -6846,6 +6850,7 @@ public class DatabaseManager {
         registrationModel.landmark = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.LANDMARK)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.LANDMARK)) : "";
         registrationModel.district = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.DISTRICT)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.DISTRICT)) : "";
         registrationModel.societyName = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.SOCIETY_NAME)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.SOCIETY_NAME)) : "";
+        registrationModel.ward = cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.WARD)) != null ? cursor.getString(cursor.getColumnIndex(RegistrationTable.Cols.WARD)) : "";
 
 
 
