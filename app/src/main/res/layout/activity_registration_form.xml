@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <include layout="@layout/toolbar3" />
 
@@ -68,12 +68,13 @@
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/margin_h2"
                     android:orientation="vertical">
+
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/image_view_consumer"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/ic_action_default_user_icon"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_action_default_user_icon" />
 
                     <EditText
                         android:id="@+id/edt_applicant_company_name"
@@ -629,6 +630,7 @@
                                 android:src="@drawable/ic_action_arrow" />
 
                         </RelativeLayout>
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/edit_text_height"
@@ -655,7 +657,7 @@
                                 android:textColorHint="@color/colorProfileEditText"
                                 android:textSize="@dimen/text_size_h4"
                                 android:theme="@style/EditTextNSC"
-                                android:visibility="gone"/>
+                                android:visibility="gone" />
 
                             <Spinner
                                 android:id="@+id/sp_ward"
@@ -721,6 +723,7 @@
                                 android:src="@drawable/ic_action_arrow" />
 
                         </RelativeLayout>
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/edit_text_height"
@@ -745,12 +748,6 @@
 
                         </RelativeLayout>
 
-
-
-
-
-
-
                         <EditText
                             android:id="@+id/edt_landmark"
                             android:layout_width="match_parent"
@@ -767,7 +764,7 @@
                             android:textColorHint="@color/colorProfileEditText"
                             android:textSize="@dimen/text_size_h4"
                             android:theme="@style/EditTextNSC"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <EditText
                             android:id="@+id/edt_location"
@@ -785,7 +782,7 @@
                             android:textColorHint="@color/colorProfileEditText"
                             android:textSize="@dimen/text_size_h4"
                             android:theme="@style/EditTextNSC"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <EditText
                             android:id="@+id/edt_city"
@@ -803,6 +800,7 @@
                             android:textColorHint="@color/colorProfileEditText"
                             android:textSize="@dimen/text_size_h4"
                             android:theme="@style/EditTextNSC" />
+
                         <EditText
                             android:id="@+id/edt_district"
                             android:layout_width="match_parent"
@@ -837,15 +835,6 @@
                             android:textColorHint="@color/colorProfileEditText"
                             android:textSize="@dimen/text_size_h4"
                             android:theme="@style/EditTextNSC" />
-
-
-
-
-
-
-
-
-
 
 
                         <!--<EditText
@@ -1119,9 +1108,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_h1"
-                    app:cardCornerRadius="@dimen/margin_h2"
+                    android:elevation="@dimen/margin_h1"
                     android:padding="@dimen/margin_h3"
-                    android:elevation="@dimen/margin_h1">
+                    app:cardCornerRadius="@dimen/margin_h2">
 
                     <RelativeLayout
                         android:id="@+id/relative_id_proof"
@@ -1155,8 +1144,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/relative_id_proof"
-                        android:visibility="visible"
-                        android:layout_marginTop="@dimen/margin_h1">
+                        android:layout_marginTop="@dimen/margin_h1"
+                        android:visibility="visible">
 
                         <LinearLayout
                             android:id="@+id/layout_step_icons"
@@ -1292,9 +1281,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_h1"
-                    app:cardCornerRadius="@dimen/margin_h2"
+                    android:elevation="@dimen/margin_h1"
                     android:padding="@dimen/margin_h3"
-                    android:elevation="@dimen/margin_h1">
+                    app:cardCornerRadius="@dimen/margin_h2">
 
                     <RelativeLayout
                         android:id="@+id/relative_address_proof"
@@ -1328,8 +1317,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/relative_address_proof"
-                        android:visibility="gone"
-                        android:layout_marginTop="@dimen/margin_h6">
+                        android:layout_marginTop="@dimen/margin_h6"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -1451,9 +1440,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_h1"
-                    app:cardCornerRadius="@dimen/margin_h2"
+                    android:elevation="@dimen/margin_h1"
                     android:padding="@dimen/margin_h3"
-                    android:elevation="@dimen/margin_h1">
+                    app:cardCornerRadius="@dimen/margin_h2">
 
                     <RelativeLayout
                         android:id="@+id/relative_noc_proof"
@@ -1471,7 +1460,7 @@
                             android:text="@string/noc_proof"
                             android:textColor="@color/colorPrimaryDarkText"
                             android:textSize="@dimen/text_size_h3"
-                            android:visibility="visible"/>
+                            android:visibility="visible" />
 
                         <ImageView
                             android:id="@+id/img_noc_proof_arrow"
@@ -1481,7 +1470,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="15dp"
                             android:src="@drawable/ic_action_arrow"
-                            android:visibility="visible"/>
+                            android:visibility="visible" />
 
                     </RelativeLayout>
 
@@ -2187,10 +2176,12 @@
 
         </RelativeLayout>
 
+
         <RelativeLayout
             android:id="@+id/relative_layout_step_five"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_h2"
             android:visibility="gone">
 
             <LinearLayout
@@ -2229,56 +2220,72 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/linear_signature"
-                android:background="@color/colorNSCEditText" />
+                android:background="@color/colorNSCEditText"
+                />
 
-            <TextView
-                android:id="@+id/txt_confirmation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/margin_h2"
-                android:text="@string/consumer_consent"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/text_size_h4"
-                android:layout_below="@+id/view_six"/>
-
-            <LinearLayout
-                android:id="@+id/linear_signature_view_consumer"
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/margin_h2"
-                android:layout_marginRight="@dimen/margin_h2"
-                android:orientation="vertical"
-                android:visibility="visible"
-                android:layout_below="@id/txt_confirmation">
+                android:layout_below="@+id/view_six"
+                android:id="@+id/six">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="70dp">
                 <TextView
-                    android:id="@+id/txt_add_sign_consumer"
+                    android:id="@+id/txt_confirmation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_customer_signature"
-                    android:textColor="@color/colorLightBlack"
-                    android:textSize="@dimen/text_size_h3" />
-
-                <LinearLayout
-                    android:id="@+id/view_signature_consumer"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="@drawable/custom_border"
-                    android:orientation="vertical" />
-
-                <Button
-                    android:id="@+id/btn_clear_consumer"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="@dimen/margin_h2"
-                    android:background="@drawable/layout_corner"
-                    android:text="@string/clear"
                     android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_h2"
+                    android:text="@string/consumer_consent"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/text_size_h4" />
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_signature_view_consumer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/txt_confirmation"
+                    android:layout_marginLeft="@dimen/margin_h2"
+                    android:layout_marginRight="@dimen/margin_h2"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/txt_add_sign_consumer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_customer_signature"
+                        android:textColor="@color/colorLightBlack"
+                        android:textSize="@dimen/text_size_h3" />
+
+                    <LinearLayout
+                        android:id="@+id/view_signature_consumer"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:background="@drawable/custom_border"
+                        android:orientation="vertical" />
+
+                    <Button
+                        android:id="@+id/btn_clear_consumer"
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin_h2"
+                        android:background="@drawable/layout_corner"
+                        android:text="@string/clear"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/text_size_h4" />
+
+                </LinearLayout>
+                </RelativeLayout>
+
+
+            </android.support.v4.widget.NestedScrollView>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -2315,8 +2322,9 @@
                     android:textSize="@dimen/text_size_h4" />
 
             </LinearLayout>
-        </RelativeLayout>
 
+
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

@@ -46,6 +46,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -156,7 +157,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private RelativeLayout relativeViewGeneralInfo, relativeViewAddressInfo, relativeViewUploadDoc, relativeViewPayment,
             relativeIdProof, relativeAddressProof, relativeImgId1, relativeImgId2, relativeImgAdd1, relativeImgAdd2,
             relBankName, relNocProof, relBankNameCheque, relativeSignature;
-    private NestedScrollView nestedIdProof, nestedAddressProof;
+    private NestedScrollView nestedIdProof, nestedAddressProof, nestedSignature;
     private RecyclerView recyclerIDDoc, recyclerViewAddDoc;
     private LinearLayoutManager layoutManager;
     private LinearLayout linearChequeDetails, linearDDDetails, linearNocDetails, linearOTP;
@@ -284,8 +285,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         txtTitle.setText(getString(R.string.registration_form));
         TextView txtSubTitle = findViewById(R.id.txt_sub_title);
         txtSubTitle.setVisibility(View.GONE);
-        //ImageView image = findViewById(R.id.img_consumer);
-        //image.setVisibility(View.GONE);
+
 
         txtRadioName = findViewById(R.id.txt_radio_name);
         txtRadioName.setTypeface(mRegular);
@@ -459,9 +459,31 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         radioYes = findViewById(R.id.radio_yes);
         radioNo = findViewById(R.id.radio_no);
 
-        // Toolbar toolbar =findViewById(R.id.toolbar);
+        //For Consumer Signature
+        signatureViewConsumer.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int action = motionEvent.getAction();
+                switch (action){
+                    case MotionEvent.ACTION_DOWN:
+                        // Disable the scroll view to intercept the touch event
+                        nestedSignature.requestDisallowInterceptTouchEvent(true);
+                        return false;
+                    case MotionEvent.ACTION_UP:
+                        // Allow scroll View to interceot the touch event
+                        nestedSignature.requestDisallowInterceptTouchEvent(false);
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        nestedSignature.requestDisallowInterceptTouchEvent(true);
+                        return false;
+                    default:
+                        return true;
+                }
+            }
+        });
 
-        //toolImage= toolbar.findViewById(R.id.img_consumer);
+
+
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -866,6 +888,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         nestedIdProof.setVisibility(View.VISIBLE);
         nestedAddressProof = findViewById(R.id.nested_address_proof);
         nestedAddressProof.setVisibility(View.GONE);
+        nestedSignature = findViewById(R.id.six);
 
         if (comingFrom.equals(getString(R.string.new_nsc))) {
             edtConsumerName.setText("");
@@ -3079,7 +3102,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         } else {
             latitude = "0";
             longitude = "0";
-
         }
     }
 
@@ -3376,6 +3398,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
         if (edtFloor.getText().toString().length() > 8) {
             registrationModel.floorNo = edtFloor.getText().toString();
+            //registrationModel.floorNo = edtFloor.getText().delete(0 , 7).toString();
         }
         if (edtPlotNo.getText().toString().length() > 10) {
             registrationModel.plotNo = edtPlotNo.getText().toString();
@@ -4060,6 +4083,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         fileConsumerPhoto = new File(getRealPathFromURI(tempUri));
         Log.d("TAG", "PHOTO" + fileConsumerPhoto);
     }
+
+
 
     // OTP Change by Jayshree Completed
 }
