@@ -134,12 +134,11 @@ import static com.fieldforce.utility.AppConstants.GALLERY;
 
 public class RegistrationFormActivity extends ParentActivity implements View.OnClickListener, LocationListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ApiServiceCaller,
-        ActivityCompat.OnRequestPermissionsResultCallback, VerificationListener{
+        ActivityCompat.OnRequestPermissionsResultCallback, VerificationListener {
 
     private static final String TAG = Verification.class.getSimpleName();
     public static Activity formActivity;
     private Verification mVerification;
-
 
 
     // for OTP verification
@@ -153,7 +152,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             edtLocation, edtArea, edtAmountPayable, edtChequeNo, edtChequeBranch, edtChequeDate,
             edtDDNo, edtOtherBank, edtIFSCCheque, edtIFSCDD, edtOtherBankCheque, edtDDDate, edtDDBranch, edtState,
             edtCity, edtEnterOTP, edtFloor, edtPlotNo, edtWing, edtSocietyName, edtRoadNo, edtLandmark,
-            edtDistrict,edtWard;
+            edtDistrict, edtWard;
     private RelativeLayout relativeViewGeneralInfo, relativeViewAddressInfo, relativeViewUploadDoc, relativeViewPayment,
             relativeIdProof, relativeAddressProof, relativeImgId1, relativeImgId2, relativeImgAdd1, relativeImgAdd2,
             relBankName, relNocProof, relBankNameCheque, relativeSignature;
@@ -164,7 +163,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private ImageView imgBack, imgIdProofArrow, imgAddressProofArrow, imgNocProofArrow, toolImage;
     private Spinner spinnerOccupation, spinnerPremisesType, spinnerState, spinnerCity, spinnerPinCode,
             spinnerPaymentScheme, spinnerPaymentMethod, spinnerConsumerCategory, spinnerConsumerSubCategory,
-            spinnerBankName, spinnerArea, spinnerBankNameCheque,spinnerWard, spinnerLocation, spinnerLandmark;
+            spinnerBankName, spinnerArea, spinnerBankNameCheque, spinnerWard, spinnerLocation, spinnerLandmark;
     private List<String> cityList, pinCodeList, paymentSchemeList, categoryList, subCategoryList,
             bankList, areaList, keyList, wardList, areaListPincode, areaListLocation, locationList, landmarkList, areaListLandmark;
     private ArrayList<String> cityArray, pinCodeArray, stateArray, schemeArray, categoryArray, subCategoryArray,
@@ -173,7 +172,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             hashMapState = new HashMap<String, String>(),
             hashMapCategory = new HashMap<String, String>(), hashMapSubCategory = new HashMap<String, String>(),
             hashMapBankName = new HashMap<String, String>(), haspMapArea = new HashMap<String, String>(),
-            hashMapBankChequeArray = new HashMap<String, String>(),  hashMapWard = new HashMap<String, String>(), hashMapLocation = new HashMap<String, String>(), hashMapLandmark = new HashMap<String, String>();
+            hashMapBankChequeArray = new HashMap<String, String>(), hashMapWard = new HashMap<String, String>(), hashMapLocation = new HashMap<String, String>(), hashMapLandmark = new HashMap<String, String>();
     private LinkedHashMap hashMapPaymentScheme = new LinkedHashMap<String, String>();
     private String selectedState, selectedCity, selectedPinCode, selectedScheme, selectedCategory, selectSubCategory,
             selectedBank, selectedArea, selectedBankCheque, message, selectedWard, selectedAreaPincode, selectedAreaLocation, selectedLocation, selectedLandmark, selectedAreaLandmark;
@@ -193,11 +192,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private int Count = 0;
     private ImageView imgTakeID1, imgTakeID2, imgCancelID1, imgCancelID2, imgTakeADD1,
             imgTakeADD2, imgCancelADD1, imgCancelADD2, imgTakeNoc, imgCancelNoc, imgCheque, imgDD,
-            imgCancelCheque, imgCancelDD,imgConsumerPhoto;
+            imgCancelCheque, imgCancelDD, imgConsumerPhoto;
     private File File1 = null, File2 = null, File3 = null, File4 = null, File5 = null,
             fileCheque = null, fileDD = null, fileConsumerSign = null, fileConsumerPhoto = null;
     private String imgId1, imgId2 = "", imgId3 = "", imgId4 = "", imgId5 = "",
-            imgIdCheque = "", imgIdDD = "",imgPhoto="";
+            imgIdCheque = "", imgIdDD = "", imgPhoto = "";
 
     private String enquiryId = "";
 
@@ -234,7 +233,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private AlertDialog alert, alert1;
 
     private Bitmap idBitmap1 = null, idBitmap2 = null, addBitmap1 = null, addBitmap2 = null, nocBitmap = null,
-            bitmapChequeDD = null, bitmapSign = null,bitmapConsumerPhoto = null;
+            bitmapChequeDD = null, bitmapSign = null, bitmapConsumerPhoto = null;
 
     private LinearLayout viewConsumerSignature;
     private SignatureView signatureViewConsumer;
@@ -334,7 +333,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         imgTakeNoc = findViewById(R.id.img_take_noc);
         imgCheque = findViewById(R.id.img_take_cheque);
         imgDD = findViewById(R.id.img_take_dd);
-        imgConsumerPhoto=findViewById(R.id.image_view_consumer);
+        imgConsumerPhoto = findViewById(R.id.image_view_consumer);
         //defaultConsumerPhoto();
         //imgConsumerPhoto.setImageResource(R.drawable.ic_action_default_user_icon);
 
@@ -484,6 +483,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -492,7 +492,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             @Override
             public void afterTextChanged(Editable editable) {
 
-                String prefix = getString(R.string.house_number)+" ";
+                String prefix = getString(R.string.house_number) + " ";
                 if (!editable.toString().startsWith(prefix)) {
                     String cleanString;
                     String deletedPrefix = prefix.substring(0, prefix.length() - 1);
@@ -523,7 +523,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             @Override
             public void afterTextChanged(Editable editable) {
 
-                String prefix = getString(R.string.floor_no_new)+" ";
+                String prefix = getString(R.string.floor_no_new) + " ";
                 if (!editable.toString().startsWith(prefix)) {
                     String cleanString;
                     String deletedPrefix = prefix.substring(0, prefix.length() - 1);
@@ -554,7 +554,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             @Override
             public void afterTextChanged(Editable editable) {
 
-                String prefix = getString(R.string.plot_no_new)+" ";
+                String prefix = getString(R.string.plot_no_new) + " ";
                 if (!editable.toString().startsWith(prefix)) {
                     String cleanString;
                     String deletedPrefix = prefix.substring(0, prefix.length() - 1);
@@ -583,7 +583,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String prefix = getString(R.string.wing_new)+" ";
+                String prefix = getString(R.string.wing_new) + " ";
                 if (!editable.toString().startsWith(prefix)) {
                     String cleanString;
                     String deletedPrefix = prefix.substring(0, prefix.length() - 1);
@@ -736,7 +736,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                     edtChequeDate.setText(String.format("%02d", dayOfMonth) + "/" + String.format("%02d", (monthOfYear + 1)) + "/" + year);
                                     selectedChequeDate = edtChequeDate.getText().toString().trim();
-                                    Log.d("ChequDate",""+selectedChequeDate);
+                                    Log.d("ChequDate", "" + selectedChequeDate);
                                 }
                             }, mYear, mMonth, mDay);
                             datePickerDialog.getDatePicker().setMinDate(newDate.getTime());
@@ -768,7 +768,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                                 @Override
                                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                     edtDDDate.setText(String.format("%02d", dayOfMonth) + "/" + String.format("%02d", (monthOfYear + 1)) + "/" + year);
-                                    Log.d("gggggggggggggggg",""+edtDDDate);
+                                    Log.d("gggggggggggggggg", "" + edtDDDate);
 
                                 }
                             }, mYear, mMonth, mDay);
@@ -1124,7 +1124,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             Count = 7;
             fileDD = null;
             callCamera();
-        }else if(view.equals(imgConsumerPhoto)){
+        } else if (view.equals(imgConsumerPhoto)) {
             Count = 8;
             fileConsumerPhoto = null;
             showPictureDialog();
@@ -1277,7 +1277,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         hashMapCategory.put("0", getString(R.string.select_consumer_category));
         for (Consumer con : category)
             hashMapCategory.put(con.getConsumerCategoryId(), con.getConsumerCategory());
-            setCategorySpinner();
+        setCategorySpinner();
 
     }
 
@@ -1287,7 +1287,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         hashMapSubCategory.put("0", getString(R.string.select_consumer_sub_category));
         for (Consumer con : subCategory)
             hashMapSubCategory.put(con.getConsumer_subcategory_id(), con.getConsumer_subcategory());
-         setSubCategorySpinner();
+        setSubCategorySpinner();
 
     }
 
@@ -1321,12 +1321,12 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     private void getPinCode(String areaId) {
-            pincode =  DatabaseManager.getPincode(mContext, AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), areaId);
-            hashMapPinCode.clear();
-            hashMapPinCode.put("0", getString(R.string.select_pin_code));
-            for (Consumer con : pincode)
-                hashMapPinCode.put(con.getPincode_id(), con.getPincode());
-                setPinCodeSpinner();
+        pincode = DatabaseManager.getPincode(mContext, AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), areaId);
+        hashMapPinCode.clear();
+        hashMapPinCode.put("0", getString(R.string.select_pin_code));
+        for (Consumer con : pincode)
+            hashMapPinCode.put(con.getPincode_id(), con.getPincode());
+        setPinCodeSpinner();
     }
 
     private void getArea() {
@@ -1342,14 +1342,15 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         setAreaSpinner();
 
     }
+
     private void getWard(String areaId) {
-         wardName = DatabaseManager.getWard(mContext,
-                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""),areaId);
-                Log.e("WARD","nxxxxxxxxxx"+wardName);
-                hashMapWard.clear();
-                hashMapWard.put("0", getString(R.string.select_ward));
-               for (Consumer con : wardName)
-                hashMapWard.put(con.getWardID(), con.getWard());
+        wardName = DatabaseManager.getWard(mContext,
+                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), areaId);
+        Log.e("WARD", "nxxxxxxxxxx" + wardName);
+        hashMapWard.clear();
+        hashMapWard.put("0", getString(R.string.select_ward));
+        for (Consumer con : wardName)
+            hashMapWard.put(con.getWardID(), con.getWard());
 
         Log.d("SIZEWARD", "" + hashMapWard.size());
         setWardSpinner();
@@ -1357,8 +1358,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
     private void getLocation(String areaId) {
         location = DatabaseManager.getLocation(mContext,
-                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""),areaId);
-        Log.e("Location","nxxxxxxxxxx"+location);
+                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), areaId);
+        Log.e("Location", "nxxxxxxxxxx" + location);
 
         hashMapLocation.clear();
         hashMapLocation.put("0", getString(R.string.select_location));
@@ -1368,9 +1369,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         Log.d("1111111111", "" + hashMapLocation);
         setLocationSpinner();
     }
+
     private void getLandmark(String areaId) {
-        landmark = DatabaseManager.getLandmark(mContext, AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""),areaId);
-        Log.e("Landmark","nxxxxxxxxxx"+landmark);
+        landmark = DatabaseManager.getLandmark(mContext, AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), areaId);
+        Log.e("Landmark", "nxxxxxxxxxx" + landmark);
         hashMapLandmark.clear();
         hashMapLandmark.put("0", getString(R.string.select_landmark));
         for (Consumer con : landmark)
@@ -1394,7 +1396,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         addDocumnetList = DatabaseManager.getAddProof(mContext,
                 AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
 
-          DocumentIdAdapter.checkParamsListAddress.clear();
+        DocumentIdAdapter.checkParamsListAddress.clear();
 
 
         DocumentIdAdapter Adapter2 = new DocumentIdAdapter(mContext, addDocumnetList, getString(R.string.edit_add_proof));
@@ -1529,7 +1531,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         } else pinCodeArray.add(getString(R.string.select_pin_code));
 
 
-        if(hashMapPinCode.size() == 2) {
+        if (hashMapPinCode.size() == 2) {
             for (int i = 0; i < hashMapPinCode.size(); i++) {
                 valueSet = sortByKey(hashMapPinCode).values();
                 pinCodeArray = new ArrayList<>(valueSet);
@@ -1593,8 +1595,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 keySetArray = new ArrayList<>(keySet);
 
             }
-        }
-        else areaArray.add(getString(R.string.select_area));
+        } else areaArray.add(getString(R.string.select_area));
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, areaArray) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
@@ -1635,27 +1636,23 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     if (selectedArea.equals("0")) {
                         hashMapWard.clear();
                         setWardSpinner();
-                    }
-                    else
+                    } else
                         getWard(selectedArea);
 
-                    if(selectedAreaLocation.equals("0")){
+                    if (selectedAreaLocation.equals("0")) {
                         hashMapLocation.clear();
                         setLocationSpinner();
-                    }
-                    else
+                    } else
                         getLocation(selectedAreaLocation);
-                    if(selectedAreaLandmark.equals("0")){
+                    if (selectedAreaLandmark.equals("0")) {
                         hashMapLandmark.clear();
                         setLandMarkSpinner();
-                    }
-                    else
+                    } else
                         getLandmark(selectedAreaLandmark);
-                    if(selectedAreaPincode.equals("0")){
+                    if (selectedAreaPincode.equals("0")) {
                         hashMapPinCode.clear();
                         setPinCodeSpinner();
-                    }
-                    else
+                    } else
                         getPinCode(selectedAreaPincode);
                 }
             }
@@ -1682,10 +1679,9 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             }
 
             //else wardArray.add(getString(R.string.select_ward));
-        }
-        else wardArray.add(getString(R.string.select_ward));
+        } else wardArray.add(getString(R.string.select_ward));
 
-        if(hashMapWard.size() == 2) {
+        if (hashMapWard.size() == 2) {
             for (int i = 0; i < hashMapWard.size(); i++) {
                 valueSet = sortByKey(hashMapWard).values();
                 wardArray = new ArrayList<>(valueSet);
@@ -1731,7 +1727,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         spinnerWard.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (hashMapWard != null && hashMapWard.size() > 0 ) {
+                if (hashMapWard != null && hashMapWard.size() > 0) {
                     wardList = getKeysFromValue(hashMapWard, spinnerWard.getSelectedItem().toString());
                     selectedWard = wardList.get(0);
                     //Log.d("selectedWard", "" + selectedWard);
@@ -1764,10 +1760,9 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 keySet = sortByKey(hashMapLocation).keySet();
                 keySetArray = new ArrayList<>(keySet);
             }
-        }
-        else locationArray.add(getString(R.string.select_location));
+        } else locationArray.add(getString(R.string.select_location));
 
-        if(hashMapLocation.size() == 2) {
+        if (hashMapLocation.size() == 2) {
             for (int i = 0; i < hashMapLocation.size(); i++) {
                 valueSet = sortByKey(hashMapLocation).values();
                 locationArray = new ArrayList<>(valueSet);
@@ -1841,10 +1836,9 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 keySet = sortByKey(hashMapLandmark).keySet();
                 keySetArray = new ArrayList<>(keySet);
             }
-        }
-        else landmarkArray.add(getString(R.string.select_landmark));
+        } else landmarkArray.add(getString(R.string.select_landmark));
 
-        if(hashMapLandmark.size() == 2) {
+        if (hashMapLandmark.size() == 2) {
             for (int i = 0; i < hashMapLandmark.size(); i++) {
                 valueSet = sortByKey(hashMapLandmark).values();
                 landmarkArray = new ArrayList<>(valueSet);
@@ -2285,10 +2279,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private void validateAddressInfo() {
         if (edtFlatNumber.getText().toString().trim().length() > 0 && edtFlatNumber.getText().toString().length() > 10)
             if (edtSocietyBuildingName.getText().toString().trim().length() > 0)
-                if (edtRoadNo.getText().toString().trim().length() > 0)
-                 //if (edtRoadNo.getText().toString().trim().length() > 0)
+                //if (edtRoadNo.getText().toString().trim().length() > 0)
+                    if (edtRoadNo.getText().toString().trim().length() > 0)
                     if (hashMapLandmark != null && hashMapLandmark.size() > 1 && spinnerLandmark.getSelectedItemPosition() > 0 || hashMapLandmark.size() == 2 && spinnerLandmark.getSelectedItemPosition() != 1)
-                        if ( hashMapLocation != null && hashMapLocation.size() > 1 && spinnerLocation.getSelectedItemPosition() > 0 || hashMapLocation.size() == 2 && spinnerLocation.getSelectedItemPosition() != 1)
+                        if (hashMapLocation != null && hashMapLocation.size() > 1 && spinnerLocation.getSelectedItemPosition() > 0 || hashMapLocation.size() == 2 && spinnerLocation.getSelectedItemPosition() != 1)
                             if (spinnerState.getSelectedItemPosition() != 0)
                                 if (spinnerCity.getSelectedItemPosition() != 0)
                                     if (spinnerArea.getSelectedItemPosition() != 0)
@@ -2325,9 +2319,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 Toast.makeText(mContext, getString(R.string.error_valid_society_building_name), Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(mContext, getString(R.string.error_valid_building_no), Toast.LENGTH_SHORT).show();
-
-
-
 
 
     }
@@ -2798,8 +2789,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                         hashMapWard.put("0", getString(R.string.select_ward));
                         for (Consumer con : jsonResponse.ward_list)
                             hashMapWard.put(con.getWardID(), con.getWard());
-                          setWardSpinner();
-                          dismissLoadingDialog();
+                        setWardSpinner();
+                        dismissLoadingDialog();
                     } else {
                         if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
                             dismissLoadingDialog();
@@ -2989,7 +2980,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     bitmapChequeDD = bitmap;
                     Uri tempUri = getImageUri(mContext, bitmap);
                     fileDD = new File(getRealPathFromURI(tempUri));
-                }else if (Count == 8) {
+                } else if (Count == 8) {
                     Count = 0;
                     if (fileConsumerPhoto != null) {
                         if (imgRemoveList.size() > 0) {
@@ -3085,6 +3076,10 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         if (mLastLocation != null) {
             latitude = String.valueOf(mLastLocation.getLatitude());
             longitude = String.valueOf(mLastLocation.getLongitude());
+        } else {
+            latitude = "0";
+            longitude = "0";
+
         }
     }
 
@@ -3379,14 +3374,14 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.flatNo = edtFlatNumber.getText().toString();
 
 
-        if(edtFloor.getText().toString().length()>8){
+        if (edtFloor.getText().toString().length() > 8) {
             registrationModel.floorNo = edtFloor.getText().toString();
         }
-        if(edtPlotNo.getText().toString().length()>10){
+        if (edtPlotNo.getText().toString().length() > 10) {
             registrationModel.plotNo = edtPlotNo.getText().toString();
         }
 
-        if(edtWing.getText().toString().length()>6){
+        if (edtWing.getText().toString().length() > 6) {
             registrationModel.wing = edtWing.getText().toString();
         }
 //        registrationModel.floorNo = edtFloor.getText().toString();
@@ -3404,24 +3399,23 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.areaName = spinnerArea.getSelectedItem().toString();
         registrationModel.city = cityId;
         registrationModel.ward = selectedWard;
-        Log.d("Wwwwwwwwwwwwww",""+registrationModel.ward);
+        Log.d("Wwwwwwwwwwwwww", "" + registrationModel.ward);
 
         registrationModel.wardName = spinnerWard.getSelectedItem().toString();
-        Log.d("WradName",""+registrationModel.wardName);
+        Log.d("WradName", "" + registrationModel.wardName);
 
         registrationModel.location = selectedLocation;
         registrationModel.locationName = spinnerLocation.getSelectedItem().toString();
 
-        Log.d("bbbbbbbbbbbbbbbb",""+registrationModel.location);
+        Log.d("bbbbbbbbbbbbbbbb", "" + registrationModel.location);
         registrationModel.landmark = selectedLandmark;
 
         registrationModel.landmarkName = spinnerLandmark.getSelectedItem().toString();
 
 
-
         //registrationModel.district = districtId;
         registrationModel.pincode = selectedPinCode;
-        Log.d("ppppppppppppppp",""+registrationModel.pincode);
+        Log.d("ppppppppppppppp", "" + registrationModel.pincode);
         registrationModel.mobile = edtMobile.getText().toString();
         registrationModel.premise = spinnerPremisesType.getSelectedItem().toString();
         registrationModel.chequeNo = edtChequeNo.getText().toString();
@@ -3433,7 +3427,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.ddNo = edtDDNo.getText().toString();
         registrationModel.bankName = selectedBankName;
         registrationModel.ddDate = edtDDDate.getText().toString().trim();
-        Log.d("mcvnvjjjjjjjvvvvvvvvvv", "" +  registrationModel.chequeDate );
+        Log.d("mcvnvjjjjjjjvvvvvvvvvv", "" + registrationModel.chequeDate);
         registrationModel.ddMicr = edtIFSCDD.getText().toString().trim();
         registrationModel.ddBranch = edtDDBranch.getText().toString().trim();
         registrationModel.latitude = latitude;
@@ -3470,17 +3464,17 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
         ArrayList<String> checklist11 = new ArrayList<>();
         for (int i = 0; i < checkValueList.size(); i++) {
-            checklist11.add(i,checkValueList.get(i));
+            checklist11.add(i, checkValueList.get(i));
         }
-        Log.d("TAG","Checklist"+checklist11);
+        Log.d("TAG", "Checklist" + checklist11);
         ArrayList<String> documentOne = new ArrayList<>();
 
 
         for (int i = 0; i < checklist11.size(); i++) {
-            documentOne.add(checklist11.get(i) +"");
+            documentOne.add(checklist11.get(i) + "");
         }
         registrationModel.documents = documentOne.toString();
-        Log.e("TAG","SAVE"+registrationModel.documents);
+        Log.e("TAG", "SAVE" + registrationModel.documents);
 
 
         ArrayList<String> documentTwo = new ArrayList<>();
@@ -3503,7 +3497,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         ImageModel imageNocFile0 = new ImageModel();
         ImageModel imageSignFile0 = new ImageModel();
         ImageModel imageChequeDDFile0 = new ImageModel();
-        ImageModel imageConsumerPhoto=new ImageModel();
+        ImageModel imageConsumerPhoto = new ImageModel();
 
 
         imageFile0.image = CommonUtility.getBitmapEncodedString(idBitmap1);
@@ -3513,7 +3507,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         imageNocFile0.image = CommonUtility.getBitmapEncodedString(nocBitmap);
         imageSignFile0.image = CommonUtility.getBitmapEncodedString(bitmapSign);
         imageChequeDDFile0.image = CommonUtility.getBitmapEncodedString(bitmapChequeDD);
-        imageConsumerPhoto.image=CommonUtility.getBitmapEncodedString(bitmapConsumerPhoto);
+        imageConsumerPhoto.image = CommonUtility.getBitmapEncodedString(bitmapConsumerPhoto);
 
         registrationModel.File0 = imageFile0;
         registrationModel.File1 = imageFile1;
@@ -3522,7 +3516,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.FileNocProof = imageNocFile0;
         registrationModel.FileSign = imageSignFile0;
         registrationModel.FileChequeDD = imageChequeDDFile0;
-        registrationModel.FileConsumerPhoto=imageConsumerPhoto;
+        registrationModel.FileConsumerPhoto = imageConsumerPhoto;
 
 
         registrationModel.isRejected = String.valueOf(isRejected);
@@ -3659,7 +3653,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 if (File5 != null) {
                     multipartUtility.addFilePart("File_noc_proof", File5);
                 }
-                if(fileConsumerPhoto!=null){
+                if (fileConsumerPhoto != null) {
                     multipartUtility.addFilePart("File_consumer_photo", fileConsumerPhoto);
                 }
 
@@ -3691,7 +3685,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 multipartUtility.addFormField("wing", edtWing.getText().toString());
                 multipartUtility.addFormField("road_no", edtRoadNo.getText().toString());
                 //multipartUtility.addFormField("landmark", edtLandmark.getText().toString());
-                multipartUtility.addFormField("district",edtDistrict.getText().toString());
+                multipartUtility.addFormField("district", edtDistrict.getText().toString());
 
                 multipartUtility.addFormField("society_name", edtSocietyName.getText().toString());
 
@@ -3934,6 +3928,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
 
     }
+
     //OTP Changes by Jayshree on 13-01-2020
     private void getOTP() {
         Random otp = new Random();
@@ -3944,7 +3939,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         }
         mStrOTP = builder.toString();
 
-        multimsg( "OTP for BGL New Registration is " + mStrOTP, ""+edtMobile.getText().toString());
+        multimsg("OTP for BGL New Registration is " + mStrOTP, "" + edtMobile.getText().toString());
 
 
     }
@@ -4056,13 +4051,14 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         }
 
     }
+
     private void defaultConsumerPhoto() {
-        Bitmap icon = BitmapFactory.decodeResource(getResources(),R.drawable.ic_action_default_user_icon);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_default_user_icon);
         imgConsumerPhoto.setImageBitmap(icon);
         bitmapConsumerPhoto = icon;
         Uri tempUri = getImageUri(mContext, icon);
         fileConsumerPhoto = new File(getRealPathFromURI(tempUri));
-        Log.d("TAG","PHOTO"+fileConsumerPhoto);
+        Log.d("TAG", "PHOTO" + fileConsumerPhoto);
     }
 
     // OTP Change by Jayshree Completed
