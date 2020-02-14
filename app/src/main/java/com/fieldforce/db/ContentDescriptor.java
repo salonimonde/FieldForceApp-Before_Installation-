@@ -72,10 +72,10 @@ public class ContentDescriptor
         matcher.addURI(AUTHORITY, BankTable.PATH, BankTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, PaymentTable.PATH, PaymentTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, IdProofTable.PATH, IdProofTable.PATH_TOKEN);
-        matcher.addURI(AUTHORITY, AddProofTable.PATH, AddProofTable.PATH_TOKEN);
+        //matcher.addURI(AUTHORITY, AddProofTable.PATH, AddProofTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, WardTable.PATH, WardTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, CategoryTable.PATH, CategoryTable.PATH_TOKEN);
-        matcher.addURI(AUTHORITY, SubCategoryTable.PATH, SubCategoryTable.PATH_TOKEN);
+        //matcher.addURI(AUTHORITY, SubCategoryTable.PATH, SubCategoryTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, Pincode.PATH, Pincode.PATH_TOKEN);
         matcher.addURI(AUTHORITY, LocationTable.PATH, LocationTable.PATH_TOKEN);
         matcher.addURI(AUTHORITY, LandmarkTable.PATH, LandmarkTable.PATH_TOKEN);

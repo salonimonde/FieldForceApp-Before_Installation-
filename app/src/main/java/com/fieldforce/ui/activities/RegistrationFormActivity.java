@@ -99,10 +99,12 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.gson.Gson;
 import com.msg91.sendotp.library.SendOtpVerification;
 import com.msg91.sendotp.library.Verification;
 import com.msg91.sendotp.library.VerificationListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -114,6 +116,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -132,6 +135,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import id.zelory.compressor.Compressor;
 
 import static com.fieldforce.utility.AppConstants.GALLERY;
+import static com.fieldforce.utility.CommonUtility.isNetworkAvailable;
 
 public class RegistrationFormActivity extends ParentActivity implements View.OnClickListener, LocationListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ApiServiceCaller,
@@ -140,7 +144,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private static final String TAG = Verification.class.getSimpleName();
     public static Activity formActivity;
     private Verification mVerification;
-
 
     // for OTP verification
     public static final String INTENT_PHONENUMBER = "phonenumber";
@@ -241,8 +244,9 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
 
     private ArrayList<Consumer> consumerArea, bankNames, schemeName, documentList, addDocumnetList, wardName, category, subCategory, pincode, location, landmark;
-
     private String mStrOTP;
+    private ArrayList<RegistrationModel> registrationToUpload;
+    public  boolean istoUpload = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -459,7 +463,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         radioYes = findViewById(R.id.radio_yes);
         radioNo = findViewById(R.id.radio_no);
 
-        //For Consumer Signature
+        // For Consumer Signature
         signatureViewConsumer.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -482,8 +486,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             }
         });
 
-
-
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -498,127 +500,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             }
         });
 
-        //jayshree changes
-        edtFlatNumber.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                String prefix = getString(R.string.house_number) + " ";
-                if (!editable.toString().startsWith(prefix)) {
-                    String cleanString;
-                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
-                    if (editable.toString().startsWith(deletedPrefix)) {
-                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
-                    } else {
-                        cleanString = editable.toString().replaceAll(prefix, "");
-                    }
-                    edtFlatNumber.setText(prefix + cleanString);
-                    edtFlatNumber.setSelection(edtFlatNumber.getText().length());
-                }
-
-            }
-        });
-
-        edtFloor.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                String prefix = getString(R.string.floor_no_new) + " ";
-                if (!editable.toString().startsWith(prefix)) {
-                    String cleanString;
-                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
-                    if (editable.toString().startsWith(deletedPrefix)) {
-                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
-                    } else {
-                        cleanString = editable.toString().replaceAll(prefix, "");
-                    }
-                    edtFloor.setText(prefix + cleanString);
-                    edtFloor.setSelection(edtFloor.getText().length());
-                }
-
-
-            }
-        });
-
-        edtPlotNo.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                String prefix = getString(R.string.plot_no_new) + " ";
-                if (!editable.toString().startsWith(prefix)) {
-                    String cleanString;
-                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
-                    if (editable.toString().startsWith(deletedPrefix)) {
-                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
-                    } else {
-                        cleanString = editable.toString().replaceAll(prefix, "");
-                    }
-                    edtPlotNo.setText(prefix + cleanString);
-                    edtPlotNo.setSelection(edtPlotNo.getText().length());
-                }
-
-            }
-        });
-
-        edtWing.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String prefix = getString(R.string.wing_new) + " ";
-                if (!editable.toString().startsWith(prefix)) {
-                    String cleanString;
-                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
-                    if (editable.toString().startsWith(deletedPrefix)) {
-                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
-                    } else {
-                        cleanString = editable.toString().replaceAll(prefix, "");
-                    }
-                    edtWing.setText(prefix + cleanString);
-                    edtWing.setSelection(edtWing.getText().length());
-                }
-            }
-        });
 
         //****************************************
 
@@ -691,7 +572,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     linearNocDetails.setVisibility(View.GONE);
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -733,7 +613,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                 } else {
                     edtChequeNo.setVisibility(View.GONE);
                 }*/
-
                 if (position == 1) {
                     linearChequeDetails.setVisibility(View.VISIBLE);
                     linearDDDetails.setVisibility(View.GONE);
@@ -758,7 +637,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                     edtChequeDate.setText(String.format("%02d", dayOfMonth) + "/" + String.format("%02d", (monthOfYear + 1)) + "/" + year);
                                     selectedChequeDate = edtChequeDate.getText().toString().trim();
-                                    Log.d("ChequDate", "" + selectedChequeDate);
+
                                 }
                             }, mYear, mMonth, mDay);
                             datePickerDialog.getDatePicker().setMinDate(newDate.getTime());
@@ -790,7 +669,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                                 @Override
                                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                     edtDDDate.setText(String.format("%02d", dayOfMonth) + "/" + String.format("%02d", (monthOfYear + 1)) + "/" + year);
-                                    Log.d("gggggggggggggggg", "" + edtDDDate);
+
 
                                 }
                             }, mYear, mMonth, mDay);
@@ -888,7 +767,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         nestedIdProof.setVisibility(View.VISIBLE);
         nestedAddressProof = findViewById(R.id.nested_address_proof);
         nestedAddressProof.setVisibility(View.GONE);
-        nestedSignature = findViewById(R.id.six);
+        nestedSignature = findViewById(R.id.nested_view_six);
 
         if (comingFrom.equals(getString(R.string.new_nsc))) {
             edtConsumerName.setText("");
@@ -918,7 +797,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
@@ -929,7 +807,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
                 }
             }
-
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -956,7 +833,133 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         if (comingFrom.equals(getString(R.string.rejected_nsc))) {
             setValues();
         }
+        editTextValication();
     }
+
+
+    //jayshree changes
+    public void editTextValication(){
+        edtFlatNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String prefix = getString(R.string.house_number) + " ";
+                if (!editable.toString().startsWith(prefix)) {
+                    String cleanString;
+                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
+                    if (editable.toString().startsWith(deletedPrefix)) {
+                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
+                    } else {
+                        cleanString = editable.toString().replaceAll(prefix, "");
+                    }
+                    edtFlatNumber.setText(prefix + cleanString);
+                    edtFlatNumber.setSelection(edtFlatNumber.getText().length());
+                }
+
+            }
+        });
+
+        edtFloor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String prefix = getString(R.string.floor_no_new) + " ";
+                if (!editable.toString().startsWith(prefix)) {
+                    String cleanString;
+                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
+                    if (editable.toString().startsWith(deletedPrefix)) {
+                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
+                    } else {
+                        cleanString = editable.toString().replaceAll(prefix, "");
+                    }
+                    edtFloor.setText(prefix + cleanString);
+                    edtFloor.setSelection(edtFloor.getText().length());
+                }
+
+
+            }
+        });
+
+        edtPlotNo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String prefix = getString(R.string.plot_no_new) + " ";
+                if (!editable.toString().startsWith(prefix)) {
+                    String cleanString;
+                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
+                    if (editable.toString().startsWith(deletedPrefix)) {
+                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
+                    } else {
+                        cleanString = editable.toString().replaceAll(prefix, "");
+                    }
+                    edtPlotNo.setText(prefix + cleanString);
+                    edtPlotNo.setSelection(edtPlotNo.getText().length());
+                }
+
+            }
+        });
+
+        edtWing.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String prefix = getString(R.string.wing_new) + " ";
+                if (!editable.toString().startsWith(prefix)) {
+                    String cleanString;
+                    String deletedPrefix = prefix.substring(0, prefix.length() - 1);
+                    if (editable.toString().startsWith(deletedPrefix)) {
+                        cleanString = editable.toString().replaceAll(deletedPrefix, "");
+                    } else {
+                        cleanString = editable.toString().replaceAll(prefix, "");
+                    }
+                    edtWing.setText(prefix + cleanString);
+                    edtWing.setSelection(edtWing.getText().length());
+                }
+            }
+        });
+    }
+
+    //************************************************************//
+
 
 
     public void getBankNames() {
@@ -1101,8 +1104,8 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     if (isRejected) {
                         new UploadData().execute();
                     } else {
-//                        showDialogForUploadOption(mContext);
-                        doSubmitOps();
+                          showDialogForUploadOption(mContext);
+//                        doSubmitOps();
                     }
 
                 } else {
@@ -1295,7 +1298,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     private void getCategory() {
-        category = DatabaseManager.getCategory(mContext, AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+        category = DatabaseManager.getCategory(mContext, AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), getString(R.string.get_category));
         hashMapCategory.clear();
         hashMapCategory.put("0", getString(R.string.select_consumer_category));
         for (Consumer con : category)
@@ -1305,7 +1308,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     private void getSubCategory() {
-        subCategory = DatabaseManager.getSubCategory(mContext, AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+        subCategory = DatabaseManager.getSubCategory(mContext, AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), getString(R.string.get_subcategory));
         hashMapSubCategory.clear();
         hashMapSubCategory.put("0", getString(R.string.select_consumer_sub_category));
         for (Consumer con : subCategory)
@@ -1361,7 +1364,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         for (Consumer con : consumerArea)
             haspMapArea.put(con.getAreaID(), con.getArea());
 
-        Log.d("1111111111", "" + haspMapArea);
+
         setAreaSpinner();
 
     }
@@ -1369,45 +1372,38 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     private void getWard(String areaId) {
         wardName = DatabaseManager.getWard(mContext,
                 AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), areaId);
-        Log.e("WARD", "nxxxxxxxxxx" + wardName);
         hashMapWard.clear();
         hashMapWard.put("0", getString(R.string.select_ward));
         for (Consumer con : wardName)
             hashMapWard.put(con.getWardID(), con.getWard());
 
-        Log.d("SIZEWARD", "" + hashMapWard.size());
         setWardSpinner();
     }
 
     private void getLocation(String areaId) {
         location = DatabaseManager.getLocation(mContext,
                 AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), areaId);
-        Log.e("Location", "nxxxxxxxxxx" + location);
-
         hashMapLocation.clear();
         hashMapLocation.put("0", getString(R.string.select_location));
         for (Consumer con : location)
             hashMapLocation.put(con.getLocationID(), con.getLocation());
 
-        Log.d("1111111111", "" + hashMapLocation);
         setLocationSpinner();
     }
 
     private void getLandmark(String areaId) {
         landmark = DatabaseManager.getLandmark(mContext, AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), areaId);
-        Log.e("Landmark", "nxxxxxxxxxx" + landmark);
         hashMapLandmark.clear();
         hashMapLandmark.put("0", getString(R.string.select_landmark));
         for (Consumer con : landmark)
             hashMapLandmark.put(con.getLandmarkID(), con.getLandmark());
 
-        Log.d("1111111111", "" + hashMapLandmark);
         setLandMarkSpinner();
     }
 
     private void getDocumentListID() {
         documentList = DatabaseManager.getIdProof(mContext,
-                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), getString(R.string.get_id_proof));
         DocumentIdAdapter.checkParamsListId.clear();
 
 
@@ -1416,12 +1412,9 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     private void getAddDocumentList() {
-        addDocumnetList = DatabaseManager.getAddProof(mContext,
-                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+        addDocumnetList = DatabaseManager.getAddProof(mContext, AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), getString(R.string.get_add_proof));
 
         DocumentIdAdapter.checkParamsListAddress.clear();
-
-
         DocumentIdAdapter Adapter2 = new DocumentIdAdapter(mContext, addDocumnetList, getString(R.string.edit_add_proof));
         recyclerViewAddDoc.setAdapter(Adapter2);
     }
@@ -1436,7 +1429,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         for (Consumer con : schemeName)
             hashMapPaymentScheme.put(con.getSchemeName(), con.getSchemeAmount());
 
-        Log.d("1111111111", "" + hashMapPaymentScheme);
+
         setSchemeSpinner();
     }
 
@@ -1695,7 +1688,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         if (hashMapWard != null && hashMapWard.size() > 1) {
             for (int i = 0; i < hashMapWard.size(); i++) {
                 valueSet = sortByKey(hashMapWard).values();
-                Log.d("valueSet", "" + valueSet);
                 wardArray = new ArrayList<>(valueSet);
                 keySet = sortByKey(hashMapWard).keySet();
                 keySetArray = new ArrayList<>(keySet);
@@ -2387,8 +2379,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         boolean checkValue = false;
         if (DocumentIdAdapter.checkParamsListAddress.size() > 0 && DocumentIdAdapter.checkParamsListAddress.size() <= 2) {
             if (File3 != null || File4 != null) {
-
-
                 if (File3 != null) {
                     imageCountAdd++;
                 }
@@ -2833,6 +2823,73 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
                     }
                 }
             }
+            break;
+            case ApiConstants.UPLOAD_NSC_FORM: {
+                try {
+                    if (jsonResponse.result.equals(jsonResponse.SUCCESS)) {
+                        String nscId = jsonResponse.nsc_id;
+                        DocumentIdAdapter.checkParamsListId.clear();
+                        DocumentIdAdapter.checkParamsListAddress.clear();
+
+                        if (registrationToUpload.get(0).isNscNew.equals("false")) {
+                            todayModel.completedOn = CommonUtility.getCompletionDate();
+                            DatabaseManager.updateEnquiryCardStatus(CommonUtility.getCompletionDate(), registrationToUpload.get(0).enquiryNo, AppConstants.CARD_STATUS_CLOSED, nscId);
+                            DatabaseManager.updateAllEnquiryCardStatus(CommonUtility.getCompletionDate(), registrationToUpload.get(0).enquiryNo, AppConstants.CARD_STATUS_CLOSED, nscId);
+                        } else if (registrationToUpload.get(0).isNscNew.equals("true")) {
+                            newTodayModel.nscId = nscId;
+                            newTodayModel.screen = getString(R.string.enquiry);
+                            newTodayModel.completedOn = CommonUtility.getCompletionDate();
+                            newTodayModel.consumerName = registrationToUpload.get(0).name;
+                            newTodayModel.mobileNumber = registrationToUpload.get(0).mobile;
+                            newTodayModel.stateId = registrationToUpload.get(0).state;
+                            newTodayModel.cityId = registrationToUpload.get(0).city;
+                            newTodayModel.area = registrationToUpload.get(0).areaName;
+                            DatabaseManager.updateNewEnquiryCardStatus(CommonUtility.getCompletionDate(), registrationToUpload.get(0).id, AppConstants.CARD_STATUS_CLOSED, nscId);
+                            DatabaseManager.updateAllNewEnquiryCardStatus(CommonUtility.getCompletionDate(), registrationToUpload.get(0).id, AppConstants.CARD_STATUS_CLOSED, nscId);
+                        } else {
+                            DatabaseManager.updateRejectedCardStatus(CommonUtility.getCompletionDate(), registrationToUpload.get(0).registrationNo,
+                                    AppConstants.CARD_STATUS_CLOSED);
+                            DatabaseManager.deleteRejectedRegistration(mContext, registrationToUpload.get(0).registrationNo,
+                                    AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+                        }
+
+                        DatabaseManager.deleteRegistration(mContext, registrationToUpload.get(0).id,
+                                AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""));
+
+
+                        CustomDialog customDialog = new CustomDialog((Activity) mContext,
+                                getString(R.string.nsc_service_added_successfully_with_us) + nscId,
+                                getString(R.string.nsc), false);
+                        customDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        customDialog.show();
+                        customDialog.setCancelable(false);
+
+                        /*if (File1 != null)
+                            File1.delete();
+                        if (File2 != null)
+                            File2.delete();
+                        if (File3 != null)
+                            File3.delete();
+                        if (File4 != null)
+                            File4.delete();
+                        if (File5 != null)
+                            File5.delete();*/
+
+
+
+                        /*if (fileCheque != null)
+                            fileCheque.delete();
+                        if (fileDD != null)
+                            fileDD.delete();*/
+
+                    } else {
+                        Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
         }
     }
 
@@ -3540,11 +3597,7 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         registrationModel.FileSign = imageSignFile0;
         registrationModel.FileChequeDD = imageChequeDDFile0;
         registrationModel.FileConsumerPhoto = imageConsumerPhoto;
-
-
         registrationModel.isRejected = String.valueOf(isRejected);
-
-
         long id = DatabaseManager.saveRegistrationNSC(mContext, registrationModel, RegistrationFormActivity.formActivity, AppConstants.CARD_STATUS_COMPLETED);
 
 
@@ -3564,7 +3617,11 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
 
         DocumentIdAdapter.checkParamsListId.clear();
         DocumentIdAdapter.checkParamsListAddress.clear();
-        finish();
+        if (istoUpload){
+            uploadRegistration();
+        } else {
+            finish();
+        }
 
     }
 
@@ -3879,23 +3936,34 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     public void showDialogForUploadOption(final Context context) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View promptView = layoutInflater.inflate(R.layout.dialog_upload, null);
-
-
         Button btnNow, btnBackground;
         btnNow = promptView.findViewById(R.id.btn_upload_manually);
         btnBackground = promptView.findViewById(R.id.btn_upload_background);
         btnNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new UploadData().execute();
+                if (isNetworkAvailable(mContext)) {
+                    istoUpload = true;
+                    doSubmitOps();
+                    alert1.dismiss();
+                } else {
+                    istoUpload = false;
+                    Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+                    alert1.dismiss();
+                }
+                /*istoUpload = true;
+                doSubmitOps();
                 alert1.dismiss();
+                finish();*/
             }
         });
         btnBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                istoUpload = false;
                 doSubmitOps();
                 alert1.dismiss();
+                
 
             }
         });
@@ -3905,7 +3973,6 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     }
 
     public void setValues() {
-
         SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -3955,16 +4022,12 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
     //OTP Changes by Jayshree on 13-01-2020
     private void getOTP() {
         Random otp = new Random();
-
         StringBuilder builder = new StringBuilder();
         for (int count = 0; count <= 3; count++) {
             builder.append(otp.nextInt(3));
         }
         mStrOTP = builder.toString();
-
         multimsg("OTP for BGL New Registration is " + mStrOTP, "" + edtMobile.getText().toString());
-
-
     }
 
     private void multimsg(String message, String phoneNumber) {
@@ -4084,7 +4147,83 @@ public class RegistrationFormActivity extends ParentActivity implements View.OnC
         Log.d("TAG", "PHOTO" + fileConsumerPhoto);
     }
 
+    public void uploadRegistration() {
+        Log.d("2222222222222",""+isNetworkAvailable(mContext));
+
+        if (isNetworkAvailable(mContext)) {
+            registrationToUpload = DatabaseManager.getRegistration(mContext,
+                    AppPreferences.getInstance(mContext).getString(AppConstants.EMP_ID, ""), ApiConstants.UPLOAD_COUNT,
+                    AppConstants.CARD_STATUS_COMPLETED);
+            if (registrationToUpload != null && registrationToUpload.size() > 0) {
+                for (int i = 0; i < registrationToUpload.size(); i++) {
+                    List<String> checklist11 = new ArrayList<>();
+                    String data = registrationToUpload.get(0).documents;
+                    String[] items = data.split("\\|");
+                    Collections.addAll(checklist11, items);
+                    List<String> documentOne = new ArrayList<>();
+                    for (int j = 0; j < checklist11.size(); j++) {
+                        documentOne.add(j, checklist11.get(j));
+                    }
+                    registrationToUpload.get(0).documents = documentOne.get(0);
+
+                    ArrayList<String> checklist12 = new ArrayList<>();
+                    String data1 = registrationToUpload.get(0).documentsAdd;
+                    String[] items1 = data1.split("\\|");
+                    Collections.addAll(checklist12, items1);
+                    ArrayList<String> documentTwo = new ArrayList<>();
+
+                    for (int k = 0; k < DocumentIdAdapter.checkParamsListAddress.size(); k++) {
+                        checklist12.add(k, DocumentIdAdapter.checkParamsListAddress.get(k));
+
+                    }
+
+                    for (int l = 0; l < checklist12.size(); l++) {
+                        documentTwo.add(l, checklist12.get(l));
+                    }
+
+                    registrationToUpload.get(0).documentsAdd = documentTwo.get(0);
+
+                    JSONObject jObject = getReadingJson(registrationToUpload);
+
+                    uploadMeterReading(jObject);
+                }
+            }
+        } else {
+            Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public JSONObject getReadingJson(ArrayList<RegistrationModel> readings) {
+        JSONObject jsonObject = null;
+        try {
+
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(readings);
+            JSONArray jsonArray = new JSONArray(jsonString);
+            jsonObject = new JSONObject();
+            jsonObject.put("values", jsonArray);
 
 
-    // OTP Change by Jayshree Completed
+            /*
+
+            Gson gson = new Gson();
+            String jsonString = gson.toJson(readings);
+            Log.d("vvvvvvvvvvvvvvvv",""+jsonString);
+            JSONObject tempJsonObject = new JSONObject(jsonString);*/
+
+
+//            jsonObject = new JSONObject(S);
+//            jsonObject.put("readings", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    private void uploadMeterReading(JSONObject object) {
+        JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, object, ApiConstants.UPLOAD_NSC_FORM, this, null);
+        App.getInstance().addToRequestQueue(request, ApiConstants.UPLOAD_NSC_FORM);
+    }
+    //OTP Change by Jayshree Completed
 }

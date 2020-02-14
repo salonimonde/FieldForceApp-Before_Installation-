@@ -1,10 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: com.msg91.sendotp.library:library:3.1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-3.1.aar/55015351d753468cb4df93f1beebff7c/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-3.1.aar/55015351d753468cb4df93f1beebff7c/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3df04207f028a5eb8508291bffb1d753/library-3.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3df04207f028a5eb8508291bffb1d753/library-3.1/res" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.msg91.sendotp.library/library/3.1/c0736cf687c46e26bea3e8202b9a3fd0065f164e/library-3.1-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.msg91.sendotp.library/library/3.1/95260ed2bd85107322e2bcbee5df34c34ba6c869/library-3.1-sources.jar!/" />
     </SOURCES>

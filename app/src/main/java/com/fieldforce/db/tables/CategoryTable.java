@@ -21,6 +21,7 @@ public class CategoryTable {
         public static final String USER_LOGIN_ID = "user_login_id";
         public static final String CATEGORY_ID = "consumer_categoary_id";
         public static final String CATEGORY_NAME = "consumer_category";
+        public static final String CATEGORY_TYPE = "category_type";
 
     }
 

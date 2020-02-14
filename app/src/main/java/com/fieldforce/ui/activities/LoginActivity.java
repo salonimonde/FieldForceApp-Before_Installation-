@@ -72,7 +72,6 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     public void onClick(View v) {
         if (v == btnLogin) {
             Log.d("xxxxxxxxxxxxxx", " " + Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -217,8 +216,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                     if (jsonResponse.categoary_list != null) {
                         ArrayList<Consumer> categoryList = new ArrayList<>();
                         categoryList.addAll(jsonResponse.categoary_list);
-                        Log.d("categoryList", "MMMMMM" + categoryList);
-                        DatabaseManager.saveCategory(mContext, categoryList);
+                        DatabaseManager.saveCategory(mContext, categoryList, getString(R.string.get_category));
                         //getSubCategory();
 
                     } else {
@@ -236,7 +234,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                         ArrayList<Consumer> subCategoryList = new ArrayList<>();
                         subCategoryList.addAll(jsonResponse.consumer_subcategoary_List);
                         Log.d("SubcategoryList", "MMMMMM" + subCategoryList);
-                        DatabaseManager.saveSubCategory(mContext, subCategoryList);
+                        DatabaseManager.saveSubCategory(mContext, subCategoryList, getString(R.string.get_subcategory));
                         //getArea();
 
                     } else {
@@ -271,7 +269,6 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                     if (jsonResponse.ward_list != null) {
                         ArrayList<Consumer> wardlist = new ArrayList<>();
                         wardlist.addAll(jsonResponse.ward_list);
-                        Log.d("WardList", "MMMMMM" + wardlist);
                         DatabaseManager.saveWard(mContext, wardlist, "");
                         //getPinCode();
                     } else {
@@ -288,8 +285,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                     if (jsonResponse.pincode_list != null) {
                         ArrayList<Consumer> pincode = new ArrayList<>();
                         pincode.addAll(jsonResponse.pincode_list);
-                        Log.d("pincode", "MMMMMM" + pincode);
-                        DatabaseManager.savePincode(mContext, pincode,"");
+                        DatabaseManager.savePincode(mContext, pincode, "");
                         //getDocumentList();
 
                     } else {
@@ -303,14 +299,13 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
             break;
             case ApiConstants.GET_DOCUMENT_LIST: {
                 if (jsonResponse != null) {
-                    if (jsonResponse.document_list != null || jsonResponse.document_address_list != null ) {
+                    if (jsonResponse.document_list != null || jsonResponse.document_address_list != null) {
                         ArrayList<Consumer> documnetList = new ArrayList<>();
                         ArrayList<Consumer> adddocumnetList = new ArrayList<>();
                         documnetList.addAll(jsonResponse.document_list);
                         adddocumnetList.addAll(jsonResponse.document_address_list);
-                        Log.d("document", "MMMMMM" + documnetList);
-                        DatabaseManager.saveIDProof(mContext, documnetList,"type");
-                        DatabaseManager.saveAddProof(mContext, adddocumnetList);
+                        DatabaseManager.saveIDProof(mContext, documnetList, getString(R.string.get_id_proof));
+                        DatabaseManager.saveAddProof(mContext, adddocumnetList, getString(R.string.get_add_proof));
                         //getPaymentScheme();
                         //dismissLoadingDialog();
                     } else {
@@ -327,7 +322,6 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                     if (jsonResponse.scheme_list != null) {
                         ArrayList<Consumer> paymentList = new ArrayList<>();
                         paymentList.addAll(jsonResponse.scheme_list);
-                        Log.d("paymentList", "MMMMMM" + paymentList);
                         DatabaseManager.savePaymentScheme(mContext, paymentList);
                         //getBankNames();
                         //dismissLoadingDialog();
@@ -347,7 +341,6 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                     if (jsonResponse.banklist != null) {
                         ArrayList<Consumer> bank = new ArrayList<>();
                         bank.addAll(jsonResponse.banklist);
-                        Log.d("tttttttttttt", "" + bank);
                         DatabaseManager.saveBankNames(mContext, bank);
                         //dismissLoadingDialog();
                     } else {
@@ -364,8 +357,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                     if (jsonResponse.location_list != null) {
                         ArrayList<Consumer> locationArrayList = new ArrayList<>();
                         locationArrayList.addAll(jsonResponse.location_list);
-                        Log.d("location", "" + locationArrayList);
-                        DatabaseManager.saveLocation(mContext, locationArrayList,"");
+                        DatabaseManager.saveLocation(mContext, locationArrayList, "");
                         //dismissLoadingDialog();
                     } else {
                         if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
@@ -381,8 +373,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                     if (jsonResponse.landmark_list != null) {
                         ArrayList<Consumer> landmarkArrayList = new ArrayList<>();
                         landmarkArrayList.addAll(jsonResponse.landmark_list);
-                        Log.d("landmark", "" + landmarkArrayList);
-                        DatabaseManager.saveLandmark(mContext, landmarkArrayList,"");
+                        DatabaseManager.saveLandmark(mContext, landmarkArrayList, "");
                         //dismissLoadingDialog();
                     } else {
                         if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
@@ -408,6 +399,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
 
         }
     }
+
     @Override
     public void onAsyncCompletelyFail(String message, String label) {
         switch (label) {
@@ -448,7 +440,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     public void getBankNames() {
 
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
-          //showLoadingDialog();
+            //showLoadingDialog();
             try {
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_BANK_NAME_URL, this, "");
@@ -527,12 +519,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
                         ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL, this, "");
                 App.getInstance().addToRequestQueue(request, ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL);
-                //showLoadingDialog();
-                //JSONObject jsonObject = new JSONObject();
-                //jsonObject.put("city_id",  AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
-                /*JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.GET, null,
-                        ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL, this, "");
-                App.getInstance().addToRequestQueue(request, ApiConstants.GET_CONSUMER_SUB_CATEGORY_URL);*/
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -545,7 +532,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
             try {
                 //showLoadingDialog();
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, "") );
+                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
                         ApiConstants.GET_PIN_CODE, this, "");
                 App.getInstance().addToRequestQueue(request, ApiConstants.GET_PIN_CODE);
@@ -555,12 +542,13 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
         } else
             Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
     }
+
     private void getLocation() {
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             try {
                 //showLoadingDialog();
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, "") );
+                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
                         ApiConstants.GET_LOCATION_REGISTRATION, this, "");
                 App.getInstance().addToRequestQueue(request, ApiConstants.GET_LOCATION_REGISTRATION);
@@ -576,7 +564,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
             try {
                 //showLoadingDialog();
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, "") );
+                jsonObject.put("city_id", AppPreferences.getInstance(mContext).getString(AppConstants.CITY_ID, ""));
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
                         ApiConstants.GET_LANDMARK, this, "");
                 App.getInstance().addToRequestQueue(request, ApiConstants.GET_LANDMARK);

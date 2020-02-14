@@ -31,7 +31,6 @@ public class ServiceJobCardTable {
         public static final String ACCEPT_STATUS = "accept_status";
         public static final String CARD_STATUS = "service_card_status";
         public static final String DUE_DATE = "due_date";
-
         public static final String SCREEN = "screen";
         public static final String COMPLETED_ON  = "completed_on";
 

@@ -72,10 +72,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createBankTable(db);
         createSchemeTable(db);
         createDocumentTable(db);
-        createAddDocumentTable(db);
+        //createAddDocumentTable(db);
         createWardTable(db);
         createCategoryTable(db);
-        createSubCategoryTable(db);
+        //createSubCategoryTable(db);
         createPincodeTable(db);
         createLocationTable(db);
         createLandmarkTable(db);
@@ -504,18 +504,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String DocumentTableFields = IdProofTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 IdProofTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
                 IdProofTable.Cols.IDPROOF_ID + " VARCHAR, " +
-                IdProofTable.Cols.DOCUMENT_NAME + " VARCHAR, "+
+                IdProofTable.Cols.DOCUMENT_NAME + " VARCHAR, " +
                 IdProofTable.Cols.DOCUMENT_TYPE + " VARCHAR";
         createTable(db, IdProofTable.TABLE_NAME, DocumentTableFields);
     }
-    private void createAddDocumentTable(SQLiteDatabase db){
+    /*private void createAddDocumentTable(SQLiteDatabase db){
         String AddDocumentTableFields = AddProofTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 AddProofTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
                 AddProofTable.Cols.ADDPROOF_ID + " VARCHAR, " +
                 AddProofTable.Cols.DOCUMENT_NAME + " VARCHAR, "+
                 AddProofTable.Cols.DOCUMENT_TYPE + " VARCHAR";
         createTable(db, AddProofTable.TABLE_NAME, AddDocumentTableFields);
-    }
+    }*/
     private void createWardTable(SQLiteDatabase db){
         String WardTableFields = WardTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 WardTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
@@ -528,7 +528,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String CategoryTableFields = CategoryTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 CategoryTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
                 CategoryTable.Cols.CATEGORY_ID + " VARCHAR, " +
-                CategoryTable.Cols.CATEGORY_NAME + " VARCHAR";
+                CategoryTable.Cols.CATEGORY_NAME + " VARCHAR, " +
+                CategoryTable.Cols.CATEGORY_TYPE + " VARCHAR";
         createTable(db, CategoryTable.TABLE_NAME, CategoryTableFields);
     }
     private void createSubCategoryTable(SQLiteDatabase db){

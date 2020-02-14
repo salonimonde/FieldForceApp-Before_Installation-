@@ -761,5 +761,9 @@
     <string name="house_number">House No : </string>
     <string name="declaration">Declaration</string>
     <string name="declaration_form">Declaration Form</string>
+    <string name="get_id_proof">ID</string>
+    <string name="get_add_proof">AddID</string>
+    <string name="get_category">category</string>
+    <string name="get_subcategory">subCategory</string>
 
 </resources>

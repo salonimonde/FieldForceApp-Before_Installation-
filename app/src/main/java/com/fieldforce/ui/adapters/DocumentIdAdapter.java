@@ -3,6 +3,8 @@ package com.fieldforce.ui.adapters;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,8 @@ public class DocumentIdAdapter extends RecyclerView.Adapter<DocumentIdAdapter.Do
     public static ArrayList<String> checkParamsListAddress = new ArrayList<>();
     private String type;
     private boolean isIdChange, isAddressChange;
+    private final SparseBooleanArray array=new SparseBooleanArray();
+    private int mSelectedItem = -1;
 
     public DocumentIdAdapter(Context context, ArrayList<Consumer> arrayList, String type) {
         this.mContext = context;
@@ -45,8 +49,6 @@ public class DocumentIdAdapter extends RecyclerView.Adapter<DocumentIdAdapter.Do
     @Override
     public void onBindViewHolder(final DocumentHolder holder, final int position) {
         holder.txtParameter.setText(assetParametersList.get(position).getDocument());
-
-
         if (assetParametersList.get(position).getChecked() != null) {
             if (type.equalsIgnoreCase(mContext.getString(R.string.edit_id_proof))) {
                 if (assetParametersList.get(position).getChecked().equalsIgnoreCase("true")) {
@@ -57,7 +59,6 @@ public class DocumentIdAdapter extends RecyclerView.Adapter<DocumentIdAdapter.Do
                     }
                 }
             } else if (type.equalsIgnoreCase(mContext.getString(R.string.edit_add_proof))) {
-
                 if (assetParametersList.get(position).getChecked().equalsIgnoreCase("true")) {
                     if (!checkParamsListAddress.contains(assetParametersList.get(position).getDocument()) && !isAddressChange) {
                         holder.checkBox.setChecked(true);
@@ -67,6 +68,19 @@ public class DocumentIdAdapter extends RecyclerView.Adapter<DocumentIdAdapter.Do
                 }
             }
         }
+        /*holder.checkBox.setChecked(position == mSelectedItem);
+        if(array.get(position,false))
+        {
+            holder.checkBox.setChecked(true);
+        }
+        else
+        {
+            holder.checkBox.setChecked(false);
+
+
+        }
+*/
+
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -97,12 +111,22 @@ public class DocumentIdAdapter extends RecyclerView.Adapter<DocumentIdAdapter.Do
                 }
             }
         });
+       /* holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //array.clear();
+                array.put(position, true);
+                notifyDataSetChanged();
+            }
+        });*/
+
     }
 
     @Override
     public int getItemCount() {
         if (assetParametersList != null && assetParametersList.size() > 0) {
             return assetParametersList.size();
+
         } else {
             return 0;
         }
@@ -124,6 +148,7 @@ public class DocumentIdAdapter extends RecyclerView.Adapter<DocumentIdAdapter.Do
             checkBox = itemView.findViewById(R.id.chk_box);
             txtParameter = itemView.findViewById(R.id.txt_parameter);
             txtParameter.setTypeface(mFontRegular);
+
         }
     }
 }

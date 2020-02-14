@@ -349,7 +349,7 @@ public class DatabaseManager {
             values.put(IdProofTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
             values.put(IdProofTable.Cols.IDPROOF_ID, consumer.document_id != null ? consumer.document_id : "");
             values.put(IdProofTable.Cols.DOCUMENT_NAME, consumer.document != null ? consumer.document : "");
-            values.put(IdProofTable.Cols.DOCUMENT_TYPE, consumer.document_type != null ? consumer.document_type : "");
+            values.put(IdProofTable.Cols.DOCUMENT_TYPE, type);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -372,8 +372,9 @@ public class DatabaseManager {
 
 
 
-    public static ArrayList<Consumer> getIdProof(Context context, String userId) {
-        String condition = IdProofTable.Cols.USER_LOGIN_ID + "='" + userId + "'";
+    public static ArrayList<Consumer> getIdProof(Context context, String userId, String type) {
+        String condition = IdProofTable.Cols.USER_LOGIN_ID + "='" + userId + "' AND "
+                + IdProofTable.Cols.DOCUMENT_TYPE + "='" + type + "'";
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(IdProofTable.CONTENT_URI, null,
                 condition, null, IdProofTable.Cols.IDPROOF_ID + " ASC ");
@@ -419,28 +420,28 @@ public class DatabaseManager {
 
     // Database functions related to AddressProof created be Jayshree 22-01-2020
 
-    public static void saveAddProof(Context loginActivity, ArrayList<Consumer> addProof) {
+    public static void saveAddProof(Context loginActivity, ArrayList<Consumer> addProof, String type) {
         for (Consumer consumerAddProof : addProof){
-            DatabaseManager.saveAddProofInfo(loginActivity, consumerAddProof);
+            DatabaseManager.saveAddProofInfo(loginActivity, consumerAddProof,type);
 
         }
     }
 
-    private static void saveAddProofInfo(Context context, Consumer consumer) {
+    private static void saveAddProofInfo(Context context, Consumer consumer, String type) {
         if (consumer != null) {
-            ContentValues values = getContentValueAddProofInfoTable(context, consumer);
-            String condition = AddProofTable.Cols.ADDPROOF_ID + "='" + consumer.document_id + "'";
-            saveAddProofValues(context, AddProofTable.CONTENT_URI, values, condition);
+            ContentValues values = getContentValueAddProofInfoTable(context, consumer, type);
+            String condition = IdProofTable.Cols.IDPROOF_ID + "='" + consumer.document_id + "'";
+            saveAddProofValues(context, IdProofTable.CONTENT_URI, values, condition);
         }
     }
 
-    private static ContentValues getContentValueAddProofInfoTable(Context context, Consumer consumer) {
+    private static ContentValues getContentValueAddProofInfoTable(Context context, Consumer consumer, String type) {
         ContentValues values = new ContentValues();
         try {
-            values.put(AddProofTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
-            values.put(AddProofTable.Cols.ADDPROOF_ID, consumer.document_id != null ? consumer.document_id : "");
-            values.put(AddProofTable.Cols.DOCUMENT_NAME, consumer.document != null ? consumer.document : "");
-            values.put(AddProofTable.Cols.DOCUMENT_TYPE, consumer.document_type != null ? consumer.document_type : "");
+            values.put(IdProofTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(IdProofTable.Cols.IDPROOF_ID, consumer.document_id != null ? consumer.document_id : "");
+            values.put(IdProofTable.Cols.DOCUMENT_NAME, consumer.document != null ? consumer.document : "");
+            values.put(IdProofTable.Cols.DOCUMENT_TYPE, type);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -463,11 +464,12 @@ public class DatabaseManager {
 
 
 
-    public static ArrayList<Consumer> getAddProof(Context context, String userId) {
-        String condition = AddProofTable.Cols.USER_LOGIN_ID + "='" + userId + "'";
+    public static ArrayList<Consumer> getAddProof(Context context, String userId, String type) {
+        String condition = IdProofTable.Cols.USER_LOGIN_ID + "='" + userId +"' AND "
+                + IdProofTable.Cols.DOCUMENT_TYPE + "='" + type + "'";
         ContentResolver resolver = context.getContentResolver();
-        Cursor cursor = resolver.query(AddProofTable.CONTENT_URI, null,
-                condition, null, AddProofTable.Cols.ADDPROOF_ID + " ASC ");
+        Cursor cursor = resolver.query(IdProofTable.CONTENT_URI, null,
+                condition, null, IdProofTable.Cols.IDPROOF_ID + " ASC ");
         ArrayList<Consumer> addproof = getAddProofFromCursor(context, cursor);
         if (cursor != null) {
             cursor.close();
@@ -501,8 +503,8 @@ public class DatabaseManager {
 
     private static Consumer getAddProofsFromCursor(Context context, Cursor cursor) {
         Consumer consumerModel = new Consumer();
-        consumerModel.document_id = cursor.getString(cursor.getColumnIndex(AddProofTable.Cols.ADDPROOF_ID)) != null ? cursor.getString(cursor.getColumnIndex(AddProofTable.Cols.ADDPROOF_ID)) : "";
-        consumerModel.document = cursor.getString(cursor.getColumnIndex(AddProofTable.Cols.DOCUMENT_NAME)) != null ? cursor.getString(cursor.getColumnIndex(AddProofTable.Cols.DOCUMENT_NAME)) : "";
+        consumerModel.document_id = cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.IDPROOF_ID)) != null ? cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.USER_LOGIN_ID)) : "";
+        consumerModel.document = cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.DOCUMENT_NAME)) != null ? cursor.getString(cursor.getColumnIndex(IdProofTable.Cols.DOCUMENT_NAME)) : "";
         return consumerModel;
     }
 
@@ -510,27 +512,28 @@ public class DatabaseManager {
 
     // Database functions related to Category created be Jayshree 22-01-2020
 
-    public static void saveCategory(Context loginActivity, ArrayList<Consumer> category) {
+    public static void saveCategory(Context loginActivity, ArrayList<Consumer> category, String categoryType) {
         for (Consumer consumerCategory : category){
-            DatabaseManager.saveCategoryInfo(loginActivity, consumerCategory);
+            DatabaseManager.saveCategoryInfo(loginActivity, consumerCategory, categoryType);
 
         }
     }
 
-    private static void saveCategoryInfo(Context context, Consumer consumer) {
+    private static void saveCategoryInfo(Context context, Consumer consumer, String categoryType) {
         if (consumer != null) {
-            ContentValues values = getContentValueCategoryInfoTable(context, consumer);
+            ContentValues values = getContentValueCategoryInfoTable(context, consumer, categoryType );
             String condition = CategoryTable.Cols.CATEGORY_ID + "='" + consumer.consumerCategoryId + "'";
             saveCategoryValues(context, CategoryTable.CONTENT_URI, values, condition);
         }
     }
 
-    private static ContentValues getContentValueCategoryInfoTable(Context context, Consumer consumer) {
+    private static ContentValues getContentValueCategoryInfoTable(Context context, Consumer consumer, String categoryType) {
         ContentValues values = new ContentValues();
         try {
             values.put(CategoryTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
             values.put(CategoryTable.Cols.CATEGORY_ID, consumer.consumerCategoryId != null ? consumer.consumerCategoryId : "");
             values.put(CategoryTable.Cols.CATEGORY_NAME, consumer.consumerCategory != null ? consumer.consumerCategory : "");
+            values.put(CategoryTable.Cols.CATEGORY_TYPE, categoryType );
 
 
         } catch (Exception e) {
@@ -554,8 +557,9 @@ public class DatabaseManager {
 
 
 
-    public static ArrayList<Consumer> getCategory(Context context, String userId) {
-        String condition = CategoryTable.Cols.USER_LOGIN_ID + "='" + userId + "'";
+    public static ArrayList<Consumer> getCategory(Context context, String userId, String categorytype) {
+        String condition = CategoryTable.Cols.USER_LOGIN_ID + "='" + userId + "' AND "
+                + CategoryTable.Cols.CATEGORY_TYPE + "='" + categorytype + "'";
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(CategoryTable.CONTENT_URI, null,
                 condition, null, CategoryTable.Cols.CATEGORY_ID + " ASC ");
@@ -601,26 +605,28 @@ public class DatabaseManager {
 
     // Database functions related to SubCategory created be Jayshree 25-01-2020
 
-    public static void saveSubCategory(Context loginActivity, ArrayList<Consumer> SubCategory) {
+    public static void saveSubCategory(Context loginActivity, ArrayList<Consumer> SubCategory, String subCategory) {
         for (Consumer consumerSubCategory : SubCategory){
-            DatabaseManager.saveSubCategoryInfo(loginActivity, consumerSubCategory);
+            DatabaseManager.saveSubCategoryInfo(loginActivity, consumerSubCategory, subCategory);
 
         }
     }
 
-    private static void saveSubCategoryInfo(Context context, Consumer consumer) {
+    private static void saveSubCategoryInfo(Context context, Consumer consumer, String subCategory) {
         if (consumer != null) {
-            ContentValues values = getContentValueSubCategoryInfoTable(context, consumer);
-            String condition = SubCategoryTable.Cols.SUBCATEGORY_ID + "='" + consumer.consumer_subcategory_id + "'";
-            saveSubCategoryValues(context, SubCategoryTable.CONTENT_URI, values, condition);
+            ContentValues values = getContentValueSubCategoryInfoTable(context, consumer, subCategory);
+            String condition = CategoryTable.Cols.CATEGORY_ID + "='" + consumer.consumer_subcategory_id + "'";
+            saveSubCategoryValues(context, CategoryTable.CONTENT_URI, values, condition);
         }
     }
 
-    private static ContentValues getContentValueSubCategoryInfoTable(Context context, Consumer consumer) {
+    private static ContentValues getContentValueSubCategoryInfoTable(Context context, Consumer consumer, String subCategory) {
         ContentValues values = new ContentValues();
         try {
-            values.put(SubCategoryTable.Cols.SUBCATEGORY_ID, consumer.consumer_subcategory_id != null ? consumer.consumer_subcategory_id : "");
-            values.put(SubCategoryTable.Cols.SUBCATEGORY_NAME, consumer.consumer_subcategory != null ? consumer.consumer_subcategory : "");
+            values.put(CategoryTable.Cols.USER_LOGIN_ID, AppPreferences.getInstance(context).getString(AppConstants.EMP_ID, ""));
+            values.put(CategoryTable.Cols.CATEGORY_ID, consumer.consumer_subcategory_id != null ? consumer.consumer_subcategory_id : "");
+            values.put(CategoryTable.Cols.CATEGORY_NAME, consumer.consumer_subcategory != null ? consumer.consumer_subcategory : "");
+            values.put(CategoryTable.Cols.CATEGORY_TYPE, subCategory);
 
 
         } catch (Exception e) {
@@ -644,10 +650,12 @@ public class DatabaseManager {
 
 
 
-    public static ArrayList<Consumer> getSubCategory(Context context, String userId) {
+    public static ArrayList<Consumer> getSubCategory(Context context, String userId, String subCategoryType) {
+        String condition = CategoryTable.Cols.USER_LOGIN_ID + "='" + userId + "' AND "
+                + CategoryTable.Cols.CATEGORY_TYPE + "='" + subCategoryType + "'";
         ContentResolver resolver = context.getContentResolver();
-        Cursor cursor = resolver.query(SubCategoryTable.CONTENT_URI, null,
-                null, null, SubCategoryTable.Cols.SUBCATEGORY_ID + " ASC ");
+        Cursor cursor = resolver.query(CategoryTable.CONTENT_URI, null,
+                condition, null, CategoryTable.Cols.CATEGORY_ID + " ASC ");
         ArrayList<Consumer> subCategory = getSubCategoryFromCursor(context, cursor);
         if (cursor != null) {
             cursor.close();
@@ -681,12 +689,13 @@ public class DatabaseManager {
 
     private static Consumer getSubCategorysFromCursor(Context context, Cursor cursor) {
         Consumer consumerModel = new Consumer();
-        consumerModel.consumer_subcategory_id = cursor.getString(cursor.getColumnIndex(SubCategoryTable.Cols.SUBCATEGORY_ID)) != null ? cursor.getString(cursor.getColumnIndex(SubCategoryTable.Cols.SUBCATEGORY_ID)) : "";
-        consumerModel.consumer_subcategory = cursor.getString(cursor.getColumnIndex(SubCategoryTable.Cols.SUBCATEGORY_NAME)) != null ? cursor.getString(cursor.getColumnIndex(SubCategoryTable.Cols.SUBCATEGORY_NAME)) : "";
+        consumerModel.consumer_subcategory_id = cursor.getString(cursor.getColumnIndex(CategoryTable.Cols.CATEGORY_ID)) != null ? cursor.getString(cursor.getColumnIndex(CategoryTable.Cols.CATEGORY_ID)) : "";
+        consumerModel.consumer_subcategory = cursor.getString(cursor.getColumnIndex(CategoryTable.Cols.CATEGORY_NAME)) != null ? cursor.getString(cursor.getColumnIndex(CategoryTable.Cols.CATEGORY_NAME)) : "";
         return consumerModel;
     }
 
     // SubCategory Related Functions end here
+
 
     // Database functions related to Ward created be Jayshree 23-01-2020
 
@@ -6759,10 +6768,9 @@ public class DatabaseManager {
     public static ArrayList<RegistrationModel> getRegistration(Context context, String userId, int limit, String cardStatus) {
         String condition = RegistrationTable.Cols.USER_LOGIN_ID + "='" + userId + "' AND "
                 + RegistrationTable.Cols.CARD_STATUS + "='" +cardStatus+"'";
-
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(RegistrationTable.CONTENT_URI, null,
-                condition, null, RegistrationTable.Cols.USER_LOGIN_ID + " ASC " + " LIMIT " + limit);
+                condition, null, RegistrationTable.Cols.ID + " DESC " + " LIMIT " + limit);
         ArrayList<RegistrationModel> meterReadings = getRegistrationsFromCursor(context, cursor);
         if (cursor != null) {
             cursor.close();

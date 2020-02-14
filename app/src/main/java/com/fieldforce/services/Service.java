@@ -190,8 +190,8 @@ public class Service extends android.app.Service implements ApiServiceCaller {
         //schedule the timer, to wake up every 1 second
 //        timer.schedule(timerTask, 90000, 1800000); // 30 minutes
 //        timer.schedule(timerTask, 1000, 600000); // 2 minutes
-         timer.schedule(timerTask, 1000, 120000); // 2 minutes
-        //timer.schedule(timerTask, 1000, 10000); // 10 seconds
+         //timer.schedule(timerTask, 1000, 120000); // 2 minutes
+          timer.schedule(timerTask, 1000, 10000); // 10 seconds
         //timer.schedule(timerTask, 60000, 3600000); // 1 hour
     }
 
@@ -215,20 +215,13 @@ public class Service extends android.app.Service implements ApiServiceCaller {
                             String data = registrationToUpload.get(0).documents;
                             String[] items = data.split("\\|");
                             Collections.addAll(checklist11, items);
-                            Log.e("TAG","CheckList"+checklist11);
+
 
                             List<String> documentOne = new ArrayList<>();
                             for (int j = 0; j < checklist11.size(); j++) {
                                 documentOne.add(j,checklist11.get(j));
                             }
                             registrationToUpload.get(0).documents = documentOne.get(0);
-                            Log.d("TAG","DocumentOne"+registrationToUpload.get(0).documents);
-
-                            Log.d("qqqqqqqqqqq",""+registrationToUpload.get(0).ward);
-                            Log.d("qqqqqqqqqqq",""+registrationToUpload.get(0).pincode);
-                            Log.d("qqqqqqqqqqq",""+registrationToUpload.get(0).location);
-
-
                             ArrayList<String> checklist12 = new ArrayList<>();
                             String data1 = registrationToUpload.get(0).documentsAdd;
                             String[] items1 = data1.split("\\|");
@@ -244,15 +237,9 @@ public class Service extends android.app.Service implements ApiServiceCaller {
                             for (int l = 0; l < checklist12.size(); l++) {
                                 documentTwo.add(l,checklist12.get(l));
                             }
-
-
                             registrationToUpload.get(0).documentsAdd = documentTwo.get(0);
-                            Log.d("TAG","DocumentTwo"+registrationToUpload.get(0).documentsAdd);
-
                             JSONObject jObject = getReadingJson(registrationToUpload);
-
                             Log.d("yyyyyyyyyyyyy",""+jObject);
-
                             uploadMeterReading(jObject);
 
 
