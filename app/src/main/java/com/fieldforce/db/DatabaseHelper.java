@@ -476,7 +476,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 RejectedJobCardTable.Cols.REGISTRATION_NO + " VARCHAR";
         createTable(db, RejectedJobCardTable.TABLE_NAME, RejectedJobCardTableFields);
     }
-
+   // Create Area Table Jayshree : start
     private void createAreaTable(SQLiteDatabase db){
         String AreaTableFields = AreaTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 AreaTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
@@ -484,6 +484,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 AreaTable.Cols.AREA_NAME + " VARCHAR";
         createTable(db, AreaTable.TABLE_NAME, AreaTableFields);
     }
+    // End Area Table
 
     private void createBankTable(SQLiteDatabase db){
         String BankTableFields = BankTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -491,6 +492,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createTable(db, BankTable.TABLE_NAME, BankTableFields);
     }
 
+    // Create Scheme Table By Jayshree : start
     private void createSchemeTable(SQLiteDatabase db){
         String SchemeTableFields = PaymentTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 PaymentTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
@@ -499,6 +501,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 PaymentTable.Cols.SCHEME_AMOUNT + " VARCHAR";
         createTable(db, PaymentTable.TABLE_NAME, SchemeTableFields);
     }
+    // End Scheme Table
+
+    // Create Doucument Table By Jayshree : start
 
     private void createDocumentTable(SQLiteDatabase db){
         String DocumentTableFields = IdProofTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -508,6 +513,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 IdProofTable.Cols.DOCUMENT_TYPE + " VARCHAR";
         createTable(db, IdProofTable.TABLE_NAME, DocumentTableFields);
     }
+
+    // End Document Table
+
     /*private void createAddDocumentTable(SQLiteDatabase db){
         String AddDocumentTableFields = AddProofTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 AddProofTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
@@ -516,6 +524,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 AddProofTable.Cols.DOCUMENT_TYPE + " VARCHAR";
         createTable(db, AddProofTable.TABLE_NAME, AddDocumentTableFields);
     }*/
+
+    // Create Ward Table Jayshree : start
     private void createWardTable(SQLiteDatabase db){
         String WardTableFields = WardTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 WardTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
@@ -524,6 +534,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 WardTable.Cols.AREA_ID + " VARCHAR";
         createTable(db, WardTable.TABLE_NAME, WardTableFields);
     }
+    // End Ward Table
+
+    // Create Category Table Jayshree : start
     private void createCategoryTable(SQLiteDatabase db){
         String CategoryTableFields = CategoryTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 CategoryTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
@@ -532,12 +545,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 CategoryTable.Cols.CATEGORY_TYPE + " VARCHAR";
         createTable(db, CategoryTable.TABLE_NAME, CategoryTableFields);
     }
-    private void createSubCategoryTable(SQLiteDatabase db){
+
+    // End Category Table
+
+    /*private void createSubCategoryTable(SQLiteDatabase db){
         String SubCategoryTableFields = SubCategoryTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 SubCategoryTable.Cols.SUBCATEGORY_ID + " VARCHAR, " +
                 SubCategoryTable.Cols.SUBCATEGORY_NAME + " VARCHAR";
         createTable(db, SubCategoryTable.TABLE_NAME, SubCategoryTableFields);
-    }
+    }*/
+
+
+    // Create Pincode Table Jayshree : start
     private void createPincodeTable(SQLiteDatabase db){
         String PincodeTableFields = Pincode.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 Pincode.Cols.USER_LOGIN_ID + " VARCHAR, " +
@@ -546,6 +565,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Pincode.Cols.PINCODE + " VARCHAR";
         createTable(db, Pincode.TABLE_NAME, PincodeTableFields);
     }
+
+    // End Pincode Table
+
+    // Create Location Table Jayshree : start
     private void createLocationTable(SQLiteDatabase db){
         String LocationTableFields = LocationTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 LocationTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
@@ -554,7 +577,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 LocationTable.Cols.LOCATION_NAME + " VARCHAR";
         createTable(db, LocationTable.TABLE_NAME, LocationTableFields);
     }
+    // End Location Table
 
+    // Create Landmark Table Jayshree : start
     private void createLandmarkTable(SQLiteDatabase db){
         String LandmarkTableFields = LandmarkTable.Cols.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 LandmarkTable.Cols.USER_LOGIN_ID + " VARCHAR, " +
@@ -563,6 +588,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 LandmarkTable.Cols.LANDMARK_NAME + " VARCHAR";
         createTable(db, LandmarkTable.TABLE_NAME, LandmarkTableFields);
     }
+
+    // End Landmark Table
 
     public void dropTable(SQLiteDatabase db, String name) {
         String query = MessageFormat.format(DatabaseHelper.KEY_DROP_TABLE, name);

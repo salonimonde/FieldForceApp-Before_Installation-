@@ -2,7 +2,9 @@ package com.fieldforce.ui.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,9 +19,13 @@ import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -50,6 +56,9 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
     private Button btnLogin;
     private String userId, userPass;
     String area_Id;
+    private static int z = 0;
+    private ImageView imageClick;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +70,19 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
         edtPassword = findViewById(R.id.edt_password);
         btnLogin = findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(this);
+        imageClick=findViewById(R.id.imageClick);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             CommonUtility.askForPermissions(mContext, App.getInstance().permissions);
         }
+        imageClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkCounts();
+            }
+        });
     }
+
 
     @SuppressLint("HardwareIds")
     @Override
@@ -83,25 +100,31 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            Log.d("ooooooooo", "" + telephonyManager.getSimSerialNumber());
+            //Log.d("ooooooooo", "" + telephonyManager.getSimSerialNumber());
             isValidate();
         }
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     public void doLogin() {
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        String imeiNumber = telephonyManager.getDeviceId();
-//        String imeiNumber = "353398090944795";
+
         if (CommonUtility.getInstance(this).checkConnectivity(mContext)) {
             showLoadingDialog();
             try {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("username", userId);
                 jsonObject.put("password", userPass);
-                jsonObject.put("imei_no", imeiNumber);
+                Log.d("2222222222",""+Build.VERSION.SDK_INT);
+
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+                    @SuppressLint("MissingPermission") String imeiNumber = telephonyManager.getDeviceId();
+                    jsonObject.put("imei_no", imeiNumber);
+
+                } else {
+                    String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                    jsonObject.put("imei_no", androidId);
+                }
                 JsonObjectRequest request = WebRequest.callPostMethod1(Request.Method.POST, jsonObject,
                         ApiConstants.LOGIN_URL, this, "");
                 App.getInstance().addToRequestQueue(request, ApiConstants.LOGIN_URL);
@@ -574,4 +597,35 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
         } else
             Toast.makeText(mContext, getString(R.string.error_internet_not_connected), Toast.LENGTH_SHORT).show();
     }
+
+    // Create Dialog for android Id By Jayshree : start
+    private void checkCounts() {
+        z++;
+        if (z == 10) {
+            z = 0;
+            showDialogForAndroidID(mContext);
+        }
+    }
+    public void showDialogForAndroidID(final Context context) {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dailog_android_id);
+        final TextView txtAndroidId;
+        txtAndroidId = dialog.findViewById(R.id.android_id);
+        Button ok = dialog.findViewById(R.id.btn_ok);
+        Window window = dialog.getWindow();
+        window.setLayout(ActionBar.LayoutParams.MATCH_PARENT, android.support.v7.app.ActionBar.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
+        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            dialog.show();
+            txtAndroidId.setText(androidId);
+        }
+        ok.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+    }
+    // End Dialog for android ID
 }

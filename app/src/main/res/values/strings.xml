@@ -765,5 +765,6 @@
     <string name="get_add_proof">AddID</string>
     <string name="get_category">category</string>
     <string name="get_subcategory">subCategory</string>
+    <string name="android_id">Your Android ID</string>
 
 </resources>

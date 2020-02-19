@@ -68,19 +68,6 @@ public class DocumentIdAdapter extends RecyclerView.Adapter<DocumentIdAdapter.Do
                 }
             }
         }
-        /*holder.checkBox.setChecked(position == mSelectedItem);
-        if(array.get(position,false))
-        {
-            holder.checkBox.setChecked(true);
-        }
-        else
-        {
-            holder.checkBox.setChecked(false);
-
-
-        }
-*/
-
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
