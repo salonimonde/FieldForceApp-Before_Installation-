@@ -190,8 +190,8 @@ public class Service extends android.app.Service implements ApiServiceCaller {
         //schedule the timer, to wake up every 1 second
 //        timer.schedule(timerTask, 90000, 1800000); // 30 minutes
 //        timer.schedule(timerTask, 1000, 600000); // 2 minutes
-         //timer.schedule(timerTask, 1000, 120000); // 2 minutes
-          timer.schedule(timerTask, 1000, 10000); // 10 seconds
+          timer.schedule(timerTask, 1000, 120000); // 2 minutes
+          //timer.schedule(timerTask, 1000, 10000); // 10 seconds
         //timer.schedule(timerTask, 60000, 3600000); // 1 hour
     }
 

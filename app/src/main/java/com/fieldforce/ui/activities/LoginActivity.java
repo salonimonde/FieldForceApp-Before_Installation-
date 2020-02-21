@@ -69,8 +69,9 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
         edtID.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
         edtPassword = findViewById(R.id.edt_password);
         btnLogin = findViewById(R.id.btn_login);
+        imageClick=findViewById(R.id.login_image);
         btnLogin.setOnClickListener(this);
-        imageClick=findViewById(R.id.imageClick);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             CommonUtility.askForPermissions(mContext, App.getInstance().permissions);
@@ -160,7 +161,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                     if (jsonResponse.SUCCESS != null && jsonResponse.result.equals(jsonResponse.SUCCESS)) {
                         if (jsonResponse.responsedata != null) {
                             try {
-                                dismissLoadingDialog();
+                                //dismissLoadingDialog();
                                 UserProfileModel userProfileModel = new UserProfileModel();
                                 userProfileModel.user_id = jsonResponse.responsedata.getUser_id();
                                 userProfileModel.emp_id = jsonResponse.responsedata.getEmp_id();
@@ -244,7 +245,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
 
                     } else {
                         if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
-//                                dismissLoadingDialog();
+                             //dismissLoadingDialog();
                             Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -400,7 +401,7 @@ public class LoginActivity extends ParentActivity implements View.OnClickListene
                         //dismissLoadingDialog();
                     } else {
                         if (jsonResponse.result != null && jsonResponse.result.equals(JsonResponse.FAILURE)) {
-//                            dismissLoadingDialog();
+                            dismissLoadingDialog();
                             Toast.makeText(mContext, jsonResponse.message, Toast.LENGTH_SHORT).show();
                         }
                     }
